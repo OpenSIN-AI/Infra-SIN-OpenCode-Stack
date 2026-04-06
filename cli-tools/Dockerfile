@@ -31,6 +31,15 @@ RUN npm install -g wrangler @google/gemini-cli
 RUN wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq && \
     chmod +x /usr/local/bin/yq
 
+# Clone and build OpenCode CLI
+RUN git clone https://github.com/anomalyco/opencode.git /tmp/opencode && \
+    cd /tmp/opencode && \
+    npm install && \
+    npm run build && \
+    cp dist/opencode-darwin-x64/bin/opencode /usr/local/bin/opencode && \
+    chmod +x /usr/local/bin/opencode && \
+    rm -rf /tmp/opencode
+
 # Clone upgraded-opencode-stack repo
 RUN git clone https://github.com/Delqhi/upgraded-opencode-stack.git /opt/upgraded-opencode-stack
 
