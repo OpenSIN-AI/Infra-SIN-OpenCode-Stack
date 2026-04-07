@@ -1,0 +1,13 @@
+{
+  "sisyphus_agent": {
+    "disabled": false,
+    "default_builder_enabled": true,
+    "planner_enabled": true,
+    "replace_plan": true
+  },
+  "disabled_agents": [],
+  "claude_code": {
+    "agents": true,
+    "skills": true
+  }
+}
