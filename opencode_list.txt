@@ -1,0 +1,18 @@
+[90m┌[39m  Credentials [90m~/.local/share/opencode/auth.json
+[90m│[39m
+[34m●[39m  OpenAI [90moauth
+[90m│[39m
+[34m●[39m  Ollama Cloud [90mapi
+[90m│[39m
+[34m●[39m  Google [90moauth
+[90m│[39m
+[90m└[39m  3 credentials
+
+[90m┌[39m  Environment
+[90m│[39m
+[34m●[39m  Cloudflare AI Gateway [90mCLOUDFLARE_API_TOKEN
+[90m│[39m
+[34m●[39m  Nvidia [90mNVIDIA_API_KEY
+[90m│[39m
+[90m└[39m  2 environment variables
+
