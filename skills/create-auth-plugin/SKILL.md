@@ -453,7 +453,7 @@ mkdir -p ~/.open-auth-rotator/${PROVIDER}
 | Plugin | Cache Path | Provider ID | Auth Type |
 |--------|-----------|-------------|-----------|
 | Antigravity | `~/.cache/opencode/node_modules/opencode-antigravity-auth/` | `google` | OAuth (Google) |
-| Qwen | `~/.cache/opencode/node_modules/opencode-qwencode-auth/` | `qwen-code` | Device Flow |
+| Qwen | `~/.cache/opencode/node_modules/opencode-qwen-proxy/` | `qwen-code` | Device Flow (Enhanced) |
 | OpenRouter | `~/.cache/opencode/node_modules/opencode-openrouter-auth/` | `openrouter` | OAuth PKCE |
 
 ## Reference: SDK Compatibility

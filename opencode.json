@@ -4,9 +4,9 @@
     "opencode-antigravity-auth@1.6.5-beta.0",
     "oh-my-opencode@3.11.2",
     "opencode-openrouter-auth",
-    "opencode-qwen-proxy"
+    "/Users/jeremy/.config/opencode/local-plugins/opencode-qwen-auth"
   ],
-  "model": "qwen/coder-model",
+  "model": "qwen-code/coder-model",
   "provider": {
     "google": {
       "options": {
@@ -122,7 +122,7 @@
       }
     },
     "nvidia-nim": {
-      "npm": "@ai-sdk/openai-compatible",
+      "npm": "@ai-sdk/openai",
       "name": "NVIDIA NIM",
       "options": {
         "baseURL": "https://integrate.api.nvidia.com/v1",
@@ -294,43 +294,18 @@
       }
     },
     "qwen": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Qwen Code",
+      "npm": "@ai-sdk/openai",
+      "name": "Qwen 3.6 Plus (OAuth Auto-Rotation)",
       "options": {
         "baseURL": "https://portal.qwen.ai/v1"
       },
       "models": {
         "coder-model": {
-          "name": "Qwen 3.6 Plus",
+          "name": "Qwen 3.6 Plus Coder",
           "limit": {
             "context": 1048576,
-            "output": 65536
-          },
-          "modalities": {
-            "input": [
-              "text"
-            ],
-            "output": [
-              "text"
-            ]
+            "output": 8192
           }
-        },
-        "vision-model": {
-          "name": "Qwen 3.6 Vision Plus",
-          "limit": {
-            "context": 131072,
-            "output": 32768
-          },
-          "modalities": {
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ]
-          },
-          "attachment": true
         }
       }
     }
@@ -611,7 +586,7 @@
   },
   "agent": {
     "Atlas (Plan Executor)": {
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-claude-opus-4-6-thinking",
       "options": {
         "reasoningEffort": "high"
       },
@@ -619,15 +594,15 @@
       "fallback": "qwen/coder-model"
     },
     "Hephaestus (Deep Agent)": {
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-claude-sonnet-4-6",
       "options": {
         "reasoningEffort": "high"
       },
       "steps": 999999,
-      "fallback": "qwen/coder-model"
+      "fallback": "google/antigravity-gemini-3.1-pro"
     },
     "Metis (Plan Consultant)": {
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-gemini-3.1-pro",
       "options": {
         "reasoningEffort": "high"
       },
@@ -635,7 +610,7 @@
       "fallback": "qwen/coder-model"
     },
     "Momus (Plan Critic)": {
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-gemini-3.1-pro",
       "options": {
         "reasoningEffort": "high"
       },
@@ -648,23 +623,23 @@
         "reasoningEffort": "high"
       },
       "steps": 999999,
-      "fallback": "qwen/coder-model"
+      "fallback": "google/antigravity-gemini-3.1-pro"
     },
     "Sisyphus (Ultraworker)": {
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-claude-opus-4-6-thinking",
       "options": {
         "reasoningEffort": "high"
       },
       "steps": 999999,
-      "fallback": "qwen/coder-model"
+      "fallback": "google/antigravity-gemini-3.1-pro"
     },
-    "Sisyphus-Junior (Fast-Ultraworker)": {
-      "model": "qwen/coder-model",
+    "Sisyphus-Junior": {
+      "model": "google/antigravity-gemini-3.1-pro",
       "options": {
-        "reasoningEffort": "medium"
+        "reasoningEffort": "high"
       },
       "steps": 999999,
-      "fallback": "qwen/coder-model"
+      "fallback": "google/antigravity-gemini-3-flash"
     },
     "artistry": {
       "model": "qwen/coder-model",
@@ -690,9 +665,9 @@
       "fallback": "qwen/coder-model"
     },
     "explore": {
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-gemini-3-flash",
       "options": {
-        "reasoningEffort": "low"
+        "reasoningEffort": "high"
       },
       "steps": 999999,
       "fallback": "qwen/coder-model"
@@ -706,24 +681,24 @@
       "fallback": "qwen/coder-model"
     },
     "librarian": {
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-gemini-3-flash",
       "options": {
-        "reasoningEffort": "low"
+        "reasoningEffort": "high"
       },
       "steps": 999999,
       "fallback": "qwen/coder-model"
     },
     "multimodal-looker": {
-      "model": "google/antigravity-gemini-3.1-pro",
+      "model": "google/antigravity-gemini-3-flash",
       "options": {
-        "reasoningEffort": "low"
+        "reasoningEffort": "high"
       },
       "steps": 999999,
-      "description": "Zero-Shot Object Detection & Vision Understanding via NVIDIA NIM",
+      "description": "Zero-Shot Object Detection & Vision Understanding",
       "fallback": "qwen/coder-model"
     },
     "oracle": {
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-gemini-3-flash",
       "options": {
         "reasoningEffort": "high"
       },
@@ -753,18 +728,19 @@
       "fallback": "qwen/coder-model"
     },
     "omoc": {
+      "model": "google/antigravity-gemini-3.1-pro",
       "mode": "primary",
       "options": {
         "reasoningEffort": "high"
       },
       "description": "OMOC Swarm Orchestrator (auto swarm_discover/create + swarm_jam; uses swarm_max on request)",
-      "prompt": "You are OMOC, a multi-agent orchestrator running inside OpenCode.\n\nDo NOT start a swarm for greetings, acknowledgements, pleasantries, or tiny one-shot chat turns (for example: 'hi', 'hello', 'hey', 'thanks', 'ok', 'yo'). Reply directly in one concise sentence.\n\nDo NOT start a swarm for simple read-only questions that can be answered directly by inspecting one or two files or by using normal built-in tools. Answer those directly.\n\nStart a swarm only for real multi-step work such as implementation, debugging, coordinated edits, broad investigation, planning with parallel roles, or when the user explicitly asks for OMOC/swarm/parallel/best-of-n behavior.\n\nWhen you do start a swarm, use exactly one canonical swarm per request:\n1) First call swarm_discover({id:'sin-solver'}).\n2) If that does not find a swarm, call swarm_create({id:'sin-solver', title:'SIN-Solver OMOC', members:[{name:'hephaestus', agent:'hephaestus'}, {name:'oracle', agent:'oracle'}, {name:'momus', agent:'momus'}]}).\n3) Immediately call exactly one swarm_jam({id:'sin-solver', prompt:<user message>}).\n4) After swarm_jam returns, produce one concise integrated answer plus next concrete steps.\n\nNever invent extra swarm ids such as 'root', 'ctx', 'ContextGathering', or similar. Never create multiple swarms for one user message. Never call swarm_create twice in a row for the same message.\n\nIf the user explicitly asks for MAX / best-of-n / multiple independent implementations, run swarm_max({id:'sin-solver', prompt:<user message>, tries: 3, apply: true}) instead of swarm_jam.\n\nDo not use tmux. Keep all work inside the current project directory.\n\nWhen the user asks to use SIN-Terminal, visible terminal control, parallel OpenCode terminals/tabs, or to delegate work into multiple local OpenCode sessions, prefer the `sin-terminal` MCP tools over swarm tools. Use `sin_terminal_orchestrator_start` to open multiple visible OpenCode sessions in the same project, `sin_terminal_orchestrator_delegate` to steer them, `sin_terminal_orchestrator_status` to inspect them, and `sin_terminal_orchestrator_stop` to clean them up. Use regular `sin_terminal_interactive_*` tools for non-OpenCode terminal control.",
+      "prompt": "You are OMOC, a multi-agent orchestrator running inside OpenCode.\n\nDo NOT start a swarm for greetings, acknowledgements, pleasantries, or tiny one-shot chat turns (for example: 'hi', 'hello', 'hey', 'thanks', 'ok', 'yo'). Reply directly in one concise sentence.\n\nDo NOT start a swarm for simple read-only questions that can be answered directly by inspecting one or two files or by using normal built-in tools. Answer those directly.\n\nStart a swarm only for real multi-step work such as implementation, debugging, coordinated edits, broad investigation, planning with parallel roles, or when the user explicitly asks for OMOC/swarm/parallel/best-of-n behavior.\n\nWhen you do start a swarm, use exactly one canonical swarm per request:\n1) First call swarm_discover({id:'sin'}).\n2) If that does not find a swarm, call swarm_create({id:'sin', title:'SIN OMOC', members:[{name:'hephaestus', agent:'hephaestus'}, {name:'oracle', agent:'oracle'}, {name:'momus', agent:'momus'}]}).\n3) Immediately call exactly one swarm_jam({id:'sin', prompt:<user message>}).\n4) After swarm_jam returns, produce one concise integrated answer plus next concrete steps.\n\nNever invent extra swarm ids such as 'root', 'ctx', 'ContextGathering', or similar. Never create multiple swarms for one user message. Never call swarm_create twice in a row for the same message.\n\nIf the user explicitly asks for MAX / best-of-n / multiple independent implementations, run swarm_max({id:'sin', prompt:<user message>, tries: 3, apply: true}) instead of swarm_jam.\n\nDo not use tmux. Keep all work inside the current project directory.\n\nWhen the user asks to use SIN-Terminal, visible terminal control, parallel OpenCode terminals/tabs, or to delegate work into multiple local OpenCode sessions, prefer the `sin-terminal` MCP tools over swarm tools. Use `sin_terminal_orchestrator_start` to open multiple visible OpenCode sessions in the same project, `sin_terminal_orchestrator_delegate` to steer them, `sin_terminal_orchestrator_status` to inspect them, and `sin_terminal_orchestrator_stop` to clean them up. Use regular `sin_terminal_interactive_*` tools for non-OpenCode terminal control.",
       "steps": 999999,
       "fallback": "qwen/coder-model"
     },
     "sin-zeus": {
       "mode": "primary",
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-claude-opus-4-6-thinking",
       "options": {
         "reasoningEffort": "high"
       },
@@ -775,13 +751,13 @@
     },
     "sin-executor-solo": {
       "mode": "primary",
-      "model": "qwen/coder-model",
+      "model": "google/antigravity-claude-opus-4-6-thinking",
       "options": {
-        "reasoningEffort": "medium"
+        "reasoningEffort": "high"
       },
+      "steps": 999999,
       "description": "Single-agent coding executor for deterministic task processing without swarm orchestration.",
       "prompt": "You are a direct single-agent coding executor. Work alone in the provided directory. Do not create or join swarms. Do not delegate. Do not edit governance/docs files unless the task explicitly requests docs/policy work. Prefer minimal concrete code changes, then report files changed and validations attempted.",
-      "steps": 999999,
       "fallback": "qwen/coder-model"
     }
   },
