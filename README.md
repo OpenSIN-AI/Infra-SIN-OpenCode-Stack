@@ -71,7 +71,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 |--------|-------|
 | `opencode-antigravity-auth` | Antigravity OAuth — Token-Rotation für Claude/Gemini |
 | `oh-my-opencode` | Oh-My-OpenCode Framework — Commands, Hooks, Orchestration |
-| `opencode-qwencode-auth` | Qwen Auth Plugin |
+| `opencode-qwen-proxy` | OpenCode-Qwen-Proxy (Qwen OAuth with throttling, jitter, header alignment) |
 | `opencode-openrouter-auth` | OpenRouter Auth mit lokalem Proxy (local source included) |
 
 ## CLI Tools (11)
@@ -98,7 +98,8 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | **nvidia-nim** | `qwen-3.5-122b`, `qwen-3.5-397b` |
 | **gemini-api** | `gemini-3.1-pro-preview`, `gemini-3-flash-preview`, `gemini-2.5-pro`, `gemini-2.5-flash` |
 | **openai** | `gpt-5.4` |
-| **openrouter** | 8 Free-Modelle (Qwen, DeepSeek, Gemini, Llama, Phi) |
+| **openrouter** | 7 Free-Modelle (DeepSeek, Gemini, Llama, Phi) |
+| **qwen-code** | Qwen 3.6 Plus, Qwen 3.6 Vision Plus (OAuth, free up to 2000/day) |
 
 ## Commands (13)
 
