@@ -145,7 +145,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | **Curated Agent-Teams** (Oracle, Librarian, Explore, Sisyphus) | ✅ Vorkonfiguriert | ❌ Manuell |
 | **Sisyphus Ultraworker** | ✅ Endlos-Schleife bis Task fertig | ❌ |
 | **Todo Continuation Enforcer** | ✅ Zwingt Agent weiterzuarbeiten | ❌ |
-| **Comment Checker** | ✅ Verhindert AI-Kommentar-Spam | ❌ |
+| **Comment Checker** | ❌ DEAKTIVIERT — Kommentare sind PFLICHT! | ✅ |
 | **Curated MCPs** (Exa, Context7, Grep.app) | ✅ Vorkonfiguriert | ❌ |
 | **Google OAuth Auth** | ✅ Eingebaut | ❌ |
 | **Claude Code Compatibility** | ✅ Commands, Agents, Skills, Hooks | ❌ |
