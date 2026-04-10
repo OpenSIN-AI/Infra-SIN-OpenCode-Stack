@@ -9,7 +9,7 @@ Dieser Skill wird automatisch vom macOS Background Watcher ausgelöst, wenn ein 
 3. **Web-Suche (Pflicht!)**: Du darfst KEINE Trainingsdaten nutzen. Nutze dein Google/Exa Search Tool, um nach dem genauen Fehler + "nodriver python" zu suchen. Finde mindestens 5-10 aktuelle Quellen.
 4. **Reparieren**: Überschreibe die fehlerhafte Mikro-Datei (`step_XX.py`). 
    - Regel 1: Max 30 Zeilen.
-   - Regel 2: Keine Kommentare oder Docstrings.
+   - Regel 2: Kommentiere ALLES ausführlich! Jede Funktion, jeder Schritt muss kommentiert werden (Was, Warum, Weshalb, Zusammenhänge), damit alle zukünftigen Coder sofort Bescheid wissen. Kommentare im Code sind ENORM WICHTIG!
    - Regel 3: `nodriver` auf Port 9222 nutzen.
    - Regel 4: Nach der Aktion Screenshot speichern.
 5. **Aufräumen & Cache-Reinigung (PFLICHT)**: Lösche die `healing_request.processing.txt` nach erfolgreichem Fix. 

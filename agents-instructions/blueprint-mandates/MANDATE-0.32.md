@@ -129,7 +129,7 @@ Fixes #(issue number)
 ## Checklist
 - [ ] My code follows the project's style guidelines
 - [ ] I have performed a self-review of my code
-- [ ] I only added comments where they explain non-obvious intent, constraints, edge cases, or workarounds
+- [ ] Ich habe meinen Code umfassend kommentiert, damit alle Coder künftig Bescheid wissen (Was, Warum, Weshalb, Zusammenhänge).
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works

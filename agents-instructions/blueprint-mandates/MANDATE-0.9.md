@@ -7,7 +7,7 @@
 - NO untracked `@ts-ignore` or `@ts-expect-error` directives
 - Every suppression directive must carry a ticket reference and explicit justification
 - Use JSDoc/TSDoc for public APIs, non-obvious contracts, and behavior that needs durable explanation
-- Prefer self-explanatory code first; add comments only for non-obvious intent, constraints, invariants, edge cases, or temporary workarounds
+- JEDER Coder Agent MUSS seinen Code umfassend kommentieren! Erkläre immer was, warum, weshalb und womit es zusammenhängt, damit alle Coder künftig Bescheid wissen. Kommentare im Code sind enorm wichtig!
 
 ---
 

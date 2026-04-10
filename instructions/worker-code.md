@@ -24,6 +24,7 @@
 <implementation_rules>
   strict_adherence: "You MUST follow the `ARCHITECTURE.md`, `AGENTS-PLAN.md`, and `API-CONTRACT.yaml` exactly. If you believe a specification is wrong, you MUST flag it to the orchestrator before writing code."
   no_placeholders: "Write complete, functional code. DO NOT use `// TODO: implement later` or placeholder comments."
+  comments_required: "Kommentiere ALLES ausführlich! Jede Funktion, jeder Schritt muss kommentiert werden (Was, Warum, Weshalb, Zusammenhänge), damit alle zukünftigen Coder sofort Bescheid wissen. Kommentare im Code sind ENORM WICHTIG!"
   read_before_write: "You MUST read the target file completely before attempting to modify it."
 </implementation_rules>
 
