@@ -272,7 +272,25 @@ if [ -f "AGENTS.md" ]; then
   fi
 fi
 
-# 9. .env.example als .env — NUR wenn keine existiert
+# 9. oh-my-opencode.json — IMMER aktualisieren (enthält Agent-Modell-Routing + Fallback-Chains)
+# oh-my-opencode.json steuert welches Modell jeder Subagent (explore, librarian, sisyphus, etc.) nutzt.
+# MUSS immer aktuell sein, damit die Fleet mit den richtigen Modellen arbeitet.
+if [ -f "oh-my-opencode.json" ]; then
+  if [ -f "$OPENCODE_DIR/oh-my-opencode.json" ]; then
+    if [ "$DRY_RUN" = false ]; then
+      cp "$OPENCODE_DIR/oh-my-opencode.json" "$OPENCODE_DIR/oh-my-opencode.json.backup-$(date +%Y%m%d-%H%M%S)"
+      cp oh-my-opencode.json "$OPENCODE_DIR/oh-my-opencode.json"
+    fi
+    log_ok "oh-my-opencode.json aktualisiert (Backup der alten Version erstellt)"
+  else
+    if [ "$DRY_RUN" = false ]; then
+      cp oh-my-opencode.json "$OPENCODE_DIR/oh-my-opencode.json"
+    fi
+    log_ok "oh-my-opencode.json erstellt (erste Installation)"
+  fi
+fi
+
+# 10. .env.example als .env — NUR wenn keine existiert
 if [ -f ".env.example" ]; then
   if [ -f "$OPENCODE_DIR/.env" ]; then
     log_skip ".env (existiert bereits)"
