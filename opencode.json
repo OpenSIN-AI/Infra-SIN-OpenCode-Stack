@@ -724,7 +724,7 @@
       "steps": 999999,
       "fallback": "qwen/coder-model"
     },
-    "sin-zeus": {
+    "SIN-Zeus": {
       "mode": "primary",
       "model": "qwen/coder-model",
       "options": {
@@ -747,7 +747,7 @@
       "fallback": "qwen/coder-model"
     }
   },
-  "default_agent": "sin-zeus",
+  "default_agent": "SIN-Zeus",
   "command": {
     "omoc-swarm-create": {
       "description": "Create/register a swarm for this session",
@@ -789,17 +789,17 @@
       "description": "Stop all sessions in a SIN-Terminal orchestration",
       "template": "Wenn $ARGUMENTS leer ist, erklaere kurz, dass eine orchestrationId gebraucht wird. Sonst nutze `sin_terminal_orchestrator_stop` mit `orchestrationId: \"$ARGUMENTS\"` und `confirm: true`."
     },
-    "sin-zeus-bootstrap": {
+    "SIN-Zeus-bootstrap": {
       "description": "Create GitHub Project and issue pool from a Zeus ultra-plan JSON",
       "template": "Wenn $ARGUMENTS leer ist, erklaere das JSON-Format `{ \"owner\": \"...\", \"repo\": \"owner/repo\", \"title\": \"...\", \"planFile\": \"scripts/zeus/ultra-plan.example.json\", \"base\": \"main\", \"dryRun\": true }`. Sonst parse $ARGUMENTS als JSON und nutze `bash` um `node /Users/jeremy/dev/OpenSIN-backend/scripts/zeus/bootstrap-github-project.mjs --owner <owner> --repo <repo> --title <title> --plan-file <planFile> --base <base>` auszufuehren; wenn `dryRun` true ist, haenge `--dry-run` an."
     },
-    "sin-zeus-hermes": {
+    "SIN-Zeus-hermes": {
       "description": "Generate Hermes dispatch payloads for Zeus-created issues",
-      "template": "Wenn $ARGUMENTS leer ist, erklaere das JSON-Format `{ \"repo\": \"owner/repo\", \"repoPath\": \"/abs/path\", \"bootstrap\": \"Docs/operations/sin-zeus-bootstrap.json\" }`. Sonst parse $ARGUMENTS als JSON und nutze `bash` um `node /Users/jeremy/dev/OpenSIN-backend/scripts/zeus/hermes-dispatch.mjs --repo <repo> --repo-path <repoPath> --bootstrap <bootstrap>` auszufuehren."
+      "template": "Wenn $ARGUMENTS leer ist, erklaere das JSON-Format `{ \"repo\": \"owner/repo\", \"repoPath\": \"/abs/path\", \"bootstrap\": \"Docs/operations/SIN-Zeus-bootstrap.json\" }`. Sonst parse $ARGUMENTS als JSON und nutze `bash` um `node /Users/jeremy/dev/OpenSIN-backend/scripts/zeus/hermes-dispatch.mjs --repo <repo> --repo-path <repoPath> --bootstrap <bootstrap>` auszufuehren."
     },
-    "sin-zeus-status": {
+    "SIN-Zeus-status": {
       "description": "Summarize current Zeus control-plane artifacts",
-      "template": "Nutze `bash` um, falls vorhanden, diese Dateien zu lesen: `/Users/jeremy/dev/OpenSIN-backend/Docs/operations/sin-zeus-bootstrap.json`, `/Users/jeremy/dev/OpenSIN-backend/Docs/operations/sin-hermes-dispatch.json`, `/Users/jeremy/dev/OpenSIN-backend/Docs/operations/alpha-acceptance-gates.json`. Fasse das Ergebnis kompakt zusammen."
+      "template": "Nutze `bash` um, falls vorhanden, diese Dateien zu lesen: `/Users/jeremy/dev/OpenSIN-backend/Docs/operations/SIN-Zeus-bootstrap.json`, `/Users/jeremy/dev/OpenSIN-backend/Docs/operations/sin-hermes-dispatch.json`, `/Users/jeremy/dev/OpenSIN-backend/Docs/operations/alpha-acceptance-gates.json`. Fasse das Ergebnis kompakt zusammen."
     }
   },
   "permission": "allow"
