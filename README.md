@@ -16,7 +16,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 
 | Kategorie | Anzahl | Zielverzeichnis |
 |-----------|--------|-----------------|
-| **Skills** | 28 | `~/.config/opencode/skills/` |
+| **Skills** | 29 | `~/.config/opencode/skills/` |
 | **Plugins** | 4 | Global via npm + `~/.config/opencode/plugins/` |
 | **Agents** | 21 | `~/.config/opencode/agents/` |
 | **Agent Instructions** | 37 | `~/.config/opencode/agents-instructions/` |
@@ -32,7 +32,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | **Backups** | 52 | `~/.config/opencode/backups/` |
 | **Config** | 1 | `~/.config/opencode/opencode.json` (intelligent gemerged) |
 
-## Skills (28)
+## Skills (29)
 
 | Skill | Zweck |
 |-------|-------|
@@ -61,6 +61,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | `doc` | .docx Dokumenten-Handling |
 | `pdf` | PDF Handling |
 | `imagegen` | Bild-Generierung via Gemini |
+| `gen-thumbnail` | Self-learning YouTube Thumbnail A/B Engine |
 | `nvidia-3d-forge` | 3D Asset Pipeline |
 | `nvidia-video-forge` | Video-Generierung via NVIDIA |
 | `sora` | Sora Video-Generierung |
@@ -179,7 +180,7 @@ cp .env.example .env
 
 # 2. Verifizieren
 opencode --version
-ls ~/.config/opencode/skills/ | wc -l  # Sollte 28+ zeigen
+ls ~/.config/opencode/skills/ | wc -l  # Sollte 29+ zeigen
 
 # 3. Sync zu OCI VM (optional)
 sin-sync
