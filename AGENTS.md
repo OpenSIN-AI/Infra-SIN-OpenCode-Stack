@@ -1234,3 +1234,16 @@ Wir sind Hacker. Wir sind Umgeher. Wenn ein offizieller Weg (API, OAuth, Scopes,
 3. **Immer noch blockiert?** -> Baue ein neues Tool, nutze Proxy-Server, injecte JavaScript via Extension.
 **VERBOT:** Ein Agent darf den User NIEMALS bitten, "mal eben manuell etwas anzuklicken" oder aufzugeben, ohne vorher JEDE Hacker-Methode ausgereizt zu haben!
 
+
+## 🚨 MODAL / GLM-5.1 POOL PROXY MANDATE (PRIORITY -2.8) 🚨
+
+**ABSOLUTES VERBOT FÜR DIREKTE MODAL API KEYS IN OPENCODE.JSON:**
+- Das Modell `modal/glm-5.1-fp8` darf **NIEMALS** mit der direkten Modal API (`https://api.us-west-2.modal.direct/v1`) und einem direkten `modalresearch_*` Key in der `opencode.json` konfiguriert werden.
+- Wenn Agenten direkt auf Modal zugreifen, umgehen sie den OCI Token-Rotator, was zu sofortigen Rate-Limits (429) führt und das gesamte Multi-Account-Setup zerstört.
+
+**KORREKTE KONFIGURATION (PFLICHT):**
+- **baseURL:** MUSS zwingend `http://92.5.60.87:4100/modal/v1` (OCI Gateway) sein.
+- **apiKey:** MUSS zwingend der Gateway-Key `sk-sin-fleet-master` sein.
+- **Modell-ID:** Das Modell muss lokal als `modal/glm-5.1-fp8` (oder mit der `id`: `zai-org/GLM-5.1-FP8` in der options.models Konfiguration) aufgerufen werden.
+- Der OCI-Proxy auf Port 4100 validiert den Gateway-Key und leitet die Anfrage an den `modal_proxy` (Port 8091) weiter, welcher sich wiederum einen rotierenden Key aus dem `pool_service` (Port 8090) holt.
+- Wer `opencode.json` auf direkte Modal-Keys ändert, zerstört die Fleet-Synchronisation und begeht einen Protokollverstoß.
