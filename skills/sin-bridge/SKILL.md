@@ -536,8 +536,10 @@ Der HF MCP Server läuft bereits und ist immer erreichbar:
 - `go_forward` — Vorwärts
 - `reload` — Seite neu laden
 
-### DOM Interaction (8)
-- `click_element` — Element klicken (React-kompatibel)
+### DOM Interaction (10)
+- `click_element` — Element klicken (Standard)
+- `ghost_click` — Element klicken mit vollem Mouse/Pointer-Event-Stack (Für SPA/React Survey-Cards!)
+- `click_coordinates` — Klick auf absolute x,y Koordinaten (CDP/DOM-Fallback)
 - `type_text` — Text eingeben
 - `get_text` — Textinhalt lesen
 - `get_html` — HTML lesen
