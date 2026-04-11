@@ -4,78 +4,78 @@
   "disabled_skills": ["playwright", "dev-browser"],
   "agents": {
     "explore": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["qwen/coder-model", "google/antigravity-gemini-3-flash"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "librarian": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["qwen/coder-model", "google/antigravity-gemini-3-flash"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "oracle": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["qwen/coder-model", "google/antigravity-gemini-3-flash"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "multimodal-looker": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["qwen/coder-model"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "momus": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["google/antigravity-gemini-3.1-pro", "qwen/coder-model"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "metis": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["google/antigravity-gemini-3.1-pro", "qwen/coder-model"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "sisyphus": {
-      "model": "google/antigravity-claude-opus-4-6-thinking",
-      "fallback_models": ["openai/gpt-5.4", "google/antigravity-gemini-3.1-pro"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "hephaestus": {
-      "model": "google/antigravity-claude-sonnet-4-6",
-      "fallback_models": ["openai/gpt-5.4", "google/antigravity-gemini-3.1-pro"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "atlas": {
-      "model": "google/antigravity-claude-opus-4-6-thinking",
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
       "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     },
     "prometheus": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["google/antigravity-gemini-3.1-pro", "qwen/coder-model"]
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": ["openai/gpt-5.4", "qwen/coder-model"]
     }
   },
-  "categories": {
-    "quick": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["qwen/coder-model"]
-    },
-    "deep": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["google/antigravity-gemini-3.1-pro", "qwen/coder-model"]
-    },
-    "artistry": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["google/antigravity-gemini-3.1-pro", "qwen/coder-model"]
-    },
-    "ultrabrain": {
-      "model": "google/antigravity-claude-opus-4-6-thinking",
-      "fallback_models": ["openai/gpt-5.4"]
-    },
-    "visual-engineering": {
-      "model": "google/antigravity-gemini-3.1-pro",
-      "fallback_models": ["openai/gpt-5.4"]
-    },
-    "unspecified-low": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["qwen/coder-model"]
-    },
-    "unspecified-high": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["google/antigravity-gemini-3.1-pro", "qwen/coder-model"]
-    },
-    "writing": {
-      "model": "openai/gpt-5.4",
-      "fallback_models": ["qwen/coder-model"]
-    }
-  }
-}
+   "categories": {
+     "quick": {
+       "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+       "fallback_models": ["openai/gpt-5.4", "google/antigravity-gemini-3-flash", "qwen/coder-model"]
+     },
+     "deep": {
+       "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+       "fallback_models": ["openai/gpt-5.4", "google/antigravity-claude-opus-4-6-thinking", "qwen/coder-model"]
+     },
+     "artistry": {
+       "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+       "fallback_models": ["openai/gpt-5.4", "google/antigravity-claude-sonnet-4-6", "qwen/coder-model"]
+     },
+     "ultrabrain": {
+       "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+       "fallback_models": ["openai/gpt-5.4", "google/antigravity-claude-opus-4-6-thinking", "qwen/coder-model"]
+     },
+     "visual-engineering": {
+       "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+       "fallback_models": ["openai/gpt-5.4", "google/antigravity-gemini-3.1-pro", "qwen/coder-model"]
+     },
+     "unspecified-low": {
+       "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+       "fallback_models": ["openai/gpt-5.4", "google/antigravity-gemini-3-flash", "qwen/coder-model"]
+     },
+     "unspecified-high": {
+       "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+       "fallback_models": ["openai/gpt-5.4", "google/antigravity-claude-sonnet-4-6", "qwen/coder-model"]
+     },
+     "writing": {
+       "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+       "fallback_models": ["openai/gpt-5.4", "google/antigravity-claude-sonnet-4-6", "qwen/coder-model"]
+     }
+   }
+ 

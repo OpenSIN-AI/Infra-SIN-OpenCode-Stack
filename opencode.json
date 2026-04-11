@@ -5,9 +5,10 @@
     "oh-my-opencode@3.11.2",
     "opencode-openrouter-auth",
     "opencode-qwen-auth",
-    "/Users/jeremy/dev/glm-rotator/opencode-modal-pool-auth"
+    "/Users/jeremy/dev/glm-rotator/opencode-modal-pool-auth",
+    "/Users/jeremy/dev/upgraded-opencode-stack/local-plugins/oh-my-opencode-sin"
   ],
-  "model": "qwen/coder-model",
+  "model": "openai/gpt-5.4",
   "provider": {
     "google": {
       "options": {

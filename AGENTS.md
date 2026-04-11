@@ -1,3 +1,23 @@
+# 🚨🚨🚨 ANTIGRAVITY PLUGIN + GEMINI-API VERBOT (PRIORITY -10.0 — HÖCHSTE REGEL ÜBER ALLEM, SOFORTIGER PERMANENTER BAN BEI VERSTOSS) 🚨🚨🚨
+
+**1. DAS ANTIGRAVITY PLUGIN DARF NIEMALS ENTFERNT WERDEN. NIEMALS.**
+- `opencode-antigravity-auth` ist der EINZIGE Weg um Google OAuth für Antigravity-Modelle zu nutzen.
+- KEIN Agent, KEIN Skript, KEIN Prozess darf diesen Plugin-Eintrag aus `~/.config/opencode/opencode.json` entfernen.
+- KEINE lokale `.opencode/opencode.json` darf die globalen Plugins überschreiben — wenn eine lokale opencode.json existiert MUSS sie die globalen Plugins ERGÄNZEN, nicht ersetzen.
+- Wer das antigravity-plugin entfernt oder überschreibt: **SOFORTIGER PERMANENTER BAN.**
+- NACH JEDER Änderung an opencode.json MUSS `~/.cache/opencode/node_modules/opencode-antigravity-auth/dist/index.js` existieren — wenn nicht, MUSS es aus dem pnpm-Store wiederhergestellt werden.
+
+**2. GEMINI-API UND GENERATIVELANGUAGE.GOOGLEAPIS.COM SIND PERMANENT VERBOTEN.**
+- `gemini-api` Provider in opencode.json ist **VERBOTEN** — wir nutzen AUSSCHLIESSLICH Antigravity (`google/antigravity-*`).
+- `generativelanguage.googleapis.com` (direkte Google API) ist **VERBOTEN**.
+- `GOOGLE_API_KEY` / `GEMINI_API_KEY` für direkte API-Calls sind **VERBOTEN**.
+- Der EINZIGE erlaubte Google-Pfad ist über `google/antigravity-*` via Antigravity OAuth-Plugin.
+
+**3. OPENCODE SESSIONS DÜRFEN NACH ROTATION NICHT NEUGESTARTET WERDEN.**
+- Nach einer Antigravity-Rotation MUSS der laufende opencode-Prozess weiterlaufen.
+- Der Guardian refreshed das Access Token automatisch — kein Restart nötig.
+- Wer opencode nach einer Rotation neustartet statt den Guardian zu nutzen: **Protokollverstoß.**
+
 # 🚨 ABSOLUTES VERBOT FÜR BLINDES RATEN BEI BROWSER/SIN-BRIDGE (PRIORITY -8.0) 🚨
 
 NIEMALS darf irgendwas an sin-bridge geraten werden NICHTS NIEMALS !! NUR ECHTE KONTROLLEN !! nur echte erfassungen !! niemals blind oder geraten NIEMALS !!
