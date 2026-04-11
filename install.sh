@@ -69,6 +69,14 @@ if [ "$SKIP_NPM" = false ]; then
       log_ok "opencode-openrouter-auth installiert"
     fi
   fi
+  if [ -d "local-plugins/opencode-qwen-auth" ]; then
+    if npm ls -g "opencode-qwen-auth" 2>/dev/null | grep -q "opencode-qwen-auth"; then
+      log_skip "opencode-qwen-auth"
+    else
+      [ "$DRY_RUN" = false ] && cd "local-plugins/opencode-qwen-auth" && npm install -g . 2>&1 | tail -1 && cd "$SCRIPT_DIR"
+      log_ok "opencode-qwen-auth installiert"
+    fi
+  fi
 else
   log_info "Skipping npm installs"
 fi
@@ -189,51 +197,80 @@ for p in tgt_plugins + src_plugins:
     if pkg_name not in seen: all_plugins.append(p); seen.add(pkg_name)
 tgt["plugin"] = all_plugins
 
-# Merge providers — NUR neue Provider und Modelle
-src_providers = src.get("provider", {})
-tgt_providers = tgt.get("provider", {})
-for name, prov in src_providers.items():
-    if name not in tgt_providers:
-        tgt_providers[name] = prov
-    else:
-        # NUR neue Modelle hinzufügen
-        src_models = prov.get("models", {})
-        tgt_models = tgt_providers[name].get("models", {})
-        new_models = 0
-        for mname, mconf in src_models.items():
-            if mname not in tgt_models:
-                tgt_models[mname] = mconf
-                new_models += 1
-        tgt_providers[name]["models"] = tgt_models
-        # NUR neue Optionen
-        src_opts = prov.get("options", {})
-        tgt_opts = tgt_providers[name].get("options", {})
-        for k, v in src_opts.items():
-            if k not in tgt_opts: tgt_opts[k] = v
-        tgt_providers[name]["options"] = tgt_opts
-        if "npm" in prov and "npm" not in tgt_providers[name]:
-            tgt_providers[name]["npm"] = prov["npm"]
-tgt["provider"] = tgt_providers
+      # Merge providers — kanonische Model-Metadaten updaten, Benutzer-Overrides bewahren
+      src_providers = src.get("provider", {})
+      tgt_providers = tgt.get("provider", {})
+      for name, prov in src_providers.items():
+          if name not in tgt_providers:
+              tgt_providers[name] = prov
+          else:
+              # Modelle: kanonische Felder updaten
+              src_models = prov.get("models", {})
+              tgt_models = tgt_providers[name].get("models", {})
+              for mname, src_mconf in src_models.items():
+                  if mname not in tgt_models:
+                      # Neues Modell
+                      tgt_models[mname] = src_mconf
+                  else:
+                      # Existierendes Modell: Kanonische Felder updaten, andere erhalten
+                      tgt_mconf = tgt_models[mname]
+                      # name
+                      if "name" in src_mconf:
+                          tgt_mconf["name"] = src_mconf["name"]
+                      # limit (context, output)
+                      if "limit" in src_mconf and isinstance(src_mconf["limit"], dict):
+                          if "limit" not in tgt_mconf or not isinstance(tgt_mconf.get("limit"), dict):
+                              tgt_mconf["limit"] = {}
+                          for k, v in src_mconf["limit"].items():
+                              tgt_mconf["limit"][k] = v
+                      # modalities
+                      if "modalities" in src_mconf:
+                          tgt_mconf["modalities"] = src_mconf["modalities"]
+                      # attachment
+                      if "attachment" in src_mconf:
+                          tgt_mconf["attachment"] = src_mconf["attachment"]
+                      # Weitere kanonische Felder können hier hinzugefügt werden
+              tgt_providers[name]["models"] = tgt_models
+              # Provider-Optionen: kanonische Felder (baseURL, apiKey) updaten
+              src_opts = prov.get("options", {})
+              tgt_opts = tgt_providers[name].get("options", {})
+              
+              # Force sync critical options from source for modal provider
+              if name == "modal":
+                  for k, v in src_opts.items():
+                      tgt_opts[k] = v
+              else:
+                  # For others, only add new options
+                  for k, v in src_opts.items():
+                      if k not in tgt_opts:
+                          tgt_opts[k] = v
+              
+              tgt_providers[name]["options"] = tgt_opts
+              if "npm" in prov and "npm" not in tgt_providers[name]:
+                  tgt_providers[name]["npm"] = prov["npm"]
+      tgt["provider"] = tgt_providers
 
-# Merge agents — NUR neue
-src_agents = src.get("agent", {})
-tgt_agents = tgt.get("agent", {})
-new_agents = 0
-for name, aconf in src_agents.items():
-    if name not in tgt_agents:
-        tgt_agents[name] = aconf
-        new_agents += 1
-tgt["agent"] = tgt_agents
+              src_agents = src.get("agent", {})
+              tgt_agents = tgt.get("agent", {})
+              for aname, src_aconf in src_agents.items():
+                  if aname not in tgt_agents:
+                      tgt_agents[aname] = src_aconf
+                  else:
+                      if "model" in src_aconf:
+                          tgt_agents[aname]["model"] = src_aconf["model"]
+                      if "description" in src_aconf:
+                          tgt_agents[aname]["description"] = src_aconf["description"]
+                      if "fallback" in src_aconf:
+                          tgt_agents[aname]["fallback"] = src_aconf["fallback"]
+              tgt["agent"] = tgt_agents
 
-# Merge commands — NUR neue
-src_cmds = src.get("command", {})
-tgt_cmds = tgt.get("command", {})
-new_cmds = 0
-for name, cconf in src_cmds.items():
-    if name not in tgt_cmds:
-        tgt_cmds[name] = cconf
-        new_cmds += 1
-tgt["command"] = tgt_cmds
+              # Merge commands — NUR neue
+              src_cmds = src.get("command", {})
+              tgt_cmds = tgt.get("command", {})
+              for name, cconf in src_cmds.items():
+                  if name not in tgt_cmds:
+                      tgt_cmds[name] = cconf
+              tgt["command"] = tgt_cmds
 
 # User's model choice BEWAHREN — NIEMALS überschreiben
 # User's $schema BEWAHREN
@@ -299,6 +336,24 @@ if [ -f ".env.example" ]; then
       cp .env.example "$OPENCODE_DIR/.env"
     fi
     log_ok ".env erstellt — bitte API Keys eintragen!"
+  fi
+fi
+
+# Ensure MODAL_BASE_URL is set in user .env for Modal pool proxy
+if [ -f "$OPENCODE_DIR/.env" ]; then
+  if ! grep -q '^MODAL_BASE_URL=' "$OPENCODE_DIR/.env"; then
+    echo 'MODAL_BASE_URL=http://92.5.60.87:4100/modal/v1' >> "$OPENCODE_DIR/.env"
+    log_ok "MODAL_BASE_URL in .env ergänzt"
+  fi
+fi
+
+if [ -f "$HOME/.zshrc" ]; then
+  if ! grep -q 'MODAL_BASE_URL' "$HOME/.zshrc"; then
+    echo "" >> "$HOME/.zshrc"
+    echo 'export MODAL_BASE_URL="http://92.5.60.87:4100/modal/v1"' >> "$HOME/.zshrc"
+    echo 'export MODAL_GATEWAY_KEY="sk-sin-fleet-master"' >> "$HOME/.zshrc"
+    echo 'export MODAL_POOL_URL="http://92.5.60.87:4100/modal"' >> "$HOME/.zshrc"
+    log_ok "Modal environment variables added to ~/.zshrc"
   fi
 fi
 
