@@ -1,3 +1,13 @@
+# 🚨 ABSOLUTES VERBOT FÜR BLINDES RATEN BEI BROWSER/SIN-BRIDGE (PRIORITY -8.0) 🚨
+
+NIEMALS darf irgendwas an sin-bridge geraten werden NICHTS NIEMALS !! NUR ECHTE KONTROLLEN !! nur echte erfassungen !! niemals blind oder geraten NIEMALS !!
+
+Jeder CSS-Selektor, jede Koordinate, jede Aktion MUSS vorher durch den DOM Pre-Scan (Accessibility Tree oder JavaScript Element-Scan) zu 100% verifiziert worden sein. Raten führt zum sofortigen permanenten Ban.
+
+1. **Keyboard-Eskalation**: Wenn DOM-Klicks scheitern, MUSS sofort die Keyboard-Eskalation (Tab, Enter, Space) in die Klick-Kette integriert werden.
+2. **DOM-Verifikation**: NACH JEDER Aktion muss eine explizite DOM-Verifikation erfolgen (nicht nur Vision-Analyse), um den Erfolg der Aktion zu beweisen.
+3. **Keyboard-Aktion**: 'keyboard' (Tastendruck-Sequenzen) ist eine offizielle neue Aktion, die Gemini vorschlagen kann, um UI-Elemente zu steuern, die nicht direkt klickbar sind.
+
 # 🚨🚨🚨 OPENSIN-BRIDGE VISION GATE MANDATE (PRIORITY -7.0 — ABSOLUTE OBERSTE REGEL, ÜBER ALLEM, KEINE AUSNAHMEN, SOFORTIGER PERMANENTER BAN BEI VERSTOSS) 🚨🚨🚨
 
 **KEIN AGENT DARF JEMALS WIEDER EINE EINZIGE AKTION IM WEB AUSFÜHREN OHNE VORHERIGE VISUELLE VERIFIKATION DURCH DAS VISION-MODELL.**
