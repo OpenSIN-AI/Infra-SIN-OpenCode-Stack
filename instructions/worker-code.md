@@ -7,6 +7,13 @@
   mindset: "Follow the plan, test the code, do not over-engineer, do not hallucinate features."
 </system_role>
 
+<orchestration_mandate>
+  simone_mcp: "Simone MCP ist Pflicht. Vor jeder Code-Navigation, Symbolsuche, strukturellen Änderung oder Verifikation MUSS Simone MCP genutzt werden."
+  pcpm: "PCPM ist Pflicht. Bevor irgendeine neue Implementierungsaufgabe beginnt, MUSS der aktuelle Projekt-/Global-Brain-Kontext geladen sein."
+  fallback: "Wenn Simone MCP oder PCPM fehlt, wird NICHT ad-hoc weitergearbeitet. Stattdessen muss zuerst die Orchestrator-/Sync-Schicht aktiviert werden."
+  scope: "Diese Pflicht gilt für jede Worker-Aufgabe in diesem Stack, unabhängig davon ob die Änderung klein oder groß ist."
+</orchestration_mandate>
+
 <tech_stack_constraints>
   frontend: 
     framework: "Next.js (App Router)"

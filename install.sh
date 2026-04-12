@@ -138,6 +138,12 @@ sync_dir_additive "agents" "$OPENCODE_DIR/agents" "Agents"
 log_info "Installing agents-instructions..."
 sync_dir_additive "agents-instructions" "$OPENCODE_DIR/agents-instructions" "Agent Instructions"
 
+if [ -f "$OPENCODE_DIR/agents-instructions/blueprint-mandates/MANDATE-0.34.md" ]; then
+  log_ok "Simone MCP + PCPM mandate aktiv"
+else
+  log_warn "Simone MCP + PCPM mandate fehlt noch"
+fi
+
 log_info "Installing vendor..."
 sync_dir_additive "vendor" "$OPENCODE_DIR/vendor" "Vendor"
 
@@ -195,6 +201,7 @@ all_plugins, seen = [], set()
 for p in tgt_plugins + src_plugins:
     pkg_name = p.split("@")[0] if "@" in p else p
     if pkg_name not in seen: all_plugins.append(p); seen.add(pkg_name)
+all_plugins = [p for p in all_plugins if "opencode-modal-pool-auth" not in p]
 tgt["plugin"] = all_plugins
 
 # Merge providers — kanonische Model-Metadaten updaten, Benutzer-Overrides bewahren
@@ -342,21 +349,10 @@ if [ -f ".env.example" ]; then
   fi
 fi
 
-# Ensure MODAL_BASE_URL is set in user .env for Modal pool proxy
 if [ -f "$OPENCODE_DIR/.env" ]; then
-  if ! grep -q '^MODAL_BASE_URL=' "$OPENCODE_DIR/.env"; then
-    echo 'MODAL_BASE_URL=http://92.5.60.87:4100/modal/v1' >> "$OPENCODE_DIR/.env"
-    log_ok "MODAL_BASE_URL in .env ergänzt"
-  fi
-fi
-
-if [ -f "$HOME/.zshrc" ]; then
-  if ! grep -q 'MODAL_BASE_URL' "$HOME/.zshrc"; then
-    echo "" >> "$HOME/.zshrc"
-    echo 'export MODAL_BASE_URL="http://92.5.60.87:4100/modal/v1"' >> "$HOME/.zshrc"
-    echo 'export MODAL_GATEWAY_KEY="sk-sin-fleet-master"' >> "$HOME/.zshrc"
-    echo 'export MODAL_POOL_URL="http://92.5.60.87:4100/modal"' >> "$HOME/.zshrc"
-    log_ok "Modal environment variables added to ~/.zshrc"
+  if ! grep -q '^MODAL_API_KEY=' "$OPENCODE_DIR/.env"; then
+    echo 'MODAL_API_KEY=' >> "$OPENCODE_DIR/.env"
+    log_ok "MODAL_API_KEY in .env ergänzt"
   fi
 fi
 

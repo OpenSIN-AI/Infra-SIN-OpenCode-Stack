@@ -32,6 +32,17 @@ REGEL: Führe diesen Terminal-Befehl aus. Bestätige mir kurz, dass die Hooks er
 
 Sobald das passiert ist, hat dein Projekt einen `.pcpm/` Ordner und teilt sein Gedächtnis mit der gesamten Flotte!
 
+## Simone MCP + PCPM sind Pflicht
+
+Ab sofort gilt für **jeden** Agenten in diesem Stack:
+
+1. **Simone MCP MUSS verwendet werden** für Code-Navigation, symbolische Analysen und strukturierte Edits.
+2. **PCPM MUSS geladen werden** bevor irgendeine neue Aufgabe begonnen wird.
+3. Wenn Simone MCP oder PCPM fehlen, werden sie zuerst über Hooks/Synchronisation aktiviert.
+4. Ad-hoc-Edits ohne Simone MCP sind nicht der Standard, wenn Simone MCP verfügbar ist.
+
+Die kanonische Mandats-Datei dazu ist: `agents-instructions/blueprint-mandates/MANDATE-0.34.md`
+
 ## Quick Start
 
 ```bash

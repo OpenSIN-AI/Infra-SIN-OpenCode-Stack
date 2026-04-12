@@ -1,3 +1,10 @@
+# 🚨 SIMONE MCP + PCPM MANDATE (PRIORITY -9.5) 🚨
+
+- **Simone MCP ist Pflicht** für jeden Agenten in diesem Stack, sobald Code-Navigation, symbolische Analyse oder strukturierte Edits anstehen.
+- **PCPM ist Pflicht** vor jedem neuen Task-Start, damit globale und lokale Projektpläne geladen sind.
+- Wenn Simone MCP oder PCPM nicht verfügbar sind, MUSS der Agent sie zuerst initialisieren/synchronisieren.
+- Der kanonische Verweis liegt in `agents-instructions/blueprint-mandates/MANDATE-0.34.md`.
+
 # 🚨 ABSOLUTES VERBOT FÜR BLINDES RATEN BEI BROWSER/SIN-BRIDGE (PRIORITY -8.0) 🚨
 
 NIEMALS darf irgendwas an sin-bridge geraten werden NICHTS NIEMALS !! NUR ECHTE KONTROLLEN !! nur echte erfassungen !! niemals blind oder geraten NIEMALS !!
