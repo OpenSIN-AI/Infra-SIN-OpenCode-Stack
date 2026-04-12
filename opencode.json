@@ -5,10 +5,9 @@
     "oh-my-opencode@3.11.2",
     "opencode-openrouter-auth",
     "opencode-qwen-auth",
-    "/Users/jeremy/dev/glm-rotator/opencode-modal-pool-auth",
-    "/Users/jeremy/dev/upgraded-opencode-stack/local-plugins/oh-my-opencode-sin"
+    "/Users/jeremy/dev/glm-rotator/opencode-modal-pool-auth"
   ],
-  "model": "openai/gpt-5.4",
+  "model": "qwen/coder-model",
   "provider": {
     "google": {
       "options": {
@@ -281,7 +280,7 @@
       }
     },
     "modal": {
-      "npm": "@ai-sdk/openai-compatible",
+      "npm": "@ai-sdk/openai",
       "options": {
         "baseURL": "http://92.5.60.87:4100/modal/v1",
         "apiKey": "sk-sin-fleet-master"
