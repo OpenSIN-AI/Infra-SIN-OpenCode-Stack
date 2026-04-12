@@ -73,7 +73,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | **Backups** | 52 | `~/.config/opencode/backups/` |
 | **Config** | 1 | `~/.config/opencode/opencode.json` (intelligent gemerged) |
 
-## Skills (29)
+## Skills (30)
 
 | Skill | Zweck |
 |-------|-------|
@@ -82,6 +82,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | `create-a2a-sin-coder` | A2A Coder Agent bootstrappen |
 | `create-a2a-team` | SIN A2A Team Manager erstellen |
 | `create-auth-plugin` | OpenCode Auth Plugin bauen |
+| `new-google-login` | Robustes Google-Login via Chrome-CDP |
 | `create-telegrambot` | Telegram Bot erstellen/deployen |
 | `create-github-account` | GitHub Account erstellen |
 | `create-github-app` | GitHub App erstellen |
@@ -111,10 +112,12 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 
 | Plugin | Zweck |
 |--------|-------|
-| `opencode-antigravity-auth` | Antigravity OAuth — Token-Rotation für Claude/Gemini |
+| `opencode-antigravity-auth` | Antigravity OAuth — Token-Rotation für Claude/Gemini + hot-reload sync |
 | `oh-my-opencode` | Oh-My-OpenCode Framework — Commands, Hooks, Orchestration |
 | `opencode-qwen-auth` | Qwen OAuth Auth via `/connect` |
 | `opencode-openrouter-auth` | OpenRouter Auth mit lokalem Proxy (local source included) |
+
+> **Note:** Der Antigravity-Auth-Flow liest `auth.json` und `antigravity-accounts.json` bei Dateiänderungen neu ein, damit laufende Sessions neu synchronisierte Credentials verwenden.
 
 ## CLI Tools (11)
 
