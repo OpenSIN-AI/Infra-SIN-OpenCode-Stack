@@ -147,7 +147,7 @@ Zusätzlich enthält der Snapshot den Guard `guard_create_flow.py`, der abweiche
 | **nvidia-nim** | `qwen-3.5-122b`, `qwen-3.5-397b` |
 | **openai** | `gpt-5.4` |
 | **openrouter** | 7 Free-Modelle (DeepSeek, Gemini, Llama, Phi) |
-| **qwen-code** | Qwen 3.6 Plus, Qwen 3.6 Vision Plus (OAuth, free up to 2000/day) |
+| **qwen** | `qwen/coder-model` – Qwen 3.6 Plus (OAuth, free up to 2000/day, no reasoning/thinking support) |
 
 ## Commands (13)
 
