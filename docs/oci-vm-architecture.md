@@ -130,6 +130,22 @@
 
 ---
 
+## 🗂️ Related GitHub Repos (OpenSIN-AI org)
+
+OCI VM components are spread across multiple repos:
+
+| Repo | Purpose | OCI VM Component |
+|------|---------|-----------------|
+| [`OpenSIN-AI/OpenSIN-backend`](https://github.com/OpenSIN-AI/OpenSIN-backend) | Backend + A2A fleet control plane | sin-server, sin-supabase services |
+| [`OpenSIN-AI/OpenSIN-Neural-Bus`](https://github.com/OpenSIN-AI/OpenSIN-Neural-Bus) | Event-Driven Nervous System | pgvector + NATS + Redis stack |
+| [`OpenSIN-AI/Team-SIN-Infrastructure`](https://github.com/OpenSIN-AI/Team-SIN-Infrastructure) | Infrastructure team | VM management, deployment |
+| [`OpenSIN-AI/Infra-SIN-Dev-Setup`](https://github.com/OpenSIN-AI/Infra-SIN-Dev-Setup) | Dev Environment Setup | Initial VM provisioning |
+| [`OpenSIN-AI/sin-github-action`](https://github.com/OpenSIN-AI/sin-github-action) | Self-hosted CI/CD | GitHub Actions Runners |
+| [`OpenSIN-AI/Core-SIN-Control-Plane`](https://github.com/OpenSIN-AI/Core-SIN-Control-Plane) | Doctor/Preflight/Eval | Health checks, preflight |
+| [`Delqhi/upgraded-opencode-stack`](https://github.com/Delqhi/upgraded-opencode-stack) | OpenCode Stack (local) | Skills, plugins, configs |
+
+---
+
 ## 🔧 Maintenance Commands
 
 ```bash
