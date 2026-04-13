@@ -73,7 +73,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | **Backups** | 52 | `~/.config/opencode/backups/` |
 | **Config** | 1 | `~/.config/opencode/opencode.json` (intelligent gemerged) |
 
-## Skills (30)
+## Skills (31)
 
 | Skill | Zweck |
 |-------|-------|
@@ -82,6 +82,7 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | `create-a2a-sin-coder` | A2A Coder Agent bootstrappen |
 | `create-a2a-team` | SIN A2A Team Manager erstellen |
 | `create-auth-plugin` | OpenCode Auth Plugin bauen |
+| `create-flow` | Interaktiver Flow Builder mit Screenshot+Vision; kanonisch in OpenSIN-AI/SIN-InkogniFlow |
 | `new-google-login` | Robustes Google-Login via Chrome-CDP |
 | `create-telegrambot` | Telegram Bot erstellen/deployen |
 | `create-github-account` | GitHub Account erstellen |
@@ -107,6 +108,9 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | `nvidia-3d-forge` | 3D Asset Pipeline |
 | `nvidia-video-forge` | Video-Generierung via NVIDIA |
 | `sora` | Sora Video-Generierung |
+
+Der Installer behandelt `create-flow` absichtlich als kanonische Ausnahme: die Skill-Dateien werden aus diesem Stack immer aktualisiert, damit alle Agenten dieselbe SIN-InkogniFlow-basierte Flow-Logik verwenden.
+Zusätzlich enthält der Snapshot den Guard `guard_create_flow.py`, der abweichende `create-flow`-Runtime-Dateien in anderen Repos erkennt und mit Exit-Code 2 blockiert.
 
 ## Plugins (5)
 

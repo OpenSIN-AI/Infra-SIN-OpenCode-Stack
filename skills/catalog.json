@@ -1,5 +1,13 @@
 [
   {
+    "slug": "3d-web",
+    "name": "3d-web",
+    "title": "3D Web",
+    "description": "Integrate ready-made GLB/GLTF 3D assets into websites, webapps, landing pages, and webshops with production-grade web performance, interaction, and fallback behavior.",
+    "source": "/Users/jeremy/.config/opencode/skills/3d-web",
+    "destination": "/Users/jeremy/.config/opencode/skills/3d-web"
+  },
+  {
     "slug": "anonymous",
     "name": "Anonymous",
     "title": "Anonymous",
@@ -134,5 +142,13 @@
     "description": "Build, debug, and deploy OpenCode auth plugins for any LLM provider (DeepSeek, Mistral, xAI, etc.). Covers the full lifecycle from scaffold to cache injection to token rotation watcher integration. Use when creating a new auth plugin or fixing a broken one.",
     "source": "/Users/jeremy/.config/opencode/skills/create-auth-plugin",
     "destination": "/Users/jeremy/.config/opencode/skills/create-auth-plugin"
+  },
+  {
+    "slug": "create-flow",
+    "name": "create-flow",
+    "title": "Create Flow",
+    "description": "Build interactive flows with atomic single-action steps, screenshot + vision gating, local brain evidence, and tiered autorun promotion (run → mini → low → high → max → full) only after 10 consecutive successful validations per tier. Vision analysis uses google/antigravity-gemini-3-flash directly and writes detailed analysis artifacts alongside each step.",
+    "source": "/Users/jeremy/.config/opencode/skills/create-flow",
+    "destination": "/Users/jeremy/.config/opencode/skills/create-flow"
   }
 ]
