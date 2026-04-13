@@ -10,6 +10,10 @@ import { transformResponsesToChatCompletions } from "./transform/request";
 import { createTransformContext, transformChatCompletionsToResponses, } from "./transform/response";
 import { createSSETransformContext, createSSETransformStream, } from "./transform/sse";
 const logger = createLogger("plugin");
+// Dead Qwen refresh tokens should not re-enter rotation immediately.
+// Once Qwen marks a refresh token invalid, the only real recovery is a fresh
+// `providers login` flow, so a long cooldown prevents endless reuse loops.
+const INVALID_AUTH_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 function normalizeUrl(value, fallback) {
     if (typeof value !== "string") {
         return fallback;
@@ -147,6 +151,30 @@ function getBackoffMs(reason, consecutiveFailures) {
 function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
+function isInvalidRefreshCode(code) {
+    return code === "invalid_grant" || code === "invalid_request";
+}
+function quarantineInvalidAccount(storage, index) {
+    return updateAccount(storage, index, {
+        accessToken: "",
+        expires: 0,
+        rateLimitResetAt: Date.now() + INVALID_AUTH_COOLDOWN_MS,
+    });
+}
+function selectAuthorizationAuth(latestAuth, selectedAuth) {
+    // `getAuth()` can lag behind a just-rotated or just-refreshed account.
+    // Only prefer the externally stored auth record when it clearly refers to
+    // the same refresh token and still has a live access token.
+    if (!isOAuthAuth(latestAuth)) {
+        return selectedAuth;
+    }
+    if (latestAuth.refresh === selectedAuth.refresh &&
+        latestAuth.access &&
+        !accessTokenExpired(latestAuth)) {
+        return latestAuth;
+    }
+    return selectedAuth;
+}
 async function ensureAuthInStorage(storage, auth) {
     const now = Date.now();
     const baseStorage = storage ?? ensureStorage(auth);
@@ -221,6 +249,7 @@ export const createQwenOAuthPlugin = (providerId) => async ({ client, directory 
                     apiKey: "",
                     fetch: async (input, init) => {
                         let attempts = 0;
+                        const forcedRefreshTokens = new Set();
                         const healthTracker = getHealthTracker();
                         const tokenTracker = getTokenTracker();
                         const selectOptions = {
@@ -253,18 +282,19 @@ export const createQwenOAuthPlugin = (providerId) => async ({ client, directory 
                                 expires: account.expires,
                                 resourceUrl: account.resourceUrl,
                             };
+                            let selectedAuth = authRecord;
                             const refreshBuffer = config.proactive_refresh
                                 ? config.refresh_window_seconds
                                 : 0;
-                            if (!authRecord.access ||
-                                accessTokenExpired(authRecord, refreshBuffer)) {
+                            if (!selectedAuth.access ||
+                                accessTokenExpired(selectedAuth, refreshBuffer)) {
                                 logger.debug("Token refresh needed", {
                                     accountIndex,
-                                    hasAccess: !!authRecord.access,
+                                    hasAccess: !!selectedAuth.access,
                                     proactive: config.proactive_refresh,
                                 });
                                 try {
-                                    const refreshed = await refreshAccessToken(authRecord, oauthOptions, client, providerId);
+                                    const refreshed = await refreshAccessToken(selectedAuth, oauthOptions, client, providerId);
                                     if (!refreshed) {
                                         throw new Error("Token refresh failed");
                                     }
@@ -279,6 +309,7 @@ export const createQwenOAuthPlugin = (providerId) => async ({ client, directory 
                                         lastUsed: now,
                                     });
                                     await saveAccounts(accountStorage);
+                                    selectedAuth = refreshed;
                                 }
                                 catch (error) {
                                     const refreshError = error;
@@ -286,8 +317,8 @@ export const createQwenOAuthPlugin = (providerId) => async ({ client, directory 
                                         accountIndex,
                                         code: refreshError.code,
                                     });
-                                    if (refreshError.code === "invalid_grant") {
-                                        accountStorage = updateAccount(accountStorage, accountIndex, { rateLimitResetAt: Date.now() + 60_000 });
+                                    if (isInvalidRefreshCode(refreshError.code)) {
+                                        accountStorage = quarantineInvalidAccount(accountStorage, accountIndex);
                                         await saveAccounts(accountStorage);
                                     }
                                     attempts += 1;
@@ -301,7 +332,7 @@ export const createQwenOAuthPlugin = (providerId) => async ({ client, directory 
                             if (!isOAuthAuth(latestAuth)) {
                                 return fetch(input, init);
                             }
-                            const activeAuth = latestAuth.access ? latestAuth : authRecord;
+                            const activeAuth = selectAuthorizationAuth(latestAuth, selectedAuth);
                             // Get URL from input - OpenCode already constructs full URLs
                             let rawUrl;
                             if (typeof input === "string") {
@@ -386,6 +417,53 @@ export const createQwenOAuthPlugin = (providerId) => async ({ client, directory 
                                 status: response.status,
                                 contentType: response.headers.get("content-type"),
                             });
+                            if (response.status === 401 || response.status === 403) {
+                                logger.debug("Authentication failed, attempting recovery", {
+                                    status: response.status,
+                                    accountIndex,
+                                });
+                                healthTracker.recordFailure(accountIndex);
+                                accountStorage = recordFailure(accountStorage, accountIndex);
+                                const refreshKey = activeAuth.refresh ?? account.refreshToken;
+                                const canForceRefresh = !!refreshKey && !forcedRefreshTokens.has(refreshKey);
+                                if (canForceRefresh) {
+                                    forcedRefreshTokens.add(refreshKey);
+                                    try {
+                                        const recovered = await refreshAccessToken(activeAuth, oauthOptions, client, providerId);
+                                        if (recovered) {
+                                            accountStorage = updateAccount(accountStorage, accountIndex, {
+                                                refreshToken: recovered.refresh,
+                                                accessToken: recovered.access,
+                                                expires: recovered.expires,
+                                                resourceUrl: recovered.resourceUrl ?? account.resourceUrl,
+                                                lastUsed: Date.now(),
+                                            });
+                                            await saveAccounts(accountStorage);
+                                            continue;
+                                        }
+                                    }
+                                    catch (error) {
+                                        const refreshError = error;
+                                        logger.debug("Forced refresh after auth failure failed", {
+                                            accountIndex,
+                                            code: refreshError.code,
+                                        });
+                                        if (isInvalidRefreshCode(refreshError.code)) {
+                                            accountStorage = quarantineInvalidAccount(accountStorage, accountIndex);
+                                        }
+                                        await saveAccounts(accountStorage);
+                                    }
+                                }
+                                else {
+                                    accountStorage = quarantineInvalidAccount(accountStorage, accountIndex);
+                                    await saveAccounts(accountStorage);
+                                }
+                                attempts += 1;
+                                if (attempts >= accountStorage.accounts.length) {
+                                    throw new Error("All Qwen OAuth accounts have invalid or expired credentials. Run `opencode providers login --provider qwen --method \"Qwen OAuth\"` to reconnect.");
+                                }
+                                continue;
+                            }
                             // Transform streaming response from Chat Completions to Responses API format
                             if (needsResponsesTransform &&
                                 response.ok &&

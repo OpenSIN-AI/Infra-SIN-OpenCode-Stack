@@ -70,12 +70,10 @@ if [ "$SKIP_NPM" = false ]; then
     fi
   fi
   if [ -d "local-plugins/opencode-qwen-auth" ]; then
-    if npm ls -g "opencode-qwen-auth" 2>/dev/null | grep -q "opencode-qwen-auth"; then
-      log_skip "opencode-qwen-auth"
-    else
-      [ "$DRY_RUN" = false ] && cd "local-plugins/opencode-qwen-auth" && npm install -g . 2>&1 | tail -1 && cd "$SCRIPT_DIR"
-      log_ok "opencode-qwen-auth installiert"
-    fi
+    # Qwen auth is shipped from this repository itself, so reinstalling it keeps
+    # the runtime plugin aligned with the repo's canonical bug fixes.
+    [ "$DRY_RUN" = false ] && cd "local-plugins/opencode-qwen-auth" && npm install -g . 2>&1 | tail -1 && cd "$SCRIPT_DIR"
+    log_ok "opencode-qwen-auth aktualisiert"
   fi
 else
   log_info "Skipping npm installs"
@@ -161,6 +159,9 @@ fi
 
 log_info "Installing vendor..."
 sync_dir_additive "vendor" "$OPENCODE_DIR/vendor" "Vendor"
+
+log_info "Installing local qwen plugin copy..."
+sync_dir_overlay "local-plugins/opencode-qwen-auth" "$OPENCODE_DIR/local-plugins/opencode-qwen-auth" "Qwen Plugin"
 
 log_info "Installing nodriver-profiles..."
 sync_dir_additive "nodriver-profiles" "$OPENCODE_DIR/nodriver-profiles" "Nodriver Profiles"
@@ -259,8 +260,9 @@ for name, prov in src_providers.items():
         src_opts = prov.get("options", {})
         tgt_opts = tgt_providers[name].get("options", {})
         
-        # Force sync critical options from source for modal provider
-        if name == "modal":
+        # Force sync critical options from source for providers where stale
+        # local values are known to break auth or routing.
+        if name in {"modal", "qwen"}:
             for k, v in src_opts.items():
                 tgt_opts[k] = v
         else:
@@ -270,7 +272,12 @@ for name, prov in src_providers.items():
                     tgt_opts[k] = v
         
         tgt_providers[name]["options"] = tgt_opts
-        if "npm" in prov and "npm" not in tgt_providers[name]:
+        if name in {"modal", "qwen"}:
+            if "npm" in prov:
+                tgt_providers[name]["npm"] = prov["npm"]
+            if "name" in prov:
+                tgt_providers[name]["name"] = prov["name"]
+        elif "npm" in prov and "npm" not in tgt_providers[name]:
             tgt_providers[name]["npm"] = prov["npm"]
 tgt["provider"] = tgt_providers
 

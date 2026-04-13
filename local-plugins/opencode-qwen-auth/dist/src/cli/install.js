@@ -6,14 +6,23 @@ import prompts from "prompts";
 const PLUGIN_NAME = "opencode-qwen-auth";
 const DEFAULT_PROVIDER_CONFIG = {
     qwen: {
-        npm: "@ai-sdk/openai",
+        npm: "@ai-sdk/openai-compatible",
+        name: "Qwen Code",
         options: {
             baseURL: "https://portal.qwen.ai/v1",
-            compatibility: "strict",
         },
         models: {
-            "qwen3-coder-plus": { contextWindow: 1048576 },
-            "qwen3-vl-plus": { contextWindow: 262144, attachment: true },
+            "coder-model": {
+                name: "Qwen 3.6 Plus",
+                limit: { context: 1048576, output: 65536 },
+                modalities: { input: ["text"], output: ["text"] },
+            },
+            "vision-model": {
+                name: "Qwen 3.6 Vision Plus",
+                limit: { context: 131072, output: 32768 },
+                modalities: { input: ["text", "image"], output: ["text"] },
+                attachment: true,
+            },
         },
     },
 };
@@ -115,6 +124,34 @@ function hasQwenProvider(config) {
         typeof config.provider === "object" &&
         "qwen" in config.provider);
 }
+function mergeQwenProvider(config) {
+    const updated = JSON.parse(JSON.stringify(config));
+    if (!updated.provider) {
+        updated.provider = {};
+    }
+    const canonicalProvider = DEFAULT_PROVIDER_CONFIG.qwen;
+    const existingProvider = updated.provider.qwen ?? {};
+    const existingOptions = existingProvider.options && typeof existingProvider.options === "object"
+        ? existingProvider.options
+        : {};
+    const existingModels = existingProvider.models && typeof existingProvider.models === "object"
+        ? existingProvider.models
+        : {};
+    updated.provider.qwen = {
+        ...existingProvider,
+        npm: canonicalProvider.npm,
+        name: canonicalProvider.name,
+        options: {
+            ...existingOptions,
+            ...canonicalProvider.options,
+        },
+        models: {
+            ...existingModels,
+            ...canonicalProvider.models,
+        },
+    };
+    return updated;
+}
 function addPlugin(config) {
     const updated = JSON.parse(JSON.stringify(config));
     if (!updated.$schema) {
@@ -129,17 +166,7 @@ function addPlugin(config) {
     return updated;
 }
 function addProvider(config) {
-    const updated = JSON.parse(JSON.stringify(config));
-    if (!updated.provider) {
-        updated.provider = {};
-    }
-    if (!hasQwenProvider(updated)) {
-        updated.provider = {
-            ...updated.provider,
-            ...DEFAULT_PROVIDER_CONFIG,
-        };
-    }
-    return updated;
+    return mergeQwenProvider(config);
 }
 function showDiff(before, after) {
     console.log("");
@@ -158,6 +185,9 @@ function showDiff(before, after) {
     }
     if (!hasQwenProvider(before) && hasQwenProvider(after)) {
         changeLines.push("Added provider: qwen");
+    }
+    if (hasQwenProvider(before) && JSON.stringify(before.provider?.qwen) !== JSON.stringify(after.provider?.qwen)) {
+        changeLines.push("Updated provider: qwen (canonical settings enforced)");
     }
     if (changeLines.length === 0) {
         console.log("No changes required.");
@@ -181,17 +211,17 @@ function printSuccess(configPath) {
     console.log("     \x1b[36mopencode\x1b[0m");
     console.log("");
     console.log("  2. Authenticate with Qwen:");
-    console.log("     \\x1b[36m/connect\\x1b[0m");
+    console.log("     \x1b[36mopencode providers login --provider qwen --method \"Qwen OAuth\"\x1b[0m");
     console.log("");
     console.log("  3. Select a Qwen model:");
-    console.log("     \x1b[36m/model qwen/qwen3-coder-plus\x1b[0m");
+    console.log("     \x1b[36m/model qwen/coder-model\x1b[0m");
     console.log("");
 }
 function printAlreadyInstalled() {
     console.log("");
     console.log("\x1b[33m⚠\x1b[0m Plugin already installed.");
     console.log("");
-    console.log("  To authenticate, run \\x1b[36m/connect\\x1b[0m in OpenCode.");
+    console.log("  To authenticate, run \x1b[36mopencode providers login --provider qwen --method \"Qwen OAuth\"\x1b[0m.");
     console.log("");
 }
 function printHelp() {
@@ -224,14 +254,12 @@ export function install(options = {}) {
         const existingConfig = findConfigPath();
         configPath = existingConfig || join(process.cwd(), "opencode.json");
     }
-    let config = existsSync(configPath) ? loadConfig(configPath) : {};
-    const alreadyHasPlugin = hasPlugin(config);
-    const alreadyHasProvider = hasQwenProvider(config);
-    if (alreadyHasPlugin && alreadyHasProvider) {
+    const before = existsSync(configPath) ? loadConfig(configPath) : {};
+    let config = addPlugin(before);
+    config = addProvider(config);
+    if (JSON.stringify(before) === JSON.stringify(config)) {
         return { success: true, configPath, alreadyInstalled: true };
     }
-    config = addPlugin(config);
-    config = addProvider(config);
     const backupPath = createBackup(configPath);
     if (backupPath) {
         console.log(`Created backup: ${backupPath}`);
