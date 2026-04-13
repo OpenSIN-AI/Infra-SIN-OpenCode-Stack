@@ -1,0 +1,51 @@
+# Upgraded OpenCode Stack - Full Context
+
+## Overview
+1:1 Kopie deines kompletten custom OpenCode CLI Setups. Klonen, installieren, fertig — identisch auf jedem MacBook.
+
+Every agent in this setup is connected to the Global-Brain (DPMA v4), which provides persistent memory across all projects.
+
+## What It Does
+- **Global-Brain (DPMA v4):** Agents never forget — global architecture rules, saved bugs, forbidden strategies are shared across all projects
+- **Local-Brain / GraphRAG:** Project-specific plan memory with auto-invalidation
+- **OMOC Swarm:** 5-agent swarm orchestration (Atlas, Hephaestus, Metis, Momus, Prometheus)
+- **SIN-Zeus Fleet Commander:** GitHub Projects, Issues, Branches + Hermes dispatch to cloud executors
+- **29+ Custom Skills:** A2A Agent Builder, Deploy, Debug, Browser Automation, Image/Video Generation
+- **5 Auth Plugins:** Antigravity OAuth (Token Rotation), Qwen OAuth, OpenRouter Proxy, OMO Framework
+- **11 CLI Tools:** sin-sync, sin-n8n, sin-telegrambot, sin-rotate, sin-health, and more
+- **GitLab Storage:** Infinite storage via auto-rotating GitLab repos (10GB free each)
+
+## Architecture
+- **Transport:** MCP stdio + HTTP/MCP
+- **Core:** opencode.json config with 5 providers, 21 agents, 13 commands
+- **Plugins:** opencode-antigravity-auth, oh-my-opencode, opencode-qwen-auth, opencode-openrouter-auth, gitlab-storage
+- **Fleet Sync:** sin-sync script pushes Mac → OCI VM → HF VM configs
+- **Storage:** GitLab auto-rotating repos with meta.json tracking
+
+## Quick Start
+```bash
+git clone https://github.com/Delqhi/upgraded-opencode-stack.git
+cd upgraded-opencode-stack
+./install.sh
+```
+
+## Providers
+- **google** (Antigravity): antigravity-claude-sonnet-4-6, antigravity-gemini-3.1-pro, antigravity-gemini-3-flash
+- **openai**: gpt-5.4 via OCI Proxy
+- **nvidia-nim**: qwen-3.5-122b, qwen-3.5-397b
+- **openrouter**: 7 Free models
+- **qwen**: qwen/coder-model (Qwen 3.6 Plus, OAuth, 2000/day free)
+
+## Key Commands
+- `./install.sh` — Install the full stack
+- `sin-sync` — Sync config to OCI VM and HF VMs
+- `opencode run "prompt"` — Run OpenCode with default model
+
+## Configuration
+See .env.example for all environment variables.
+
+## Links
+- GitHub: https://github.com/Delqhi/upgraded-opencode-stack
+- Documentation: https://github.com/Delqhi/upgraded-opencode-stack/blob/main/docs/
+- Issues: https://github.com/Delqhi/upgraded-opencode-stack/issues
+- License: https://github.com/Delqhi/upgraded-opencode-stack/blob/main/LICENSE

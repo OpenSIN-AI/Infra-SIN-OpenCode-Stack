@@ -1,79 +1,172 @@
+<a name="readme-top"></a>
+
 # Upgraded OpenCode Stack
 
-> **1:1 Kopie** deines kompletten custom OpenCode CLI Setups. Klonen, installieren, fertig — identisch auf jedem MacBook.
+<p align="center">
+  <a href="https://github.com/Delqhi/upgraded-opencode-stack/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" />
+  </a>
+  <a href="https://github.com/Delqhi/upgraded-opencode-stack/stargazers">
+    <img src="https://img.shields.io/github/stars/Delqhi/upgraded-opencode-stack?style=social" alt="Stars" />
+  </a>
+  <a href="https://github.com/Delqhi/upgraded-opencode-stack/network/members">
+    <img src="https://img.shields.io/github/forks/Delqhi/upgraded-opencode-stack?style=social" alt="Forks" />
+  </a>
+  <a href="https://github.com/Delqhi/upgraded-opencode-stack/last-commit">
+    <img src="https://img.shields.io/github/last-commit/Delqhi/upgraded-opencode-stack" alt="Last Commit" />
+  </a>
+  <a href="https://www.python.org/downloads/">
+    <img src="https://img.shields.io/badge/python-3.12+-3776AB?logo=python&logoColor=white" alt="Python" />
+  </a>
+  <a href="https://github.com/modelcontextprotocol">
+    <img src="https://img.shields.io/badge/MCP-2.0-068A0A?logo=mcp" alt="MCP" />
+  </a>
+</p>
 
-## 🧠 Core Architecture: Global-Brain & Local-Brain (DPMA v4)
+<p align="center">
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#architecture">Architecture</a> ·
+  <a href="#skills">Skills</a> ·
+  <a href="#commands">Commands</a> ·
+  <a href="#providers">Providers</a> ·
+  <a href="#deploy">Deploy</a> ·
+  <a href="#contributing">Contributing</a>
+</p>
 
-**DAS ALLERWICHTIGSTE FEATURE DIESES STACKS:** Jeder Agent in diesem Setup ist an das **Global-Brain (DPMA v4)** gekoppelt. Das bedeutet das Ende der "Amnesie" für Coding-Agenten.
+<p align="center">
+  <em>Clone. Install. Run. Dein komplettes OpenCode-Setup — auf jedem Mac identisch.</em>
+</p>
 
-Wenn du in diesem Stack ein neues Projekt startest, hat dein Agent nicht nur ein leeres Textfenster. Er bekommt durch unsere `beforeRun` und `afterRun` Hooks automatisch:
-1. **Das Global-Brain:** Alles, was Agenten jemals über all deine Projekte hinweg gelernt haben (globale Architekturregeln, gerettete Bugs, "Niemals X tun" Vorgaben).
-2. **Das Local-Brain (Project):** Projekt-spezifische Pläne, `forbidden` Strategien, die sich als falsch erwiesen haben, und den detaillierten History-Graph des aktuellen Repos.
-
-### 🚀 Wie du ein neues Projekt an das Brain anschließt:
-Kopiere diesen Prompt als **allererste Anweisung** an deinen Agenten, wenn du ein neues Verzeichnis öffnest:
-
-```markdown
-🚨 OBERSTE PRIORITÄT: GLOBAL-BRAIN INITIALISIERUNG 🚨
-
-Bevor du mit der eigentlichen Aufgabe beginnst oder Code schreibst, MUSST du dieses Projekt an unser "Global-Brain" (DPMA v4) ankoppeln. 
-
-Führe den folgenden Befehl im Terminal (im Root-Verzeichnis dieses Projekts) aus. Der Befehl installiert die notwendigen OpenCode-Hooks und verbindet das Projekt mit dem Global-Brain.
-
-\`\`\`bash
-node /Users/jeremy/dev/global-brain/src/cli.js setup-hooks \
-  --project $(basename "$PWD") \
-  --project-root "$PWD" \
-  --agents-directive
-\`\`\`
-
-REGEL: Führe diesen Terminal-Befehl aus. Bestätige mir kurz, dass die Hooks erfolgreich registriert wurden, und beginne ERST DANACH mit der eigentlichen Aufgabe.
-```
-
-Sobald das passiert ist, hat dein Projekt einen `.pcpm/` Ordner und teilt sein Gedächtnis mit der gesamten Flotte!
-
-## Simone MCP + PCPM sind Pflicht
-
-Ab sofort gilt für **jeden** Agenten in diesem Stack:
-
-1. **Simone MCP MUSS verwendet werden** für Code-Navigation, symbolische Analysen und strukturierte Edits.
-2. **PCPM MUSS geladen werden** bevor irgendeine neue Aufgabe begonnen wird.
-3. Wenn Simone MCP oder PCPM fehlen, werden sie zuerst über Hooks/Synchronisation aktiviert.
-4. Ad-hoc-Edits ohne Simone MCP sind nicht der Standard, wenn Simone MCP verfügbar ist.
-
-Die kanonische Mandats-Datei dazu ist: `agents-instructions/blueprint-mandates/MANDATE-0.34.md`
+---
 
 ## Quick Start
 
-```bash
-git clone https://github.com/Delqhi/upgraded-opencode-stack.git
-cd upgraded-opencode-stack
-./install.sh
+<table>
+<tr>
+<td width="33%" align="center">
+<strong>1. Clone</strong><br/><br/>
+<code>git clone Delqhi/upgraded-opencode-stack</code><br/><br/>
+<img src="https://img.shields.io/badge/10s-Blue?style=flat" />
+</td>
+<td width="33%" align="center">
+<strong>2. Install</strong><br/><br/>
+<code>./install.sh</code><br/><br/>
+<img src="https://img.shields.io/badge/2min-Blue?style=flat" />
+</td>
+<td width="33%" align="center">
+<strong>3. Run</strong><br/><br/>
+<code>opencode run "hello"</code><br/><br/>
+<img src="https://img.shields.io/badge/Go!-Green?style=flat" />
+</td>
+</tr>
+</table>
+
+> [!TIP]
+> Danach `.env` mit deinen API Keys befuellen — fertig. Exakt dasselbe Setup wie auf deinem Haupt-Mac.
+
+---
+
+## Features
+
+| Capability | Description | Status |
+|:---|:---|:---:|
+| **Global-Brain (DPMA v4)** | Multi-Project Memory — Agenten vergessen nie wieder was sie gelernt haben | ✅ |
+| **Local-Brain / GraphRAG** | Projekt-basiertes Plan-Gedächtnis mit Auto-Invalidation | ✅ |
+| **OMOC Swarm** | 5-Agenten-Schwarm (Atlas, Hephaestus, Metis, Momus, Prometheus) | ✅ |
+| **SIN-Zeus Fleet Commander** | GitHub Projects, Issues, Branches + Hermes Dispatch | ✅ |
+| **29+ Custom Skills** | A2A Agent Builder, Deploy, Debug, Browser Automation, Image/Video Gen | ✅ |
+| **5 Auth Plugins** | Antigravity OAuth, Qwen OAuth, OpenRouter Proxy, OMO Framework | ✅ |
+| **11 CLI Tools** | sin-sync, sin-n8n, sin-telegrambot, sin-rotate, sin-health, ... | ✅ |
+| **13 Custom Commands** | Swarm orchestration, Terminal orchestration, Zeus bootstrap | ✅ |
+| **5 Provider Configs** | Google Antigravity, OpenAI, NVIDIA NIM, OpenRouter, Qwen | ✅ |
+| **sin-sync Fleet Sync** | Mac → OCI VM → HF VM — identische Configs überall | ✅ |
+| **GitLab Storage** | Infinite storage via auto-rotating GitLab repos (10GB free each) | ✅ |
+
+<details>
+<summary>Full Tool Surface — Alle Komponenten im Detail</summary>
+
+### Skills (29)
+`create-a2a`, `create-a2a-mcp`, `create-a2a-sin-coder`, `create-a2a-team`, `create-auth-plugin`, `create-flow`, `new-google-login`, `create-telegrambot`, `create-github-account`, `create-github-app`, `create-hf-space-vm`, `cloudflare-deploy`, `vercel-deploy`, `sin-bridge`, `sin-vision-colab`, `enterprise-deep-debug`, `omoc-plan-swarm`, `check-plan-done`, `self-healer`, `sovereign-repo-governance`, `sovereign-research`, `opencode-subagent-delegation`, `anonymous`, `browser-crashtest-lab`, `doc`, `pdf`, `imagegen`, `gen-thumbnail`, `nvidia-3d-forge`, `nvidia-video-forge`, `sora`
+
+### Plugins (5)
+`opencode-antigravity-auth` (Token Rotation), `oh-my-opencode` (Framework), `opencode-qwen-auth` (Qwen OAuth), `opencode-openrouter-auth` (OpenRouter Proxy), `gitlab-storage` (Infinite Storage)
+
+### CLI Tools (11)
+`sin-document-forge`, `sin-google-docs`, `sin-health`, `sin-metrics`, `sin-n8n`, `sin-pull-token`, `sin-rotate`, `sin-rotator`, `sin-sync`, `sin-telegrambot`, `check-should-automate`
+
+</details>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+## Architecture
+
+```mermaid
+flowchart TB
+    subgraph Clients["Clients"]
+        OC[OpenCode CLI]
+        AG[A2A Agents]
+        SK[Custom Skills]
+    end
+
+    subgraph Transport["Transport Layer"]
+        STD[MCP stdio]
+        HTTP[HTTP/MCP]
+    end
+
+    subgraph Core["Core Stack"]
+        CFG[opencode.json]
+        PLG[5 Plugins]
+        AGT[21 Agents]
+    end
+
+    subgraph Storage["Storage"]
+        GL[GitLab Storage]
+        DP[DPMA v4 Brain]
+    end
+
+    subgraph Fleet["Fleet"]
+        MAC[Mac]
+        OCI[OCI VM]
+        HF[HF VMs]
+    end
+
+    OC --> STD
+    AG --> HTTP
+    SK --> STD
+    STD --> CFG
+    HTTP --> CFG
+    CFG --> PLG
+    CFG --> AGT
+    PLG --> GL
+    AGT --> DP
+    CFG --> SYNC[sin-sync]
+    SYNC --> MAC
+    SYNC --> OCI
+    SYNC --> HF
+
+    classDef clientClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef transportClass fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef coreClass fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef storageClass fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef fleetClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+
+    class OC,AG,SK clientClass
+    class STD,HTTP transportClass
+    class CFG,PLG,AGT coreClass
+    class GL,DP storageClass
+    class MAC,OCI,HF fleetClass
 ```
 
-Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasselbe OpenCode** wie auf deinem Haupt-Mac.
+For detailed architecture documentation see [docs/oci-vm-architecture.md](docs/oci-vm-architecture.md) and [FIXES_2026-04-11.md](FIXES_2026-04-11.md).
 
-## Was wird installiert
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-| Kategorie | Anzahl | Zielverzeichnis |
-|-----------|--------|-----------------|
-| **Skills** | 29 | `~/.config/opencode/skills/` |
-| **Plugins** | 5 | Global via npm + `~/.config/opencode/plugins/` |
-| **Agents** | 21 | `~/.config/opencode/agents/` |
-| **Agent Instructions** | 37 | `~/.config/opencode/agents-instructions/` |
-| **Commands** | 13 | `~/.config/opencode/commands/` |
-| **Scripts** | 17 | `~/.config/opencode/scripts/` |
-| **CLI Tools** | 11 | `~/.local/bin/` |
-| **Templates** | 5 | `~/.config/opencode/templates/` |
-| **Hooks** | 1 | `~/.config/opencode/hooks/` |
-| **Instructions** | 4 | `~/.config/opencode/instructions/` |
-| **Rules** | 1 | `~/.config/opencode/rules/` |
-| **Tools** | 1 | `~/.config/opencode/tools/` |
-| **Vendor** | 1633 | `~/.config/opencode/vendor/` |
-| **Backups** | 52 | `~/.config/opencode/backups/` |
-| **Config** | 1 | `~/.config/opencode/opencode.json` (intelligent gemerged) |
+---
 
-## Skills (31)
+## Skills
 
 | Skill | Zweck |
 |-------|-------|
@@ -82,74 +175,34 @@ Das war's. Danach `.env` mit deinen API Keys befüllen und du hast **exakt dasse
 | `create-a2a-sin-coder` | A2A Coder Agent bootstrappen |
 | `create-a2a-team` | SIN A2A Team Manager erstellen |
 | `create-auth-plugin` | OpenCode Auth Plugin bauen |
-| `create-flow` | Interaktiver Flow Builder mit Screenshot+Vision; kanonisch in OpenSIN-AI/SIN-InkogniFlow |
+| `create-flow` | Interaktiver Flow Builder (SIN-InkogniFlow) |
 | `new-google-login` | Robustes Google-Login via Chrome-CDP |
 | `create-telegrambot` | Telegram Bot erstellen/deployen |
-| `create-github-account` | GitHub Account erstellen |
-| `create-github-app` | GitHub App erstellen |
-| `create-hf-space-vm` | HuggingFace Space VM erstellen |
 | `cloudflare-deploy` | Cloudflare Deployment |
 | `vercel-deploy` | Vercel Deployment |
 | `sin-bridge` | OpenSIN Bridge Chrome Extension |
-| `sin-vision-colab` | Screen Recording + AI Vision |
 | `enterprise-deep-debug` | Enterprise Debugging |
-| `omoc-plan-swarm` | OMOC Plan Swarm |
-| `check-plan-done` | Plan-and-Execute Workflow |
-| `self-healer` | Self-Healing |
 | `sovereign-repo-governance` | Repo Governance |
-| `sovereign-research` | Sovereign Research |
-| `opencode-subagent-delegation` | Codex ↔ OpenCode Orchestration |
 | `anonymous` | Browser Automation (webauto-nodriver-mcp) |
-| `browser-crashtest-lab` | Full-Browser Crash-Test + QA |
-| `doc` | .docx Dokumenten-Handling |
-| `pdf` | PDF Handling |
 | `imagegen` | Bild-Generierung via Gemini |
-| `gen-thumbnail` | Self-learning YouTube Thumbnail A/B Engine |
-| `nvidia-3d-forge` | 3D Asset Pipeline |
 | `nvidia-video-forge` | Video-Generierung via NVIDIA |
-| `sora` | Sora Video-Generierung |
 
-Der Installer behandelt `create-flow` absichtlich als kanonische Ausnahme: die Skill-Dateien werden aus diesem Stack immer aktualisiert, damit alle Agenten dieselbe SIN-InkogniFlow-basierte Flow-Logik verwenden.
-Zusätzlich enthält der Snapshot den Guard `guard_create_flow.py`, der abweichende `create-flow`-Runtime-Dateien in anderen Repos erkennt und mit Exit-Code 2 blockiert.
+*Vollständige Liste: 29 Skills installiert*
 
-## Plugins (5)
+---
 
-| Plugin | Zweck |
-|--------|-------|
-| `opencode-antigravity-auth` | Antigravity OAuth — Token-Rotation für Claude/Gemini + hot-reload sync |
-| `oh-my-opencode` | Oh-My-OpenCode Framework — Commands, Hooks, Orchestration |
-| `opencode-qwen-auth` | Qwen OAuth Auth via `/connect` |
-| `opencode-openrouter-auth` | OpenRouter Auth mit lokalem Proxy (local source included) |
+## Commands
 
-> **Note:** Der Antigravity-Auth-Flow liest `auth.json` und `antigravity-accounts.json` bei Dateiänderungen neu ein, damit laufende Sessions neu synchronisierte Credentials verwenden.
+| Command | Zweck |
+|---------|-------|
+| `omoc-jam` | Collaborative Swarm Jam |
+| `omoc-max` | OMOC MAX best-of-n |
+| `omoc-status` | Swarm Members anzeigen |
+| `sin-terminal-orchestrate` | SIN-Terminal — parallele Sessions steuern |
+| `sin-zeus-bootstrap` | GitHub Project + Issue Pool aus Zeus Plan |
 
-## CLI Tools (11)
-
-| Tool | Zweck |
-|------|-------|
-| `sin-document-forge` | Word-Dokumente generieren |
-| `sin-google-docs` | Google Docs MCP |
-| `sin-health` | System Health Check |
-| `sin-metrics` | Metriken sammeln |
-| `sin-n8n` | n8n Workflow Management |
-| `sin-pull-token` | Token Pull |
-| `sin-rotate` | Token Rotation |
-| `sin-rotator` | Token Rotator |
-| `sin-sync` | OpenCode Config Sync (Mac → OCI VM) |
-| `sin-telegrambot` | Telegram Bot CLI |
-| `check-should-automate` | Inefficiency Detector für n8n |
-
-## Provider (5 konfiguriert)
-
-| Provider | Modelle |
-|----------|---------|
-| **google** (Antigravity) | `antigravity-claude-sonnet-4-6`, `antigravity-claude-opus-4-6-thinking`, `antigravity-gemini-3.1-pro`, `antigravity-gemini-3-flash` |
-| **nvidia-nim** | `qwen-3.5-122b`, `qwen-3.5-397b` |
-| **openai** | `gpt-5.4` |
-| **openrouter** | 7 Free-Modelle (DeepSeek, Gemini, Llama, Phi) |
-| **qwen** | `qwen/coder-model` – Qwen 3.6 Plus (OAuth, free up to 2000/day, no reasoning/thinking support) |
-
-## Commands (13)
+<details>
+<summary>Alle 13 Commands</summary>
 
 | Command | Zweck |
 |---------|-------|
@@ -167,89 +220,55 @@ Zusätzlich enthält der Snapshot den Guard `guard_create_flow.py`, der abweiche
 | `sin-zeus-hermes` | Hermes Dispatch Payloads generieren |
 | `sin-zeus-status` | Zeus Control-Plane Status |
 
-## Vanilla OpenCode vs. Oh-My-OpenCode vs. Dein Custom Stack
+</details>
 
-### Was OpenCode nativ kann (ohne Plugins)
+---
 
-| Feature | Vanilla OpenCode |
-|---------|-----------------|
-| Agent Management | ✅ `opencode agent create/list` |
-| Session Export/Import | ✅ `opencode export/import` |
-| LSP Tools | ✅ Integriert |
-| MCP Management | ✅ `opencode mcp` |
-| Hooks | ✅ Eigenes Hook-System |
-| Plugins | ✅ `opencode plugin` |
-| GitHub Integration | ✅ `opencode github`, `opencode pr` |
-| Subagent Delegation | ✅ `task()` Tool |
-| Ralph/Ultrawork Loop | ✅ `/ulw-loop`, `/ralph-loop` |
-| Provider-Config | ✅ `opencode providers` |
-| Model-Listing | ✅ `opencode models` |
-| Token Stats | ✅ `opencode stats` |
+## Providers
 
-### Was Oh-My-OpenCode (OMO) zusätzlich bringt
+| Provider | Modelle |
+|----------|---------|
+| **google** (Antigravity) | `antigravity-claude-sonnet-4-6`, `antigravity-claude-opus-4-6-thinking`, `antigravity-gemini-3.1-pro`, `antigravity-gemini-3-flash` |
+| **openai** | `gpt-5.4` via OCI Proxy |
+| **nvidia-nim** | `qwen-3.5-122b`, `qwen-3.5-397b` |
+| **openrouter** | 7 Free-Modelle (DeepSeek, Gemini, Llama, Phi) |
+| **qwen** | `qwen/coder-model` — Qwen 3.6 Plus (OAuth, 2000/day free) |
 
-| Feature | OMO | Vanilla |
-|---------|-----|---------|
-| **Curated Agent-Teams** (Oracle, Librarian, Explore, Sisyphus) | ✅ Vorkonfiguriert | ❌ Manuell |
-| **Sisyphus Ultraworker** | ✅ Endlos-Schleife bis Task fertig | ❌ |
-| **Todo Continuation Enforcer** | ✅ Zwingt Agent weiterzuarbeiten | ❌ |
-| **Comment Checker** | ❌ DEAKTIVIERT — Kommentare sind PFLICHT! | ✅ |
-| **Curated MCPs** (Exa, Context7, Grep.app) | ✅ Vorkonfiguriert | ❌ |
-| **Google OAuth Auth** | ✅ Eingebaut | ❌ |
-| **Claude Code Compatibility** | ✅ Commands, Agents, Skills, Hooks | ❌ |
-| **Tmux Integration** | ✅ | ❌ |
-| **JSONC Config Support** | ✅ | ❌ |
+---
 
-### Was NUR dein Custom Stack hat (nicht in OMO!)
+## Deploy
 
-| Feature | Dein Stack | OMO |
-|---------|-----------|-----|
-| **Global-Brain (DPMA v4)** | ✅ Multi-Project Memory + Auto-Invalidation | ❌ (Vergisst alles) |
-| **Local-Brain / GraphRAG** | ✅ Projekt-basiertes Plan-Gedächtnis | ❌ |
-| **OMOC Swarm** (Atlas, Hephaestus, Metis, Momus, Prometheus) | ✅ 5-Agenten-Schwarm | ❌ Nur Sisyphus |
-| **SIN-Zeus** (Fleet Commander) | ✅ | ❌ |
-| **SIN-Terminal Orchestration** | ✅ 4 Commands | ❌ |
-| **29 Custom Skills** | ✅ | ❌ (hat 0) |
-| **Antigravity Auth Plugin** | ✅ Token-Rotation | ❌ (eigenes Google Auth) |
-| **OpenRouter Auth (lokal)** | ✅ Mit Proxy | ❌ |
-| **11 sin-* CLI Tools** | ✅ | ❌ |
-| **17 Scripts** (Sync, Rotation, PR-Watcher, etc.) | ✅ | ❌ |
-| **n8n Integration** | ✅ sin-n8n CLI | ❌ |
-| **Telegram Bot Integration** | ✅ | ❌ |
-| **Agent Instructions** (37 Dateien) | ✅ | ❌ |
-| **Vendor Dependencies** | ✅ 1633 Dateien | ❌ |
-| **sin-sync** (Mac → OCI VM) | ✅ | ❌ |
+| Methode | Kommando | Zweck |
+|:---|:---|:---|
+| **Local** | `./install.sh` | Mac Setup — 1:1 Kopie des Setups |
+| **OCI VM** | `sin-sync` | Config Sync Mac → OCI VM (92.5.60.87) |
+| **HF VM** | `sin-sync` | Config Sync Mac → HF Spaces |
 
-## Post-Install
+> [!IMPORTANT]
+> `sin-sync` muss nach JEDER Aenderung an `opencode.json` ausgefuehrt werden. Auth-Dateien werden automatisch ausgeschlossen.
 
-```bash
-# 1. API Keys setzen
-cp .env.example .env
-# .env bearbeiten und deine Keys eintragen
+<details>
+<summary>Environment Variables</summary>
 
-# 2. Verifizieren
-opencode --version
-ls ~/.config/opencode/skills/ | wc -l  # Sollte 29+ zeigen
+| Variable | Purpose | Required |
+|:---|:---|:---:|
+| `NVIDIA_API_KEY` | NVIDIA NIM | ✅ |
+| `GOOGLE_API_KEY` | Gemini Direct API | ✅ |
+| `OPENROUTER_API_KEY` | OpenRouter | ✅ |
+| `OPENAI_API_KEY` | OpenAI (via Proxy) | ✅ |
+| `TELEGRAM_BOT_TOKEN` | sin-telegrambot | |
+| `N8N_BASE_URL` | n8n URL | |
+| `N8N_API_KEY` | n8n API Key | |
+| `OCI_VM_HOST` | OCI VM Host | |
+| `OCI_VM_USER` | OCI VM User | |
+| `SUPABASE_URL` | Supabase | |
+| `SUPABASE_KEY` | Supabase Key | |
 
-# 3. Sync zu OCI VM (optional)
-sin-sync
-```
+</details>
 
-## .env Variablen
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-```bash
-NVIDIA_API_KEY=          # NVIDIA NIM
-GOOGLE_API_KEY=          # Gemini Direct API
-OPENROUTER_API_KEY=      # OpenRouter
-OPENAI_API_KEY=          # OpenAI (via Proxy)
-TELEGRAM_BOT_TOKEN=      # sin-telegrambot
-N8N_BASE_URL=            # n8n URL
-N8N_API_KEY=             # n8n API Key
-OCI_VM_HOST=             # OCI VM Host (sin-sync)
-OCI_VM_USER=             # OCI VM User
-SUPABASE_URL=            # Supabase
-SUPABASE_KEY=            # Supabase Key
-```
+---
 
 ## Repo Struktur
 
@@ -259,35 +278,68 @@ upgraded-opencode-stack/
 ├── opencode.json           # OpenCode Config (gesanitized)
 ├── AGENTS.md               # Globale Agent-Regeln
 ├── .env.example            # API Key Template
-├── bin/                    # 11 echte CLI Tools
+├── llms.txt                # AI Discoverability
+├── llms-full.txt           # Full Context for AI Agents
+├── CONTRIBUTING.md         # How to contribute
+├── SECURITY.md             # Security policy
+├── SUPPORT.md              # Where to get help
+├── bin/                    # 11 CLI Tools
 ├── skills/                 # 29 Skills
-├── plugins/                # 5 Plugins (2 lokal)
+├── plugins/                # 5+ Plugins (lokal)
 ├── agents/                 # Agent-Definitionen
-├── agents-instructions/    # 37 Agent-Instruktionen
 ├── commands/               # 13 Custom Commands
 ├── scripts/                # 17 Scripts
+├── docs/                   # OCI VM Architecture + Fixes
 ├── hooks/                  # Git Hooks
 ├── templates/              # JSON Schemas
-├── instructions/           # 4 Anleitungen
-├── rules/                  # Model-Regeln
-├── tools/                  # Utility Tools
-├── platforms/              # Platform Evidence
-├── vendor/                 # Vendored Dependencies
-├── backups/                # Config Backups
-└── docs/                   # Dokumentation
+└── vendor/                 # Vendored Dependencies
 ```
-
-## Was NICHT im Repo ist (aus Sicherheitsgründen)
-
-- `antigravity-accounts.json` — OAuth Tokens
-- `token.json`, `auth.json` — API Keys
-- `telegram_config.json` — Telegram Config
-- `*_cookies.json` — Browser Cookies
-- `*.db`, `*.db-wal` — Lokale Datenbanken
-- `node_modules/` — Wird per `npm install -g` installiert
-
-Diese Dateien werden vom Installer als Platzhalter angelegt und müssen manuell befüllt werden.
 
 ---
 
-**Built by OpenSIN-AI Fleet** — sincode
+## Changelog
+
+### v2.1.0 (2026-04-14)
+- Enterprise Visual README overhaul (badges, diagrams, llms.txt)
+- GitLab Storage skill added (infinite storage via auto-rotating repos)
+- OCI VM architecture documented
+- .so temp file leak root cause fixed + systemd timer added
+- Vision model removed from Qwen config (no longer supported)
+- reasoningEffort removed from all Qwen agents (not supported)
+
+### v2.0.0 (2026-04-12)
+- Qwen OAuth plugin fully fixed and integrated
+- Global-Brain DPMA v4 hooks installed
+
+### v1.0.0 (2026-04-11)
+- Initial release
+- 29 Skills, 5 Plugins, 21 Agents, 11 CLI Tools
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run `./install.sh` to verify
+5. Commit (`git commit -m 'Add amazing feature'`)
+6. Push (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+> [!NOTE]
+> Nach jeder Aenderung an `opencode.json` MUSS `sin-sync` ausgefuehrt werden.
+
+---
+
+## License
+
+MIT. See [LICENSE](LICENSE) for details.
+
+---
+
+<p align="center">
+  <sub>Built by <a href="https://github.com/OpenSIN-AI">OpenSIN-AI Fleet</a></sub>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
