@@ -1256,3 +1256,5 @@ Wir sind Hacker. Wir sind Umgeher. Wenn ein offizieller Weg (API, OAuth, Scopes,
 - Wer `opencode.json` auf direkte Modal-Keys ändert, zerstört die Fleet-Synchronisation und begeht einen Protokollverstoß.
 
 
+
+
