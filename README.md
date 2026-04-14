@@ -160,7 +160,7 @@ flowchart TB
     class MAC,OCI,HF fleetClass
 ```
 
-For detailed architecture documentation see [docs/oci-vm-architecture.md](docs/oci-vm-architecture.md) and [FIXES_2026-04-11.md](FIXES_2026-04-11.md).
+For detailed architecture documentation see [docs/oci-vm-architecture.md](docs/oci-vm-architecture.md), [FIXES_2026-04-11.md](FIXES_2026-04-11.md), and [docs/operations/system-directives-guide.md](docs/operations/system-directives-guide.md) (System Directives & Brain Sync Enforcer).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
