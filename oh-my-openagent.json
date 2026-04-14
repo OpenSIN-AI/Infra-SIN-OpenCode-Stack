@@ -1,11 +1,40 @@
+// ╔══════════════════════════════════════════════════════════╗
+// ║  OH-MY-OPENAGENT.json — Subagenten-Modell-Konfiguration  ║
+// ╠══════════════════════════════════════════════════════════╣
+// ║  WAS IST DAS?                                            ║
+// ║  Dies ist die KANONISCHE Konfiguration für ALLE          ║
+// ║  Subagenten-Modelle im OpenSIN Stack.                    ║
+// ║                                                          ║
+// ║  WANN WIRD DAS GENUTZT?                                  ║
+// ║  Immer wenn ein Haupt-Agent (z.B. SIN-Zeus) an einen     ║
+// ║  Subagenten delegiert:                                   ║
+// ║    task(subagent_type="explore") → nutzt explore.model   ║
+// ║    task(category="quick") → nutzt categories.quick.model ║
+// ║                                                          ║
+// ║  UNTERSCHIED ZU opencode.json:                           ║
+// ║    opencode.json      → DEINE Agenten (die du siehst)    ║
+// ║    oh-my-openagent.json → SUBAGENTEN (die im Hintergrund ║
+// ║                           arbeiten wenn delegiert wird)  ║
+// ╚══════════════════════════════════════════════════════════╝
 {
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
+
+  // Automatisch zum nächsten Modell wechseln wenn das primäre ausfällt
   "model_fallback": true,
+
+  // Diese Skills sind deaktiviert (spielen nicht mit unserem Stack zusammen)
   "disabled_skills": [
-    "playwright",
-    "dev-browser"
+    "playwright",    // Playwright ist gebannt — wir nutzen nodriver
+    "dev-browser"    // Dev-Browser kollidiert mit webauto-nodriver-mcp
   ],
+
+  // ═══════════════════════════════════════════════════════════
+  // AGENTEN — Spezifische Modelle für jeden Subagenten-Typ
+  // ═══════════════════════════════════════════════════════════
   "agents": {
+
+    // EXPLORE — Codebase erkunden, Dateien durchsuchen, Struktur verstehen
+    // Nutzt GLM-5.1 (gratis via Modal) — schnell und günstig für Lese-Operationen
     "explore": {
       "model": "modal/glm-5.1-fp8",
       "fallback_models": [
@@ -16,6 +45,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // LIBRARIAN — Dokumentation lesen, Spezifikationen analysieren, Referenzen finden
+    // Nutzt GLM-5.1 (gratis via Modal) — perfekt für Text-Lastige Aufgaben
     "librarian": {
       "model": "modal/glm-5.1-fp8",
       "fallback_models": [
@@ -26,6 +58,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // ORACLE — Architektur-Analyse, Design-Entscheidungen, Best Practices
+    // Nutzt GPT-5.4 — beste Architektur-Erkennung
     "oracle": {
       "model": "openai/gpt-5.4",
       "fallback_models": [
@@ -35,6 +70,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // MULTIMODAL-LOOKER — Bildanalyse, Screenshots auswerten, UI verstehen
+    // Nutzt Gemini 3.1 Pro — bestes Vision-Modell im Stack
     "multimodal-looker": {
       "model": "google/antigravity-gemini-3.1-pro",
       "fallback_models": [
@@ -44,6 +82,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // MOMUS — Plan-Kritiker, findet Fehler in Plänen, warnt vor Risiken
+    // Nutzt Gemini 3.1 Pro — starkes kritisches Denken
     "momus": {
       "model": "google/antigravity-gemini-3.1-pro",
       "fallback_models": [
@@ -53,6 +94,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // METIS — Plan-Berater, strategische Empfehlungen, Alternativen aufzeigen
+    // Nutzt Gemini 3.1 Pro — starke strategische Analyse
     "metis": {
       "model": "google/antigravity-gemini-3.1-pro",
       "fallback_models": [
@@ -62,6 +106,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // SISYPHUS — Ultraworker, endlose Aufgaben bis sie fertig sind
+    // Nutzt Claude Opus 4.6 Thinking — tiefstes Nachdenken für komplexe Tasks
     "sisyphus": {
       "model": "google/antigravity-claude-opus-4-6-thinking",
       "fallback_models": [
@@ -71,6 +118,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // HEPHAESTUS — Deep Agent, tiefe Code-Analyse, komplexe Implementationen
+    // Nutzt Claude Sonnet 4.6 — bestes Coding-Modell
     "hephaestus": {
       "model": "google/antigravity-claude-sonnet-4-6",
       "fallback_models": [
@@ -80,6 +130,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // ATLAS — Plan Executor, setzt Pläne in Code um
+    // Nutzt Claude Opus 4.6 Thinking — durchdachteste Implementation
     "atlas": {
       "model": "google/antigravity-claude-opus-4-6-thinking",
       "fallback_models": [
@@ -89,6 +142,9 @@
         "qwen/coder-model"
       ]
     },
+
+    // PROMETHEUS — Plan Builder, erstellt detaillierte Pläne
+    // Nutzt Qwen 3.6 Plus — kostenlos und schnell für Plan-Erstellung
     "prometheus": {
       "model": "qwen/coder-model",
       "fallback_models": [
@@ -98,6 +154,9 @@
         "google/antigravity-claude-sonnet-4-6"
       ]
     },
+
+    // SISYPHUS-JUNIOR — Fast-Ultraworker, schnellere Variante von Sisyphus
+    // Nutzt Gemini 3.1 Pro — guter Kompromiss aus Geschwindigkeit und Qualität
     "sisyphus-junior": {
       "model": "google/antigravity-gemini-3.1-pro",
       "fallback_models": [
@@ -108,7 +167,13 @@
       ]
     }
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // KATEGORIEN — Modell-Auswahl wenn kein spezifischer Agent angegeben
+  // ═══════════════════════════════════════════════════════════
   "categories": {
+
+    // QUICK — Schnelle Antworten, einfache Fragen, kurze Tasks
     "quick": {
       "model": "openai/gpt-5.4",
       "fallback_models": [
@@ -117,6 +182,8 @@
         "qwen/coder-model"
       ]
     },
+
+    // DEEP — Tiefe Analysen, komplexe Probleme, umfangreiche Recherche
     "deep": {
       "model": "openai/gpt-5.4",
       "fallback_models": [
@@ -126,6 +193,8 @@
         "qwen/coder-model"
       ]
     },
+
+    // ARTISTRY — Kreative Tasks, Design, UI/UX, visuelle Inhalte
     "artistry": {
       "model": "openai/gpt-5.4",
       "fallback_models": [
@@ -134,6 +203,8 @@
         "qwen/coder-model"
       ]
     },
+
+    // ULTRABRAIN — Schwerste Probleme, maximale Denkleistung
     "ultrabrain": {
       "model": "google/antigravity-claude-opus-4-6-thinking",
       "fallback_models": [
@@ -143,6 +214,8 @@
         "qwen/coder-model"
       ]
     },
+
+    // VISUAL-ENGINEERING — UI/UX Tasks, Frontend-Design, Layout
     "visual-engineering": {
       "model": "google/antigravity-gemini-3.1-pro",
       "fallback_models": [
@@ -151,6 +224,8 @@
         "qwen/coder-model"
       ]
     },
+
+    // UNSPECIFIED-LOW — Unspezifische Tasks mit niedriger Priorität
     "unspecified-low": {
       "model": "openai/gpt-5.4",
       "fallback_models": [
@@ -159,6 +234,8 @@
         "qwen/coder-model"
       ]
     },
+
+    // UNSPECIFIED-HIGH — Unspezifische Tasks mit hoher Priorität
     "unspecified-high": {
       "model": "openai/gpt-5.4",
       "fallback_models": [
@@ -168,6 +245,8 @@
         "qwen/coder-model"
       ]
     },
+
+    // WRITING — Text-Generierung, Dokumentation, Copywriting
     "writing": {
       "model": "openai/gpt-5.4",
       "fallback_models": [

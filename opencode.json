@@ -1,3 +1,14 @@
+// ====================================================================
+// OPENCODE.json - HAUPT-KONFIGURATION
+// ====================================================================
+// WAS: Haupt-Config fuer OpenCode CLI (Provider, Modelle, MCPs,
+//      Agenten, Commands) - das was DU direkt als Nutzer siehst
+//
+// VS oh-my-openagent.json:
+//   opencode.json          -> DEINE Agenten (sichtbar)
+//   oh-my-openagent.json   -> SUBAGENTEN (intern, bei Delegation)
+// ====================================================================
+
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
