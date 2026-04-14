@@ -1,10 +1,18 @@
-# GitLab Storage — Unendlicher Speicher für die gesamte SIN-Flotte
+# ⚠️ DEPRECATED — GitLab Storage Plugin
 
-> **ZWECK:** Alle schweren Dateien, Logs, Backups, Docker-Images, Reports und Agent-Artefakte werden in private GitLab-Repos (10GB free each, unendlich viele Repos) verlagert. Keine OCI-VM-Disk-Voll-Probleme mehr.
+> **WICHTIG:** Dieses Plugin ist **VERALTET** und wird nicht mehr unterstützt.  
+> **ERSATZ:** Verwende stattdessen **A2A-SIN-Box-Storage** (room-09) für alle Speicheranforderungen.  
+> Siehe: `docs/storage/box-cloud-storage.md` für Migration.
+
+# 🛑 GITLAB STORAGE DEPRECATED — Unendlicher Speicher für die gesamte SIN-Flotte
+
+> **ZWECK (VERALTET):** Alle schweren Dateien, Logs, Backups, Docker-Images, Reports und Agent-Artefakte wurden früher in private GitLab-Repos (10GB free each, unendlich viele Repos) verlagert.  
+> **STATUS:** GitLab hat unser Konto gesperrt (zu viele Dateien).  
+> **ABLÖSUNG:** Ab sofort nutzt OpenSIN **Box.com** als primären Cloud Storage via `A2A-SIN-Box-Storage`.
 
 ---
 
-## 📁 Skill-Struktur
+## 📁 Skill-Struktur (VERALTET)
 
 ```
 ~/.config/opencode/skills/gitlab-storage/
@@ -96,21 +104,23 @@ Jeder Eintrag enthält:
 }
 ```
 
-### Bekannte Projekte (Stand: 2026-04-13)
+### Bekannte Projekte (MIGRIERT — Stand: 2026-04-13)
 
-| Projekt | Repo-Prefix | Visibility | Zweck |
-|---------|-------------|------------|-------|
-| `sin-solver` | `sin-solver-logcenter-` | **private** | Alle SIN Solver Logs, Videos, Reports |
-| `sin-backend` | `sin-backend-storage-` | **private** | OpenSIN-Backend Dateien, DB-Dumps |
-| `oci-vm` | `oci-vm-storage-` | **private** | OCI VM Docker-Images, System-Backups |
-| `opencode-stack` | `opencode-stack-logs-` | **private** | OpenCode CLI Logs, Plugin-Logs |
-| `sin-code` | `sin-code-artifacts-` | **private** | Build-Artefakte, Test-Results |
+| Projekt | Alter Storage-Repo | Neuer Speicherort | Status |
+|---------|-------------------|-------------------|--------|
+| `sin-solver` | `sin-solver-logcenter-*` | Box.com `/Cache` (room-09) | ✅ migriert |
+| `sin-backend` | `sin-backend-storage-*` | Box.com `/Cache` (room-09) | ✅ migriert |
+| `oci-vm` | `oci-vm-storage-*` | Box.com `/Cache` (room-09) | ✅ migriert |
+| `opencode-stack` | `opencode-stack-logs-*` | Box.com `/Cache` (room-09) | ✅ migriert |
+| `sin-code` | `sin-code-artifacts-*` | Box.com `/Cache` (room-09) | ✅ migriert |
 
 ---
 
-## 🔗 Machine-Links (Welche Maschine nutzt welche Repos)
+## 🔗 Machine-Links (VERALTET — Nicht mehr verwendet)
 
-**Konfiguration:** `config/machine-links.json`
+**HINWEIS:** Diese Konfiguration ist veraltet. Durch die zentrale Box Storage Service (`room-09-box-storage`) sind keine lokalen sync_dirs mehr nötig. Alle Uploads gehen direkt an Box.com.
+
+**Alte Konfiguration (für Referenz):**
 
 ```json
 {
@@ -141,7 +151,7 @@ Jeder Eintrag enthält:
 
 ---
 
-## 🔄 Auto-Rotation (wenn Repo voll)
+## 🔄 Auto-Rotation (VERALTET — Wird nicht mehr genutzt)
 
 - **Limit:** 9 GB pro Repo (10 GB free - 1 GB Safety)
 - **Trigger:** Bei Upload prüft Script automatisch ob Repo voll ist
@@ -191,44 +201,47 @@ gitlab_storage_manager.py upload --project oci-vm --file /var/log/syslog --categ
 
 ---
 
-## 🚨 WICHTIGE REGELN FÜR ALLE AGENTEN
+## 🚨 WICHTIGE HINWEISE (DEPRECATED)
 
-1. **NIEMALS** große Dateien lokal speichern (>1 MB) → IMMEDIATELY nach GitLab uploaden
-2. **IMMER** `gitlab_storage_manager.py` nutzen, nicht manuell `git push`
-3. **IMMER** `.meta.json` wird automatisch erstellt — nicht manuell bearbeiten
-4. **IMMER** Tags setzen für spätere Suche
-5. **NIEMALS** Secrets/Tokens in Dateien speichern die nach GitLab gehen
-6. **IMMER** `--category` korrekt setzen
-7. **IMMER** prüfen ob Repo voll ist vor Upload (Script macht das automatisch)
+1. ⚠️ **Dieses Plugin ist DEPRECATED.** Verwende stattdessen `A2A-SIN-Box-Storage` (room-09).
+2. **NICHT MEHR VERWENDEN** für neue Projekte.
+3. Bestehende Uploads wurden migriert; neueste Daten liegen in Box.com.
+4. Die hier beschriebenen Befehle funktionieren nur noch über Kompatibilitätsschicht (`box_storage.py`) und sind ab sofort zu vermeiden.
+5. **Token:** `GITLAB_LOGCENTER_TOKEN` wird nicht mehr unterstützt — verwende `BOX_STORAGE_API_KEY`.
 
 ---
 
-## 📋 Integration mit bestehendem gitlab_logcenter.py
+## 📋 Integration mit bestehendem gitlab_logcenter.py (DEPRECATED)
 
-Dieser Skill **erweitert** das bestehende `gitlab_logcenter.py` aus dem `enterprise-deep-debug` Skill:
+Dieser Skill **erweitert** das `gitlab_logcenter.py` — **ABER:** Beide sind deprecated.
 
-- **Bestehende Funktion:** Log-Speicherung für Crash-Analyse
-- **Neu:** Allgemeine Dateispeicherung, Machine-Links, Storage-Register
-- **Kompatibel:** Alle alten Befehle funktionieren weiter
-- **Erweitert:** Neue Kategorien (`docker-images`, `backups`, `agent-artifacts`)
+- **Bestehende Funktion:** Log-Speicherung für Crash-Analyse (veraltet)
+- **Neu (historisch):** Allgemeine Dateispeicherung, Machine-Links, Storage-Register (veraltet)
+- **Status:** Alles ersetzt durch `A2A-SIN-Box-Storage`
+
+**Verwende stattdessen:** `box_storage.py` (gleiche API, anderes Backend).
 
 ---
 
-## 🔍 Quick Reference für Agenten
+## 🔍 Quick Reference für Agenten (DEPRECATED)
 
 ```
 FRAGE: Wo speichere ich eine große Datei?
-ANTWORT: gitlab_storage_manager.py upload --project <projekt> --file <pfad> --category <kat>
+ANTWORT: box_storage.py verwenden (nicht mehr gitlab_storage_manager.py)
 
 FRAGE: Wie finde ich eine alte Datei?
-ANTWORT: gitlab_storage_manager.py search --project <projekt> --query <suchbegriff>
+ANTWORT: box_storage.upload_file() und eigene Indexierung (Box.com)
 
 FRAGE: Ist mein Storage-Repo voll?
-ANTWORT: gitlab_storage_manager.py status --project <projekt>
+ANTWORT: Box.com hat 10GB free, automatische Volume-Erweiterung bei 9GB
 
 FRAGE: Welches Repo nutze ich?
-ANTWORT: gitlab_storage_manager.py get-active --project <projekt>
+ANTWORT: Box Storage service (room-09-box-storage:3000)
 
 FRAGE: Neue Maschine anbinden?
-ANTWORT: config/machine-links.json erweitern + gitlab_storage_manager.py init --project <name>
+ANTWORT: Nicht mehr nötig — alle gehen an zentrale Box Storage.
 ```
+
+**Siehe:** `docs/storage/box-cloud-storage.md` für aktuelle Anleitung.
+
+---
