@@ -277,8 +277,16 @@ For detailed architecture documentation see [docs/oci-vm-architecture.md](docs/o
 ```
 upgraded-opencode-stack/
 ├── install.sh              # Haupt-Installer
-├── opencode.json           # OpenCode Config (gesanitized)
-├── AGENTS.md               # Globale Agent-Regeln
+├── opencode.json           # OpenCode Config (Provider, Modelle, MCPs, Agenten)
+├── AGENTS.md               # Globale Agent-Regeln (inkl. PARALLEL-EXPLORATION MANDATE)
+│
+├── oh-my-sin.json          # 🆕 Zentrales A2A Team Register (alle Teams + Manager)
+├── oh-my-openagent.json    # Subagenten-Modell-Konfiguration (explore, librarian, etc.)
+├── oh-my-opencode.json     # Identisch mit oh-my-openagent.json (gesynced)
+├── my-sin-team-code.json   # 🆕 Team Coding Agenten + Modelle
+├── my-sin-team-worker.json # 🆕 Team Worker Agenten + Modelle
+├── my-sin-team-infrastructure.json # 🆕 Team Infra Agenten + Modelle
+│
 ├── .env.example            # API Key Template
 ├── llms.txt                # AI Discoverability
 ├── llms-full.txt           # Full Context for AI Agents
@@ -299,7 +307,58 @@ upgraded-opencode-stack/
 
 ---
 
+## Agenten-Konfigurationsdateien
+
+Dieses Repo verwaltet **7 Konfigurationsdateien** fuer die gesamte A2A-Flotte:
+
+| Datei | Zweck | Inhalt |
+|:---|:---|:---|
+| `opencode.json` | **Haupt-Config** — Provider, Modelle, MCPs, Agenten, Commands | Deine sichtbaren Agenten (SIN-Zeus, Sisyphus, etc.) |
+| `oh-my-sin.json` | **Zentrales Team Register** — alle A2A Teams klassifiziert | Team-Manager, Config-Dateien, Default-Modelle |
+| `oh-my-openagent.json` | **Subagenten-Modelle** — interne Agenten bei Delegation | explore, librarian, oracle, etc. + Fallback-Ketten |
+| `oh-my-opencode.json` | Identisch mit oh-my-openagent.json (auto-gesynced) | Wird vom OHO Plugin gelesen |
+| `my-sin-team-code.json` | **Team Coding** — Entwickler-Flotte | Zeus, Simone, Frontend, Backend, Fullstack |
+| `my-sin-team-worker.json` | **Team Worker** — autonome Worker | Prolific, Freelancer, Survey |
+| `my-sin-team-infrastructure.json` | **Team Infra** — DevOps-Flotte | Deploy, Monitoring, Security |
+
+### Team-Register Architektur
+
+```
+oh-my-sin.json (Zentrales Register)
+    ├── team-code → my-sin-team-code.json
+    ├── team-worker → my-sin-team-worker.json
+    └── team-infrastructure → my-sin-team-infrastructure.json
+```
+
+Jede Team-Config definiert:
+- **Agenten** mit spezifischen Modellen und Fallback-Ketten
+- **Kategorien** fuer Task-spezifische Modell-Auswahl
+- **Rollen** und Beschreibungen pro Agent
+
+### PARALLEL-EXPLORATION MANDATE
+
+Bei grossen Codebases (100k+ Zeilen) MUESSEN Agenten **5-10 parallele explore + 5-10 librarian-Agenten** starten:
+
+```
+task(subagent_type="explore", run_in_background=true, load_skills=[], description="Find APIs", ...)
+task(subagent_type="explore", run_in_background=true, load_skills=[], description="Find Services", ...)
+task(subagent_type="librarian", run_in_background=true, load_skills=[], description="Framework Docs", ...)
+// ... 9 weitere parallele Agenten
+```
+
+Siehe `AGENTS.md` → `PARALLEL-EXPLORATION MANDATE (PRIORITY -4.5)` fuer Details.
+
+---
+
 ## Changelog
+
+### v2.2.0 (2026-04-14)
+- **oh-my-sin.json** — Zentrales A2A Team Register (alle Teams klassifiziert)
+- **Per-Team Configs** — my-sin-team-code.json, worker.json, infrastructure.json
+- **Step 3.5 Flash** — explore/librarian nutzen jetzt nvidia-nim/stepfun-ai/step-3.5-flash
+- **PARALLEL-EXPLORATION MANDATE** — 5-10 parallele explores fuer grosse Codebases
+- **Full Fallback Chains** — restored fuer explore/librarian (6 Modelle pro Agent)
+- **Providers aktualisiert** — glm-5.1-fp8, gpt-5.4-mini, qwen-3.5-flash, Lightning AI VM
 
 ### v2.1.0 (2026-04-14)
 - Enterprise Visual README overhaul (badges, diagrams, llms.txt)
