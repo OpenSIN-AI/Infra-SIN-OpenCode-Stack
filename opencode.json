@@ -168,6 +168,16 @@
             "context": 262144,
             "output": 32768
           }
+        },
+        "step-3.5-flash": {
+          "name": "Step 3.5 Flash (NVIDIA NIM)",
+          "id": "stepfun-ai/step-3.5-flash",
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        }
+          }
         }
       }
     },

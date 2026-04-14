@@ -55,14 +55,23 @@
   "agents": {
 
     // EXPLORE — Codebase erkunden, Dateien durchsuchen, Struktur verstehen
-    // Nutzt GLM-5.1 (gratis via Modal) — schnell und günstig für Lese-Operationen
+    // Nutzt Step 3.5 Flash (NVIDIA NIM) — extrem schnell und guenstig fuer Lese-Operationen
     "explore": {
-      "model": "modal/glm-5.1-fp8",
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
       "fallback_models": [
         "google/antigravity-gemini-3-flash",
         "openai/gpt-5.4",
-        "google/antigravity-gemini-3.1-pro",
-        "google/antigravity-claude-sonnet-4-6",
+        "qwen/coder-model"
+      ]
+    },
+
+    // LIBRARIAN — Dokumentation lesen, Spezifikationen analysieren, Referenzen finden
+    // Nutzt Step 3.5 Flash (NVIDIA NIM) — extrem schnell und guenstig fuer Recherche
+    "librarian": {
+      "model": "nvidia-nim/stepfun-ai/step-3.5-flash",
+      "fallback_models": [
+        "google/antigravity-gemini-3-flash",
+        "openai/gpt-5.4",
         "qwen/coder-model"
       ]
     },
