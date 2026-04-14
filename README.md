@@ -229,10 +229,11 @@ For detailed architecture documentation see [docs/oci-vm-architecture.md](docs/o
 | Provider | Modelle |
 |----------|---------|
 | **google** (Antigravity) | `antigravity-claude-sonnet-4-6`, `antigravity-claude-opus-4-6-thinking`, `antigravity-gemini-3.1-pro`, `antigravity-gemini-3-flash` |
-| **openai** | `gpt-5.4` via OCI Proxy |
-| **nvidia-nim** | `qwen-3.5-122b`, `qwen-3.5-397b` |
-| **openrouter** | 7 Free-Modelle (DeepSeek, Gemini, Llama, Phi) |
+| **openai** | `gpt-5.4`, `gpt-5.4-mini` via OCI Proxy |
+| **nvidia-nim** | `qwen-3.5-122b`, `qwen-3.5-397b`, `qwen-3.5-flash` |
+| **openrouter** | 8 Free-Modelle (Qwen 3.6 Plus, DeepSeek V3/R1, Gemini 2.5 Flash, Llama 4 Maverick, Phi-4) |
 | **qwen** | `qwen/coder-model` — Qwen 3.6 Plus (OAuth, 2000/day free) |
+| **modal** | `glm-5.1-fp8` — GLM 5.1 FP8 (via OCI Token Pool) |
 
 ---
 
@@ -243,6 +244,7 @@ For detailed architecture documentation see [docs/oci-vm-architecture.md](docs/o
 | **Local** | `./install.sh` | Mac Setup — 1:1 Kopie des Setups |
 | **OCI VM** | `sin-sync` | Config Sync Mac → OCI VM (92.5.60.87) |
 | **HF VM** | `sin-sync` | Config Sync Mac → HF Spaces |
+| **Lightning AI** | `sin-sync` | Config Sync Mac → Lightning AI VM |
 
 > [!IMPORTANT]
 > `sin-sync` muss nach JEDER Aenderung an `opencode.json` ausgefuehrt werden. Auth-Dateien werden automatisch ausgeschlossen.
