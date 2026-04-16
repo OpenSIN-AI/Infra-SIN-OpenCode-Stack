@@ -60,7 +60,7 @@
 - `A2A-SIN-Fullstack`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `qwen/coder-model`
 3. `google/antigravity-gemini-3.1-pro`
 
@@ -74,7 +74,7 @@
 |:---|:---|
 | **Manager** | `A2A-SIN-Team-Worker` |
 | **Config** | `my-sin-team-worker.json` |
-| **Primary Model** | `google/antigravity-gemini-3-flash` |
+| **Primary Model** | `meta/llama-3.2-11b-vision-instruct` |
 
 **Mitglieder:**
 - `A2A-SIN-Worker-Prolific`
@@ -82,7 +82,7 @@
 - `A2A-SIN-Worker-Survey`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `qwen/coder-model`
 3. `nvidia-nim/stepfun-ai/step-3.5-flash`
 
@@ -96,7 +96,7 @@
 |:---|:---|
 | **Manager** | `A2A-SIN-Team-Infrastructure` |
 | **Config** | `my-sin-team-infrastructure.json` |
-| **Primary Model** | `openai/gpt-5.4` |
+| **Primary Model** | `nvidia/minimaxai/minimax-m2.7` |
 
 **Mitglieder:**
 - `A2A-SIN-Deploy`
@@ -126,7 +126,7 @@
 - `A2A-SIN-Google-Drive`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `qwen/coder-model`
 3. `google/antigravity-claude-sonnet-4-6`
 
@@ -140,7 +140,7 @@
 |:---|:---|
 | **Manager** | `A2A-SIN-Apple-Apps` |
 | **Config** | `my-sin-team-apple-apps.json` |
-| **Primary Model** | `openai/gpt-5.4` |
+| **Primary Model** | `nvidia/minimaxai/minimax-m2.7` |
 
 **Mitglieder:**
 - `A2A-SIN-Apple-Shortcuts`
@@ -160,7 +160,7 @@
 |:---|:---|
 | **Manager** | `A2A-SIN-Apple` |
 | **Config** | `my-sin-apple.json` |
-| **Primary Model** | `openai/gpt-5.4` |
+| **Primary Model** | `nvidia/minimaxai/minimax-m2.7` |
 
 **Mitglieder:**
 - `A2A-SIN-Apple-Mail`
@@ -200,7 +200,7 @@
 - `A2A-SIN-X-Twitter`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `google/antigravity-claude-sonnet-4-6`
 
 ---
@@ -213,7 +213,7 @@
 |:---|:---|
 | **Manager** | `A2A-SIN-Messaging` |
 | **Config** | `my-sin-messaging.json` |
-| **Primary Model** | `google/antigravity-gemini-3-flash` |
+| **Primary Model** | `meta/llama-3.2-11b-vision-instruct` |
 
 **Mitglieder:**
 - `A2A-SIN-WhatsApp`
@@ -224,7 +224,7 @@
 - `A2A-SIN-Zoom`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `qwen/coder-model`
 
 ---
@@ -237,14 +237,14 @@
 |:---|:---|
 | **Manager** | `A2A-SIN-Forum` |
 | **Config** | `my-sin-forum.json` |
-| **Primary Model** | `google/antigravity-gemini-3-flash` |
+| **Primary Model** | `meta/llama-3.2-11b-vision-instruct` |
 
 **Mitglieder:**
 - `A2A-SIN-StackOverflow`
 - `A2A-SIN-Quora`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `qwen/coder-model`
 
 ---
@@ -264,7 +264,7 @@
 - `A2A-SIN-Tax`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `qwen/coder-model`
 
 ---
@@ -283,7 +283,7 @@
 - `A2A-SIN-TikTok-Shop`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `google/antigravity-claude-sonnet-4-6`
 
 ---
@@ -296,12 +296,12 @@
 |:---|:---|
 | **Manager** | `A2A-SIN-Community` |
 | **Config** | `my-sin-community.json` |
-| **Primary Model** | `google/antigravity-gemini-3-flash` |
+| **Primary Model** | `meta/llama-3.2-11b-vision-instruct` |
 
 **Mitglieder:** _(leer — in Entwicklung)_
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `qwen/coder-model`
 
 ---
@@ -320,7 +320,7 @@
 - `A2A-SIN-Opal`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `qwen/coder-model`
 
 ---
@@ -333,7 +333,7 @@
 |:---|:---|
 | **Manager** | `A2A-SIN-Microsoft` |
 | **Config** | `my-sin-microsoft.json` |
-| **Primary Model** | `openai/gpt-5.4` |
+| **Primary Model** | `nvidia/minimaxai/minimax-m2.7` |
 
 **Mitglieder:** _(leer — in Entwicklung)_
 
@@ -357,7 +357,7 @@
 - `A2A-SIN-Research`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `google/antigravity-claude-opus-4-6-thinking`
 
 ---
@@ -375,7 +375,7 @@
 **Mitglieder:** _(leer — in Entwicklung)_
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `google/antigravity-claude-sonnet-4-6`
 
 ---
@@ -393,7 +393,7 @@
 **Mitglieder:** _(leer — in Entwicklung)_
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `google/antigravity-claude-sonnet-4-6`
 
 ---
@@ -413,7 +413,7 @@
 - `A2A-SIN-Security-Fuzz`
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `google/antigravity-gemini-3.1-pro`
 
 ---
@@ -432,7 +432,7 @@
 
 **Fallback Models:**
 1. `google/antigravity-claude-sonnet-4-6`
-2. `openai/gpt-5.4`
+2. `nvidia/minimaxai/minimax-m2.7`
 
 ---
 
@@ -449,7 +449,7 @@
 **Mitglieder:** _(leer — in Entwicklung)_
 
 **Fallback Models:**
-1. `openai/gpt-5.4`
+1. `nvidia/minimaxai/minimax-m2.7`
 2. `google/antigravity-gemini-3.1-pro`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -472,7 +472,7 @@ Jeder Team-Eintrag hat folgende Struktur:
     ],
     "primary_model": "google/antigravity-claude-sonnet-4-6",
     "fallback_models": [
-        "openai/gpt-5.4",
+        "nvidia/minimaxai/minimax-m2.7",
         "qwen/coder-model",
         "google/antigravity-gemini-3.1-pro"
     ]
@@ -503,7 +503,7 @@ Jeder Team-Eintrag hat folgende Struktur:
 | `google/antigravity-claude-opus-4-6-thinking` | Premium | Deep Research, komplexe Analyse |
 | `google/antigravity-gemini-3.1-pro` | Standard | Google Workspace, Media, Legal |
 | `google/antigravity-gemini-3-flash` | Fast | Worker, Messaging, Forum |
-| `openai/gpt-5.4` | Standard | Infrastructure, Apple, Backup |
+| `nvidia/minimaxai/minimax-m2.7` | Standard | Infrastructure, Apple, Backup |
 | `qwen/coder-model` | Budget | Coding-assist, schnelle Tasks |
 | `nvidia-nim/stepfun-ai/step-3.5-flash` | Budget | Explore/Librarian, interne Tasks |
 
@@ -529,7 +529,7 @@ Der `defaults` Block gilt für alle Teams:
     "librarian_model": "nvidia-nim/stepfun-ai/step-3.5-flash",
     "fallback_models": [
         "google/antigravity-gemini-3-flash",
-        "openai/gpt-5.4",
+        "nvidia/minimaxai/minimax-m2.7",
         "qwen/coder-model"
     ]
 }
@@ -579,7 +579,7 @@ for model in [teams[team]["primary_model"]] + teams[team]["fallback_models"]:
     ],
     "primary_model": "google/antigravity-gemini-3.1-pro",
     "fallback_models": [
-        "openai/gpt-5.4",
+        "nvidia/minimaxai/minimax-m2.7",
         "qwen/coder-model"
     ]
 }

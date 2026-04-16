@@ -64,7 +64,7 @@ SCHRITT 5: NUR bei POSITIVEM Vision-Ergebnis → nächste Aktion erlaubt
 
 ## 3. DAS VISION-MODELL (TECHNISCHE SPEZIFIKATION)
 
-**Primäres Vision-Modell:** `google/antigravity-gemini-3-flash` via OpenCode CLI
+**Primäres Vision-Modell:** `meta/llama-3.2-11b-vision-instruct` via NVIDIA NIM (kostenlos, getestet 4.3s Latenz)
 **Fallback Vision-Modell:** `look-screen` CLI mit Gemini REST API Fallback-Chain (6 Modelle)
 
 **Aufruf-Methode (PFLICHT — eine der folgenden):**
@@ -164,7 +164,7 @@ Antworte mit: PROCEED wenn alles OK ist, STOP wenn etwas falsch ist, RETRY wenn 
 
 ## 7. ZUSAMMENFASSUNG IN EINEM SATZ
 
-**KEIN EINZIGER KLICK, KEIN EINZIGER TASTENDRUCK, KEINE EINZIGE URL, KEINE EINZIGE WEB-AKTION OHNE DASS `antigravity-gemini-3-flash` (oder ein äquivalentes Vision-Modell) VORHER EINEN SCREENSHOT DES GESAMTEN BILDSCHIRMS ANALYSIERT UND MIT "PROCEED" BESTÄTIGT HAT. PUNKT. KEINE AUSNAHMEN. NIEMALS. WEDER JETZT NOCH IN ZUKUNFT.**
+**KEIN EINZIGER KLICK, KEIN EINZIGER TASTENDRUCK, KEINE EINZIGE URL, KEINE EINZIGE WEB-AKTION OHNE DASS `meta/llama-3.2-11b-vision-instruct` (oder ein äquivalentes Vision-Modell) VORHER EINEN SCREENSHOT DES GESAMTEN BILDSCHIRMS ANALYSIERT UND MIT "PROCEED" BESTÄTIGT HAT. PUNKT. KEINE AUSNAHMEN. NIEMALS. WEDER JETZT NOCH IN ZUKUNFT.**
 
 ---
 
@@ -302,7 +302,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 - Gemini API direkt (`generativelanguage.googleapis.com`) = PERMANENT VERBOTEN
 - Anthropic API direkt = PERMANENT VERBOTEN
 - `requests.post(...)` oder `urllib` für LLM = VERBOTEN
-- **Modell:** opencode wählt automatisch `openai/gpt-5.4` via Antigravity — kein `--model` nötig
+- **Modell:** opencode wählt automatisch `nvidia/minimaxai/minimax-m2.7` via Antigravity — kein `--model` nötig
 - **Gilt auf ALLEN Plattformen:** Mac, OCI VM, HF VM — opencode CLI ist überall identisch
 
 
@@ -323,7 +323,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 | **nvidia-nim** | `qwen-3.5-*` | Spezialmodelle |
 
 **REGELN — KEINE AUSNAHMEN:**
-- `"model"` in `opencode.json` MUSS `openai/gpt-5.4` oder `google/antigravity-*` sein — NIEMALS `gemini-api/*`
+- `"model"` in `opencode.json` MUSS `nvidia/minimaxai/minimax-m2.7` oder `google/antigravity-*` sein — NIEMALS `gemini-api/*`
 - Der `gemini-api` Provider Block darf NIEMALS in `opencode.json` existieren — weder als Backup noch als Fallback
 - Wer `gemini-api` einträgt oder den Default-Model auf `gemini-api/*` setzt: **SOFORTIGER PERMANENTER BAN**
 - Nach JEDER Änderung an `opencode.json` MUSS `sin-sync` ausgeführt werden
@@ -370,7 +370,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 - Gemini API direkt (`generativelanguage.googleapis.com`) = PERMANENT VERBOTEN
 - Anthropic API direkt = PERMANENT VERBOTEN
 - `requests.post(...)` oder `urllib` für LLM = VERBOTEN
-- **Modell:** opencode wählt automatisch `openai/gpt-5.4` via Antigravity — kein `--model` nötig
+- **Modell:** opencode wählt automatisch `nvidia/minimaxai/minimax-m2.7` via Antigravity — kein `--model` nötig
 - **Gilt auf ALLEN Plattformen:** Mac, OCI VM, HF VM — opencode CLI ist überall identisch
 
 
@@ -391,7 +391,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 | **nvidia-nim** | `qwen-3.5-*` | Spezialmodelle |
 
 **REGELN — KEINE AUSNAHMEN:**
-- `"model"` in `opencode.json` MUSS `openai/gpt-5.4` oder `google/antigravity-*` sein — NIEMALS `gemini-api/*`
+- `"model"` in `opencode.json` MUSS `nvidia/minimaxai/minimax-m2.7` oder `google/antigravity-*` sein — NIEMALS `gemini-api/*`
 - Der `gemini-api` Provider Block darf NIEMALS in `opencode.json` existieren — weder als Backup noch als Fallback
 - Wer `gemini-api` einträgt oder den Default-Model auf `gemini-api/*` setzt: **SOFORTIGER PERMANENTER BAN**
 - Nach JEDER Änderung an `opencode.json` MUSS `sin-sync` ausgeführt werden
@@ -438,7 +438,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 - Gemini API direkt (`generativelanguage.googleapis.com`) = PERMANENT VERBOTEN
 - Anthropic API direkt = PERMANENT VERBOTEN
 - `requests.post(...)` oder `urllib` für LLM = VERBOTEN
-- **Modell:** opencode wählt automatisch `openai/gpt-5.4` via Antigravity — kein `--model` nötig
+- **Modell:** opencode wählt automatisch `nvidia/minimaxai/minimax-m2.7` via Antigravity — kein `--model` nötig
 - **Gilt auf ALLEN Plattformen:** Mac, OCI VM, HF VM — opencode CLI ist überall identisch
 
 
@@ -459,7 +459,7 @@ def call_llm(prompt: str, timeout: int = 120) -> str:
 | **nvidia-nim** | `qwen-3.5-*` | Spezialmodelle |
 
 **REGELN — KEINE AUSNAHMEN:**
-- `"model"` in `opencode.json` MUSS `openai/gpt-5.4` oder `google/antigravity-*` sein — NIEMALS `gemini-api/*`
+- `"model"` in `opencode.json` MUSS `nvidia/minimaxai/minimax-m2.7` oder `google/antigravity-*` sein — NIEMALS `gemini-api/*`
 - Der `gemini-api` Provider Block darf NIEMALS in `opencode.json` existieren — weder als Backup noch als Fallback
 - Wer `gemini-api` einträgt oder den Default-Model auf `gemini-api/*` setzt: **SOFORTIGER PERMANENTER BAN**
 - Nach JEDER Änderung an `opencode.json` MUSS `sin-sync` ausgeführt werden
@@ -573,7 +573,7 @@ Unsere A2A Flotte agiert wie eine autonome Hacker- und Freelancer-Organisation (
 
 **1. THE OPENCODE INTELLIGENCE STANDARD (SUPREME MANDATE):**
 - EVERY general A2A agent MUST be equipped with the `opencode` CLI as its primary brain.
-- ALL general agents MUST use the model `openai/gpt-5.4` via the OpenCode CLI.
+- ALL general agents MUST use the model `nvidia/minimaxai/minimax-m2.7` via the OpenCode CLI.
 - ALL general agents MUST explicitly set `--fallback opencode/minimax-m2.5-free` to guarantee 100% uptime.
 - ONLY highly specialized agents (e.g., Voice, Video generation) are permitted to deviate from this standard.
 
