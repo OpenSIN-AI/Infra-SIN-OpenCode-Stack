@@ -1,40 +1,40 @@
-# Operation: Global Fleet Model Upgrade (NVIDIA NIM Standard)
+# Operation: Global Fleet Model Upgrade (OpenAI GPT-5.4 + NVIDIA Fallback)
 
 **Date:** 2026-04-16
 **Status:** ✅ COMPLETED
 **Operator:** Antigravity (google/antigravity-gemini-3-flash)
 
 ## Summary
-Detected and corrected a critical misalignment in the A2A fleet model configuration. The outdated "OpenCode Free" models (Qwen 3.6 Plus / Nemotron 3) have been replaced with the high-performance **NVIDIA NIM** standard across all core systems and factory templates.
+Detected and corrected a critical misalignment in the A2A fleet model configuration. The outdated "OpenCode Free" models have been replaced with **OpenAI GPT-5.4** as primary and **NVIDIA Minimax M2.7** as fallback across all core systems and factory templates.
 
 ## Affected Components
 
 ### 1. Simone MCP (Core Code Worker)
-- **Primary Model:** `nvidia/minimaxai/minimax-m2.7` (Upgraded from `opencode/qwen3.6-plus-free`)
-- **Fallback Model:** `nvidia/stepfun-ai/step-3.5-flash` (Upgraded from `opencode/nemotron-3-super-free`)
+- **Primary Model:** `openai/gpt-5.4`
+- **Fallback Model:** `nvidia/minimaxai/minimax-m2.7`
 - **Verification:** `sin.simone.mcp.health` check confirmed successful model pivot.
 
 ### 2. A2A Factory Skills (Templates)
-The following skills have been patched to enforce the new NVIDIA standard for all newly created agents:
+The following skills have been patched to enforce the new standard for all newly created agents:
 - `create-a2a`: Base A2A template logic updated.
 - `create-a2a-sin-agent`: Single agent factory updated.
 - `create-a2a-team`: Team manager generation script (`generate-team.sh`) patched.
 - `create-a2a-sin-coder`: Elite Coder factory (`trigger-factory.mjs` and `SKILL.md`) updated.
 
 ## Technical Details
-The transition involved patching both JSON metadata and compiled JavaScript runtime logic (in `dist/src/runtime.js` for Simone MCP) to ensure the `opencode run` calls utilize the correct `--model` and `--fallback` flags.
+The transition involved patching both JSON metadata and compiled JavaScript runtime logic (in `dist/src/runtime.js` for Simone MCP).
 
 ### New Model Strings
-- **Primary:** `nvidia/minimaxai/minimax-m2.7`
-- **Fallback:** `nvidia/stepfun-ai/step-3.5-flash`
+- **Primary:** `openai/gpt-5.4`
+- **Fallback:** `nvidia/minimaxai/minimax-m2.7`
 
 ## Verification Evidence
 ```json
 {
   "ok": true,
   "agent": "sin-simone-mcp",
-  "primaryModel": "nvidia/minimaxai/minimax-m2.7",
-  "fallbackModel": "nvidia/stepfun-ai/step-3.5-flash",
+  "primaryModel": "openai/gpt-5.4",
+  "fallbackModel": "nvidia/minimaxai/minimax-m2.7",
   "status": "Simone MCP Online — LSP Semantic Engine Ready"
 }
 ```
