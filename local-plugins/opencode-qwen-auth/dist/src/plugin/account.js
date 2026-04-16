@@ -51,7 +51,17 @@ async function withFileLock(path, fn) {
     }
 }
 function normalizeStorage(storage) {
-    const accounts = storage.accounts.filter((account) => account?.refreshToken);
+    const MAX_CONSECUTIVE_FAILURES = 20;
+    const now = Date.now();
+    const accounts = storage.accounts.filter((account) => {
+if (!account?.refreshToken) return false;
+    if ((account.health?.consecutiveFailures ?? 0) > MAX_CONSECUTIVE_FAILURES) return false;
+    const hasExpiredToken = !account.accessToken && (!account.expires || account.expires < now);
+    const hasHighFailures = (account.health?.failureCount ?? 0) > 50;
+    if (hasExpiredToken && hasHighFailures) return false;
+    if (!account.accessToken && account.expires === 0) return false;
+    return true;
+    });
     const activeIndex = accounts.length > 0
         ? Math.min(Math.max(storage.activeIndex, 0), accounts.length - 1)
         : 0;
