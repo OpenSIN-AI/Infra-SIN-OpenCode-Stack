@@ -1296,6 +1296,61 @@ Wir sind Hacker. Wir sind Umgeher. Wenn ein offizieller Weg (API, OAuth, Scopes,
 - Der OCI-Proxy auf Port 4100 validiert den Gateway-Key und leitet die Anfrage an den `modal_proxy` (Port 8091) weiter, welcher sich wiederum einen rotierenden Key aus dem `pool_service` (Port 8090) holt.
 - Wer `opencode.json` auf direkte Modal-Keys ändert, zerstört die Fleet-Synchronisation und begeht einen Protokollverstoß.
 
+# 🚨 QWEN MULTI-ACCOUNT PLUGIN WISSEN (PRIORITY 0000) 🚨
+
+## Architektur-Übersicht: opencode-qwen-auth
+
+**Plugin:** `opencode-qwen-auth@0.3.4`  
+**Source:** `/Users/jeremy/dev/upgraded-opencode-stack/local-plugins/opencode-qwen-auth/`  
+**Runtime:** `/Users/jeremy/.config/opencode/local-plugins/opencode-qwen-auth/`  
+**Account-Storage:** `/Users/jeremy/.config/opencode/qwen-auth-accounts.json`  
+**OpenCode DB:** `/Users/jeremy/.local/share/opencode/opencode.db` (Tabellen: `account`, `account_state`, `control_account` — ABER Qwen-Accounts liegen NICHT hier!)
+
+## Kritische Erkenntnisse (2026-04-15)
+
+### 1. `mergeAccounts()` löscht NIE Accounts
+Die Funktion `mergeAccounts()` in `account.js` fügt nur hinzu oder aktualisiert — sie löscht NIEMALS. Tote Accounts sammeln sich endlos an.
+
+### 2. `normalizeStorage()` war der einzige Filter
+Ursprünglich filterte `normalizeStorage()` nur nach `refreshToken`-Existenz. Tote Accounts blieben ewig.
+
+### 3. PATCH V2: normalizeStorage() erweitert (MUSS BEIBEHALTEN BEI UPDATES!)
+```javascript
+// ORIGINAL v0.3.4 (nur refreshToken-Check):
+const accounts = storage.accounts.filter((account) => account?.refreshToken);
+
+// PATCH V2 (2026-04-15) — 3-Filter-Condition:
+const MAX_CONSECUTIVE_FAILURES = 20;
+const now = Date.now();
+const accounts = storage.accounts.filter((account) => {
+  // Filter 1: Kein refreshToken = tot
+  if (!account?.refreshToken) return false;
+  // Filter 2: Zu viele consecutive Failures → raus
+  if ((account.health?.consecutiveFailures ?? 0) > MAX_CONSECUTIVE_FAILURES) return false;
+  // Filter 3: Zombie-Filter — kein AccessToken + expired + viele Failures → raus
+  const hasExpiredToken = !account.accessToken && (!account.expires || account.expires < now);
+  const hasHighFailures = (account.health?.failureCount ?? 0) > 50;
+  if (hasExpiredToken && hasHighFailures) return false;
+  return true;
+});
+```
+
+**Der Patch V2 MUSS nach jedem Plugin-Update (npm update) erneut angewendet werden!**
+
+### 4. OpenCode Config Schema — Was NICHT erlaubt ist
+- `hooks` ist KEIN gültiges Feld in `opencode.json` → Crash beim Start
+- `description` ist KEIN gültiges Feld in MCP-Einträgen → Crash beim Start
+- MCP-Commands MÜSSEN einen Interpreter enthalten (`"node", ...` oder `"python3", ...`)
+
+### 5. saveAccounts() führt IMMER mergeAccounts() aus
+Auch wenn man die JSON-Datei manuell bereinigt, wird beim nächsten `saveAccounts()` der alte State gelesen und gemerged. Der Patch in `normalizeStorage()` ist die EINZIGE Möglichkeit, tote Accounts automatisch zu entfernen.
+
+### 6. Qwen-Accounts sind NICHT in opencode.db
+Die Tabellen `account` und `control_account` in der SQLite-Datenbank enthalten KEINE Qwen-Accounts. Alle Qwen-Token liegen ausschließlich in `qwen-auth-accounts.json`.
+
+## Vollständige Dokumentation
+Siehe: `/Users/jeremy/dev/upgraded-opencode-stack/docs/qwen-plugin-architecture.md`
+
 
 
 
