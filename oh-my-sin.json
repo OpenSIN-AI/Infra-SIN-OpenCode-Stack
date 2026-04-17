@@ -1,8 +1,8 @@
 // ╔══════════════════════════════════════════════════════════╗
-// ║       OH-MY-SIN.json — ZENTRALES A2A TEAM REGISTER     ║
+// ║ OH-MY-SIN.json — ZENTRALES A2A TEAM REGISTER ║
 // ╠══════════════════════════════════════════════════════════╣
-// ║  Alle 17 A2A Teams klassifiziert mit Modellen + Configs  ║
-// ║  Stand: 2026-04-14 — Big Boss Update                     ║
+// ║ Alle 18 A2A Teams klassifiziert mit Modellen + Configs ║
+// ║ Stand: 2026-04-17 — 6 dedizierte Coder-Repos (BUG-OCI-001) ║
 // ╚══════════════════════════════════════════════════════════╝
 {
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
@@ -310,6 +310,58 @@
       "fallback_models": [
         "openai/gpt-5.4",
         "google/antigravity-gemini-3.1-pro"
+      ]
+    },
+    "team-coding-agents": {
+      "name": "Team Coding Agents (6 dedicated repos)",
+      "description": "6 dedicated A2A Coder Agents with individual GitHub repos \u2014 split from monolithic OpenSIN-Code for isolated deployments, independent versioning, and crash-storm protection. Established after BUG-OCI-001 (OCI VM disk-full incident, 2026-04-16).",
+      "manager": "A2A-SIN-Zeus",
+      "config_file": "my-sin-coding-agents.json",
+      "members": [
+        "A2A-SIN-Code-Backend",
+        "A2A-SIN-Code-Command",
+        "A2A-SIN-Code-Frontend",
+        "A2A-SIN-Code-Fullstack",
+        "A2A-SIN-Code-Plugin",
+        "A2A-SIN-Code-Tool"
+      ],
+      "agent_repos": {
+        "A2A-SIN-Code-Backend": {
+          "github": "https://github.com/OpenSIN-AI/A2A-SIN-Code-Backend",
+          "port": 7863,
+          "purpose": "Backend specialists \u2014 Server, OracleCloud, APIs"
+        },
+        "A2A-SIN-Code-Command": {
+          "github": "https://github.com/OpenSIN-AI/A2A-SIN-Code-Command",
+          "port": 7861,
+          "purpose": "Command/CLI agents \u2014 shell, automation, scripting"
+        },
+        "A2A-SIN-Code-Frontend": {
+          "github": "https://github.com/OpenSIN-AI/A2A-SIN-Code-Frontend",
+          "port": 7865,
+          "purpose": "Frontend specialists \u2014 UI/UX, React, CSS"
+        },
+        "A2A-SIN-Code-Fullstack": {
+          "github": "https://github.com/OpenSIN-AI/A2A-SIN-Code-Fullstack",
+          "port": 7864,
+          "purpose": "Fullstack specialists \u0000 end-to-end implementations"
+        },
+        "A2A-SIN-Code-Plugin": {
+          "github": "https://github.com/OpenSIN-AI/A2A-SIN-Code-Plugin",
+          "port": 7860,
+          "purpose": "Plugin developers \u2014 MCPs, integrations, auth"
+        },
+        "A2A-SIN-Code-Tool": {
+          "github": "https://github.com/OpenSIN-AI/A2A-SIN-Code-Tool",
+          "port": 7862,
+          "purpose": "Tool builders \u2014 CLI utilities, external integrations"
+        }
+      },
+      "primary_model": "google/antigravity-claude-sonnet-4-6",
+      "fallback_models": [
+        "openai/gpt-5.4",
+        "google/antigravity-gemini-3.1-pro",
+        "qwen/coder-model"
       ]
     }
   },

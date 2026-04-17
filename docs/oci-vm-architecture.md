@@ -149,9 +149,14 @@ OCI VM components are spread across multiple repos:
 ## 🔧 Maintenance Commands
 
 ```bash
-# Check disk usage
+# Check disk usage (live)
 df -h /
-sudo du -xh / 2>/dev/null | sort -rh | head -20
+
+# All 6 coder agents healthy?
+curl -s http://localhost:7860/health && curl -s http://localhost:7861/health && curl -s http://localhost:7862/health && curl -s http://localhost:7863/health && curl -s http://localhost:7864/health && curl -s http://localhost:7865/health
+
+# All 5 protection timers active?
+systemctl list-timers | grep -E "runner-cleanup|oci-space-guardian|oci-emergency-disk-guard|oci-log-rotation|oci-disk-self-test"
 
 # Check Docker services
 sudo docker ps --format 'table {{.Names}}\t{{.Status}}'
@@ -160,11 +165,20 @@ sudo docker ps --format 'table {{.Names}}\t{{.Status}}'
 cd /opt/n8n && sudo docker compose up -d
 sudo systemctl restart sin-server
 
-# Check runner cleanup logs
-cat /var/log/runner-cleanup.log
-
-# Manual .so cleanup
+# Run manual .so cleanup (Python glob, not regex)
 sudo /usr/local/bin/cleanup-runner-libs.sh
+
+# Run space guardian manually
+sudo /usr/local/bin/oci-space-guardian.sh
+
+# Check emergency guard last-stop reason
+cat /var/lib/oci-emergency-disk-guard/last-stop.txt 2>/dev/null || echo "No emergency stop recorded"
+
+# Check self-test last result
+sudo /usr/local/bin/oci-disk-self-test.sh
+
+# See recent journald entries for an agent
+sudo journalctl -u a2a-sin-code-backend -n 20 --no-pager
 ```
 
 ---
@@ -173,12 +187,54 @@ sudo /usr/local/bin/cleanup-runner-libs.sh
 
 | Issue | Status | Fix |
 |-------|--------|-----|
-| `/tmp` fills with .so files (179 GB) | ✅ Fixed | `DOTNET_BUNDLE_EXTRACT_BASE_DIR` + systemd timer |
-| Docker containers crash on disk full | ✅ Fixed | Hourly cleanup prevents recurrence |
+| `/tmp` fills with .so files (179 GB) — BUG-OCI-001 | ✅ Fixed | 5-layer protection stack (see below) |
+| Docker containers crash on disk full | ✅ Fixed | `oci-space-guardian.timer` prunes Docker at ≥80% |
 | `haus-netzwerk` network missing | ✅ Fixed | Created with `--subnet=172.20.0.0/16` |
 | rsyslog holds deleted file handles | ✅ Fixed | `sudo systemctl restart rsyslog` |
 | Runner.Li holds 2TB memfd files | ✅ Fixed | `sudo kill` on stale processes |
+| Agent `/health` returns 404 (Gradio shadowing) | ✅ Fixed | FastAPI routes registered before Gradio mount |
+| `is_healthy()` leaks .so files per call | ✅ Fixed | Changed to `shutil.which("opencode")` |
 
 ---
 
-*Last updated: 2026-04-13*
+## 🚨 BUG-OCI-001: OCI VM Disk Full Prevention (2026-04-16)
+
+> **Incident Date:** 2026-04-16 — OCI VM `92.5.60.87` went 100% disk full. All 6 coder agents died.
+> **Root Cause:** `is_healthy()` called `subprocess.run(["opencode", "--version"])` which leaked ~4.4 MB `.so` files per call into `/tmp/`. Python's `glob.glob(r"/tmp/.*.so")` was a **broken regex** (`.` not escaped, so nothing matched).
+
+### 5-Layer Protection Stack (fully deployed)
+
+| Layer | Timer | Script | Action |
+|-------|-------|--------|--------|
+| **1. Runner Cleanup** | every 5 min | `cleanup-runner-libs.sh` | Python glob clean `/tmp/.*.so` >10min |
+| **2. Space Guardian** | every 1 hour | `oci-space-guardian.sh` | Prune caches+Docker at ≥80%, escalate at ≥85% |
+| **3. Emergency Guard** | every 5 min | `oci-emergency-disk-guard.sh` | Auto-stop all 6 agents if disk stays ≥85% |
+| **4. Log Rotation** | daily | `oci-log-rotation.sh` | journald 200MB max, syslog vacuum |
+| **5. Self-Test** | daily 03:00 | `oci-disk-self-test.sh` | 27-point verification — alerts if any check fails |
+
+**systemd drop-ins** on all 6 agents (`/etc/systemd/system/a2a-sin-code-*.service.d/hardening.conf`):
+- `StartLimitIntervalSec=300`, `StartLimitBurst=3` — crash storm brake
+- `Restart=on-failure`, `RestartSec=30`
+- `ExecStartPre=-/usr/local/bin/cleanup-runner-libs.sh`
+
+### Quick Verification Commands
+
+```bash
+# Disk + agents + timers in one shot
+df -h / && systemctl is-active a2a-sin-code-* && systemctl list-timers | grep oci
+
+# Run 27-point self-test
+sudo /usr/local/bin/oci-disk-self-test.sh
+
+# Emergency: stop all 6 agents
+sudo systemctl stop a2a-sin-code-backend a2a-sin-code-command a2a-sin-code-frontend a2a-sin-code-fullstack a2a-sin-code-plugin a2a-sin-code-tool
+
+# Emergency: restart all 6 agents
+sudo systemctl start a2a-sin-code-backend a2a-sin-code-command a2a-sin-code-frontend a2a-sin-code-fullstack a2a-sin-code-plugin a2a-sin-code-tool
+```
+
+**Source-controlled at:** [`OpenSIN-AI/Infra-SIN-Dev-Setup`](https://github.com/OpenSIN-AI/Infra-SIN-Dev-Setup) — `scripts/` + `systemd/`
+
+---
+
+*Last updated: 2026-04-17 — BUG-OCI-001 hardening stack integrated*
