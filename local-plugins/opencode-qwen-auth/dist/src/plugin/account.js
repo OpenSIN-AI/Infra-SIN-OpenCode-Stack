@@ -121,12 +121,13 @@ export async function saveAccounts(storage) {
 export function upsertAccount(storage, account) {
     const index = storage.accounts.findIndex((item) => item.refreshToken === account.refreshToken);
     if (index === -1) {
-        // When a new account is added, set activeIndex to its position 
-        // so it gets used immediately instead of being buried at the end.
         return normalizeStorage({
             version: STORAGE_VERSION,
             accounts: [...storage.accounts, account],
-            activeIndex: storage.accounts.length,
+            // Set activeIndex to the account BEFORE the new one.
+            // This ensures the default "round-robin" strategy 
+            // ((activeIndex + 1) % total) selects this new account immediately.
+            activeIndex: Math.max(0, storage.accounts.length - 1),
         });
     }
     const updated = [...storage.accounts];
