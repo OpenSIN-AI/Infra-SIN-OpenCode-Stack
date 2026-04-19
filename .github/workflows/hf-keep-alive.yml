@@ -1,0 +1,73 @@
+name: HF Spaces keep-alive
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hf-keep-alive
+  cancel-in-progress: true
+
+jobs:
+  ping-and-recover:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        space:
+          - a2a-sin-code-plugin
+          - a2a-sin-code-command
+          - a2a-sin-code-tool
+          - a2a-sin-code-backend
+          - a2a-sin-code-fullstack
+          - a2a-sin-code-frontend
+    steps:
+      - name: Check secret is configured
+        env:
+          HF_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
+        run: |
+          if [ -z "$HF_TOKEN" ]; then
+            echo "::error::Secret HUGGINGFACE_TOKEN is not set on this repo. Add it at Settings → Secrets and variables → Actions."
+            exit 2
+          fi
+
+      - name: Probe Space
+        id: probe
+        env:
+          SPACE: ${{ matrix.space }}
+        run: |
+          set +e
+          URL="https://opensin-ai-${SPACE}.hf.space/"
+          CODE=$(curl -o /dev/null -s -w "%{http_code}" --max-time 15 -L "$URL")
+          echo "http_code=$CODE" >> "$GITHUB_OUTPUT"
+          if [ "$CODE" -ge 500 ] || [ "$CODE" -eq 000 ]; then
+            echo "unhealthy=true" >> "$GITHUB_OUTPUT"
+            echo "::warning::$SPACE returned $CODE — will restart"
+          else
+            echo "unhealthy=false" >> "$GITHUB_OUTPUT"
+            echo "$SPACE OK ($CODE)"
+          fi
+          exit 0
+
+      - name: Restart Space if unhealthy
+        if: steps.probe.outputs.unhealthy == 'true'
+        env:
+          HF_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
+          SPACE: ${{ matrix.space }}
+        run: |
+          set -e
+          API="https://huggingface.co/api/spaces/opensin-ai/${SPACE}/restart"
+          RESULT=$(curl -s -w "\n%{http_code}" -X POST -H "Authorization: Bearer $HF_TOKEN" "$API")
+          BODY=$(echo "$RESULT" | head -n -1)
+          CODE=$(echo "$RESULT" | tail -n 1)
+          echo "HF restart API returned $CODE: $BODY"
+          if [ "$CODE" -ge 400 ]; then
+            echo "::error::Restart failed for $SPACE (HTTP $CODE)"
+            exit 2
+          fi
+          echo "::notice::Restart triggered for $SPACE"
+          exit 1
