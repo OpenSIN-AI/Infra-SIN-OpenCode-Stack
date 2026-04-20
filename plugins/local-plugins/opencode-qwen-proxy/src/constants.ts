@@ -1,13 +1,16 @@
 /**
  * Qwen OAuth and API Constants
+ * 
+ * WICHTIG: OAuth Endpoints müssen mit portal.qwen.ai sein, nicht chat.qwen.ai!
+ * chat.qwen.ai wird nur für die Web-UI verwendet, nicht für API/OAuth.
  */
 
 export const QWEN_PROVIDER_ID = 'qwen';
 
 export const QWEN_OAUTH_CONFIG = {
-  baseUrl: 'https://chat.qwen.ai',
-  deviceCodeEndpoint: 'https://chat.qwen.ai/api/v1/oauth2/device/code',
-  tokenEndpoint: 'https://chat.qwen.ai/api/v1/oauth2/token',
+  baseUrl: 'https://portal.qwen.ai',
+  deviceCodeEndpoint: 'https://portal.qwen.ai/api/v1/oauth2/device/code',
+  tokenEndpoint: 'https://portal.qwen.ai/api/v1/oauth2/token',
   clientId: 'f0304373b74a44d2b584a3fb70ca9e56',
   scope: 'openid profile email model.completion',
   grantType: 'urn:ietf:params:oauth:grant-type:device_code',
