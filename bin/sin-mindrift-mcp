@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "${0:A:h}/.." && pwd)"
+ROOT="$PROJECT_ROOT/a2a/team-worker/A2A-SIN-Mindrift"
+CLI="$ROOT/dist/src/cli.js"
+
+if [[ ! -f "$CLI" ]]; then
+  npm --prefix "$ROOT" run build >/dev/null
+fi
+
+exec node "$CLI" serve-mcp "$@"

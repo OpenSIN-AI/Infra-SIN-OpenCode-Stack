@@ -1,0 +1,105 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "${0:A:h}/.." && pwd)"
+ROOT="$PROJECT_ROOT/a2a/team-coding/A2A-SIN-Backend"
+CLI="$ROOT/dist/src/cli.js"
+
+needs_build=0
+if [[ ! -f "$CLI" ]]; then
+  needs_build=1
+elif find "$ROOT/src" -type f \( -name '*.ts' -o -name '*.json' -o -name '*.md' \) -newer "$CLI" | grep -q .; then
+  needs_build=1
+fi
+
+if [[ "$needs_build" -eq 1 ]]; then
+  npm --prefix "$ROOT" run build >/dev/null
+fi
+
+if [[ "${1:-}" == "run-action" ]]; then
+  if [[ $# -ge 2 ]]; then
+    RAW_ACTION_JSON="$2"
+  else
+    RAW_ACTION_JSON="$(cat)"
+  fi
+
+  ACTION_NAME="$(python3 - <<'PY' "$RAW_ACTION_JSON"
+import json, sys
+raw = sys.argv[1]
+try:
+    payload = json.loads(raw)
+except Exception:
+    print("")
+    raise SystemExit(0)
+print(str(payload.get("action") or ""))
+PY
+)"
+
+  if [[ "$ACTION_NAME" == "sin.backend.code.generate" || "$ACTION_NAME" == "sin.backend.code.review" ]]; then
+    python3 - <<'PY' "$RAW_ACTION_JSON" "$PROJECT_ROOT" "$ROOT"
+import json
+import subprocess
+import sys
+
+raw = sys.argv[1]
+project_root = sys.argv[2]
+root = sys.argv[3]
+action = json.loads(raw)
+
+name = action.get("action")
+if name == "sin.backend.code.generate":
+    prompt = str(action.get("prompt") or "").strip()
+    cwd = str(action.get("contextDir") or project_root)
+elif name == "sin.backend.code.review":
+    target = str(action.get("targetDir") or project_root)
+    prompt = f"Review the backend in {target} according to 2026 A2A and Supabase-native architectural standards. Forbid monolithic REST APIs."
+    cwd = target
+else:
+    print("unsupported_fast_path_action", file=sys.stderr)
+    raise SystemExit(1)
+
+subprocess.run(["python3", f"{root}/scripts/hf_pull_script.py"], cwd=root, capture_output=True, text=True)
+completed = subprocess.run(
+    [
+        "python3",
+        f"{root}/scripts/run_opencode.py",
+        "--model",
+        "opencode/qwen3.6-plus-free",
+        "--agent",
+        "sin-executor-solo",
+        "--cwd",
+        cwd,
+        "--timeout-sec",
+        "900",
+        "--prompt",
+        prompt,
+    ],
+    cwd=project_root,
+    capture_output=True,
+    text=True,
+    timeout=960,
+)
+
+if completed.returncode != 0:
+    print(completed.stderr or completed.stdout or "backend_runner_failed", file=sys.stderr)
+    raise SystemExit(completed.returncode)
+
+result = json.loads(completed.stdout or "{}")
+if not result.get("ok"):
+    print(result.get("stderr") or result.get("stdout") or f"backend_runner_failed:{result.get('returncode')}", file=sys.stderr)
+    raise SystemExit(result.get("returncode") or 1)
+
+payload = {
+    "ok": True,
+    "expertAnalysis": result.get("stdout", ""),
+}
+if result.get("stderr"):
+    payload["warnings"] = result["stderr"]
+
+sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+PY
+    exit $?
+  fi
+fi
+
+exec node "$CLI" "$@"

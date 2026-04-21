@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "${0:A:h}/.." && pwd)"
+ROOT="$PROJECT_ROOT/a2a/team-apple-apps/A2A-SIN-Apple-Mobile"
+CLI="$ROOT/dist/src/cli.js"
+
+needs_build=0
+if [[ ! -f "$CLI" ]]; then
+  needs_build=1
+elif find "$ROOT/src" -type f \( -name '*.ts' -o -name '*.json' -o -name '*.md' \) -newer "$CLI" | grep -q .; then
+  needs_build=1
+fi
+
+if [[ "$needs_build" -eq 1 ]]; then
+  npm --prefix "$ROOT" run build >/dev/null
+fi
+
+exec node "$CLI" "$@"

@@ -1,0 +1,49 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "${0:A:h}/.." && pwd)"
+ROOT="$PROJECT_ROOT/app"
+
+# Load project env (NVIDIA_API_KEY, etc) if present.
+if [[ -f "$PROJECT_ROOT/.env" ]]; then
+  set -a
+  source "$PROJECT_ROOT/.env"
+  set +a
+fi
+
+# Auto-start a dedicated Chrome instance with CDP enabled (persisted profile).
+CDP_HOST="${SIN_MINDRIFT_CDP_HOST:-127.0.0.1}"
+CDP_PORT="${SIN_MINDRIFT_CDP_PORT:-50019}"
+PROFILE_DIR="${SIN_MINDRIFT_CHROME_PROFILE_DIR:-$HOME/.config/sin/sin-mindrift/chrome-profile}"
+START_URL="${SIN_MINDRIFT_START_URL:-https://mindrift.toloka.ai/reg-wizard}"
+
+if ! curl -sS --max-time 0.3 "http://$CDP_HOST:$CDP_PORT/json/version" >/dev/null 2>&1; then
+  mkdir -p "$PROFILE_DIR"
+  open -na "Google Chrome" --args \
+    --new-instance \
+    --remote-debugging-port="$CDP_PORT" \
+    --remote-allow-origins="*" \
+    --user-data-dir="$PROFILE_DIR" \
+    --no-first-run \
+    --no-default-browser-check \
+    "$START_URL" >/dev/null 2>&1 || true
+
+  # Wait for CDP to come up.
+  for _ in {1..80}; do
+    if curl -sS --max-time 0.3 "http://$CDP_HOST:$CDP_PORT/json/version" >/dev/null 2>&1; then
+      break
+    fi
+    sleep 0.25
+  done
+fi
+
+export SIN_MINDRIFT_CDP_HOST="$CDP_HOST"
+export SIN_MINDRIFT_CDP_PORT="$CDP_PORT"
+
+# Canonical implementation: repo-local v2 agent.
+if [[ -f "$ROOT/agent_v2.py" ]]; then
+  exec python3 "$ROOT/agent_v2.py" "$@"
+fi
+
+echo "ERROR: $ROOT/agent_v2.py not found" >&2
+exit 1

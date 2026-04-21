@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Project-local `opencode` shim.
+# - Default: pass-through to the real OpenCode binary (no tmux, no core patching).
+# - Optional: `--tmux` to start the legacy tmux swarm launcher.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+find_real_opencode() {
+  local wrapper_path candidates
+  wrapper_path="${SCRIPT_DIR}/opencode"
+  candidates="$(which -a opencode 2>/dev/null || true)"
+  [ -z "${candidates}" ] && return 1
+  while IFS= read -r line; do
+    [ -z "${line}" ] && continue
+    if [ "${line}" != "${wrapper_path}" ]; then
+      echo "${line}"
+      return 0
+    fi
+  done <<< "${candidates}"
+  return 1
+}
+
+REAL_OPENCODE_BIN="${OPENCODE_REAL_BIN:-}"
+if [ -z "${REAL_OPENCODE_BIN}" ]; then
+  REAL_OPENCODE_BIN="$(find_real_opencode || true)"
+fi
+if [ -z "${REAL_OPENCODE_BIN}" ]; then
+  echo "Error: could not locate the real 'opencode' binary (set OPENCODE_REAL_BIN)." >&2
+  exit 1
+fi
+
+if [ "${1:-}" = "--tmux" ]; then
+  shift
+  export OMOC_RESET="${OMOC_RESET:-1}"
+  exec "${PROJECT_ROOT}/bin/oc-swarm" "$@"
+fi
+
+exec "${REAL_OPENCODE_BIN}" "$@"

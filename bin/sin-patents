@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+AGENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../a2a/team-company/A2A-SIN-Patents" && pwd)"
+exec node "$AGENT_DIR/dist/src/cli.js" "$@"

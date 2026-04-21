@@ -1,0 +1,32 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+AUTHD_ROOT="$PROJECT_ROOT/services/authd"
+DIST_ENTRY="$AUTHD_ROOT/dist/authd/src/cli.js"
+
+needs_build=0
+if [ ! -f "$DIST_ENTRY" ]; then
+    needs_build=1
+elif find "$PROJECT_ROOT/services/authd/src" "$PROJECT_ROOT/services/auth-core/src" "$PROJECT_ROOT/services/provider-x/src" -type f \( -name '*.ts' -o -name '*.json' \) -newer "$DIST_ENTRY" | grep -q .; then
+    needs_build=1
+fi
+
+if [ "$needs_build" -eq 0 ] && find "$PROJECT_ROOT/services/provider-discord/src" -type f \( -name '*.ts' -o -name '*.json' \) -newer "$DIST_ENTRY" | grep -q .; then
+    needs_build=1
+fi
+
+if [ "$needs_build" -eq 0 ] && find "$PROJECT_ROOT/services/provider-github/src" -type f \( -name '*.ts' -o -name '*.json' \) -newer "$DIST_ENTRY" | grep -q .; then
+    needs_build=1
+fi
+
+if [ "$needs_build" -eq 0 ] && find "$PROJECT_ROOT/services/provider-huggingface/src" -type f \( -name '*.ts' -o -name '*.json' \) -newer "$DIST_ENTRY" | grep -q .; then
+    needs_build=1
+fi
+
+if [ "$needs_build" -eq 1 ]; then
+    npx tsc -p "$AUTHD_ROOT/tsconfig.json"
+fi
+
+exec node "$DIST_ENTRY" "$@"

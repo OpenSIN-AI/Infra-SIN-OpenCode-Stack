@@ -448,7 +448,7 @@
       "type": "local",
       "command": [
         "node",
-        "/Users/jeremy/dev/OpenSIN-backend/a2a/team-infratructur/A2A-SIN-Passwordmanager/dist/src/cli.js",
+        "{env:HOME}/.config/opencode/local-plugins/A2A-SIN-Passwordmanager/dist/src/cli.js",
         "serve-mcp"
       ],
       "environment": {
@@ -600,7 +600,7 @@
       "type": "local",
       "command": [
         "node",
-        "/Users/jeremy/dev/OpenSIN-backend/a2a/team-coding/A2A-SIN-Simone-MCP/dist/src/cli.js",
+        "{env:HOME}/.config/opencode/local-plugins/A2A-SIN-Simone-MCP/dist/src/cli.js",
         "serve-mcp"
       ],
       "enabled": true

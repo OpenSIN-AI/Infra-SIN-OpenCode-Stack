@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+set -e
+exec node "$(dirname "$0")/../a2a/team-worker/A2A-SIN-Worker-Prolific/dist/src/cli.js" "$@"

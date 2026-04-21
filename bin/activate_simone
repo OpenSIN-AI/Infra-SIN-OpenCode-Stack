@@ -1,0 +1,50 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+echo "=================================================="
+echo "🚀 Aktivierte Simone MCP (Ultra-Duo Coder Agent)"
+echo "=================================================="
+
+PROJECT_ROOT="$(cd "${0:A:h}/.." && pwd)"
+SIMONE_ROOT="$PROJECT_ROOT/a2a/team-coding/A2A-SIN-Simone-MCP"
+LOG_FILE="/tmp/simone-mcp.log"
+PORT=8000
+MODE="${1:-activate}"
+
+if [[ "$MODE" == "serve-mcp" || "$MODE" == "serve-a2a" ]]; then
+  cd "$SIMONE_ROOT"
+  exec python3 src/cli.py serve-mcp
+fi
+
+if ! lsof -i ":${PORT}" >/dev/null 2>&1; then
+  echo "⚠️  Simone MCP Server läuft nicht auf Port 8000."
+  echo "Starte Simone MCP im Hintergrund..."
+  (
+    cd "$SIMONE_ROOT"
+    if command -v uv >/dev/null 2>&1; then
+      nohup uv run python src/cli.py serve-mcp >"$LOG_FILE" 2>&1 &
+    else
+      nohup python3 src/cli.py serve-mcp >"$LOG_FILE" 2>&1 &
+    fi
+  )
+
+  for _ in {1..30}; do
+    if lsof -i ":${PORT}" >/dev/null 2>&1; then
+      break
+    fi
+    sleep 1
+  done
+fi
+
+if lsof -i ":${PORT}" >/dev/null 2>&1; then
+  echo "✅ Simone MCP Event-Bus & LSP Server ist ONLINE!"
+else
+  echo "⚠️ Simone MCP konnte nicht automatisch starten; Log: $LOG_FILE"
+fi
+
+echo "🌐 Öffne Enterprise Dashboard..."
+open "http://localhost:8000/dashboard" || echo "Bitte öffne http://localhost:8000/dashboard im Browser."
+
+echo "=================================================="
+echo "Simone MCP ist nun bereit für A2A Commands (z.B. code.find_symbol)."
+echo "=================================================="

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Mindrift inbox sync loop runner.
+# Keeps SIN-Mindrift job inbox up-to-date by delegating to SIN-Google-Apps.
+# Note: Use only where automation is permitted and with valid sessions.
+
+INTERVAL_SECONDS="${SIN_MINDRIFT_INBOX_LOOP_INTERVAL_SECONDS:-300}"
+
+run_once() {
+  ./bin/sin-mindrift run-action '{"action":"sin.mindrift.google_apps.sync"}' || true
+  ./bin/sin-mindrift run-action '{"action":"sin.mindrift.job.next"}' || true
+}
+
+if [[ "${1:-}" == "--run-forever" ]]; then
+  while true; do
+    echo "=== $(date -Is) mindrift-inbox-loop interval=${INTERVAL_SECONDS}s ==="
+    run_once
+    sleep "${INTERVAL_SECONDS}"
+  done
+fi
+
+if command -v pm2 &> /dev/null; then
+  pm2 start "$0" --name "mindrift-inbox-loop" -- --run-forever
+  pm2 save
+  echo "[+] mindrift-inbox-loop running under pm2. Use: pm2 logs mindrift-inbox-loop"
+else
+  nohup "$0" --run-forever > mindrift-inbox-loop.log 2>&1 &
+  echo "[+] mindrift-inbox-loop running in background (PID $!)."
+  echo "[+] Tail logs: tail -f mindrift-inbox-loop.log"
+fi

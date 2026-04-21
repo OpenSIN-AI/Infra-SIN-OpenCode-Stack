@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Best-of-n status panel for OMOC Swarm.
+#
+# Reads `.omoc-worktrees/<swarmId>/latest.json` and renders a compact UI.
+#
+# Env:
+#   OMOC_SWARM_ID   required
+#   OMOC_DIR        optional (default cwd)
+#   OMOC_REFRESH    optional seconds (default 0.5)
+
+SWARM_ID="${OMOC_SWARM_ID:-}"
+ROOT_DIR="${OMOC_DIR:-$(pwd)}"
+REFRESH="${OMOC_REFRESH:-0.5}"
+
+if [ -z "${SWARM_ID}" ]; then
+  echo "Error: OMOC_SWARM_ID is required" >&2
+  exit 2
+fi
+
+STATE_PATH="${ROOT_DIR}/.omoc-worktrees/${SWARM_ID}/latest.json"
+
+tput_available=0
+if command -v tput >/dev/null 2>&1; then
+  tput_available=1
+fi
+
+if [ "${tput_available}" -eq 1 ]; then
+  COLOR_RESET="$(tput sgr0 2>/dev/null || true)"
+  COLOR_GREEN="$(tput setaf 2 2>/dev/null || true)"
+  COLOR_YELLOW="$(tput setaf 3 2>/dev/null || true)"
+  COLOR_RED="$(tput setaf 1 2>/dev/null || true)"
+  COLOR_DIM="$(tput dim 2>/dev/null || true)"
+  COLOR_BOLD="$(tput bold 2>/dev/null || true)"
+  tput civis 2>/dev/null || true
+  trap 'tput cnorm 2>/dev/null || true' EXIT
+else
+  COLOR_RESET=""
+  COLOR_GREEN=""
+  COLOR_YELLOW=""
+  COLOR_RED=""
+  COLOR_DIM=""
+  COLOR_BOLD=""
+fi
+
+screen_home() {
+  if [ "${tput_available}" -eq 1 ]; then
+    tput cup 0 0
+  else
+    printf '\033[H'
+  fi
+}
+
+screen_clear_to_end() {
+  if [ "${tput_available}" -eq 1 ]; then
+    tput ed
+  else
+    printf '\033[J'
+  fi
+}
+
+get_state_mtime() {
+  if [ ! -f "${STATE_PATH}" ]; then
+    echo ""
+    return 0
+  fi
+
+  if stat -c %Y "${STATE_PATH}" >/dev/null 2>&1; then
+    stat -c %Y "${STATE_PATH}" 2>/dev/null || echo ""
+    return 0
+  fi
+
+  if stat -f %m "${STATE_PATH}" >/dev/null 2>&1; then
+    stat -f %m "${STATE_PATH}" 2>/dev/null || echo ""
+    return 0
+  fi
+
+  echo ""
+}
+
+color_status() {
+  case "${1}" in
+    complete) printf "%s%s%s" "${COLOR_GREEN}" "${1}" "${COLOR_RESET}" ;;
+    running|selecting) printf "%s%s%s" "${COLOR_YELLOW}" "${1}" "${COLOR_RESET}" ;;
+    error) printf "%s%s%s" "${COLOR_RED}" "${1}" "${COLOR_RESET}" ;;
+    pending|queued) printf "%s%s%s" "${COLOR_DIM}" "${1}" "${COLOR_RESET}" ;;
+    *) printf "%s" "${1}" ;;
+  esac
+}
+
+render() {
+  if [ ! -f "${STATE_PATH}" ]; then
+    echo "editor-best-of-n  idle"
+    echo
+    echo "No MAX run yet."
+    echo "Run: swarm_max({ prompt: \"...\", tries: 3 })"
+    return 0
+  fi
+
+  if ! jq_output="$(jq -r '
+    def status_line:
+      (.tries // [])
+      | to_entries
+      | map(
+          .value as $t
+          | ($t.name // ("#" + ((.key + 1)|tostring))) as $name
+          | ($t.status // "pending") as $st
+          | ($st | ascii_downcase) as $status
+          | (
+              if ($name|test("^[a-e]$")) then
+                ("Editor #" + (((($name|ascii_upcase)|explode|.[0]) - ("A"|explode|.[0]) + 1 | tostring)) + "  " + $status)
+              else
+                ("Editor " + ($name|ascii_upcase) + "  " + $status)
+              end
+            )
+        )
+      | .[];
+    [
+      (.phase // "unknown"),
+      (.runId // ""),
+      (.winner // "")
+    ] | @tsv,
+    status_line
+  ' "${STATE_PATH}" 2>/dev/null)"; then
+    return 1
+  fi
+
+  header=""
+  if ! IFS= read -r header <<<"${jq_output}"; then
+    return 1
+  fi
+
+  phase=""
+  run_id=""
+  winner=""
+  IFS=$'\t' read -r phase run_id winner <<<"${header}"
+  phase_display="$(color_status "${phase}")"
+
+  echo "editor-best-of-n  ${phase_display}"
+  [ -n "${run_id}" ] && echo "run: ${run_id}"
+  echo
+
+  remaining="${jq_output#"${header}"}"
+  if [ -n "${remaining}" ]; then
+    remaining="${remaining#?}"
+    while IFS= read -r line; do
+      [ -z "${line}" ] && continue
+      status="${line##*  }"
+      colored_status="$(color_status "${status}")"
+      echo "${line%  *}  ${colored_status}"
+    done <<<"${remaining}"
+  fi
+
+  echo
+  case "${phase}" in
+    selecting) echo "Selecting best" ;;
+    applying) echo "Applying selected changes..." ;;
+    complete)
+      if [ -n "${winner}" ]; then
+        echo "Winner: ${COLOR_BOLD}${COLOR_GREEN}${winner}${COLOR_RESET}"
+      else
+        echo "Winner: (unknown)"
+      fi
+      ;;
+    error) echo "${COLOR_RED}Error${COLOR_RESET} (see state file)" ;;
+  esac
+}
+
+last_mtime=""
+last_output=""
+
+while true; do
+  mtime="$(get_state_mtime)"
+  if [ "${mtime}" != "${last_mtime}" ] || [ -z "${last_output}" ]; then
+    if output="$(render)"; then
+      last_output="${output}"
+      last_mtime="${mtime}"
+      screen_home
+      printf "%s\n" "${last_output}"
+      screen_clear_to_end
+    fi
+  fi
+  sleep "${REFRESH}"
+done
