@@ -4,11 +4,11 @@
   "name": "Team Coding Agents (6 dedicated repos)",
   "description": "6 dedicated A2A Coder Agents with individual GitHub repos — split from monolithic OpenSIN-Code for isolated deployments, independent versioning, and crash-storm protection. Established after BUG-OCI-001 (OCI VM disk-full incident, 2026-04-16).",
   "manager": "A2A-SIN-Zeus",
-  "primary_model": "google/antigravity-claude-sonnet-4-6",
+  "primary_model": "openai/gpt-5.4-mini",
   "fallback_models": [
-    "openai/gpt-5.4",
-    "google/antigravity-gemini-3.1-pro",
-    "qwen/coder-model"
+    "qwen/coder-model",
+    "modal/glm-5.1-fp8",
+    "nvidia-nim/qwen-3.5-397b"
   ],
   "established": "2026-04-17",
   "bug_references": [

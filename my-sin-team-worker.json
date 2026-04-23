@@ -23,11 +23,11 @@
     // PROLIFIC WORKER — Survey Automation
     // Autonome Survey-Teilnahme auf Prolific
     "prolific": {
-      "model": "google/antigravity-gemini-3-flash",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
         "qwen/coder-model",
-        "nvidia-nim/stepfun-ai/step-3.5-flash"
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "survey-worker",
       "description": "Autonome Survey-Teilnahme auf Prolific"
@@ -36,10 +36,11 @@
     // FREELANCER WORKER — Freelancing Automation
     // Bewerbungen auf Freelancer-Plattformen
     "freelancer": {
-      "model": "google/antigravity-gemini-3.1-pro",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "google/antigravity-claude-sonnet-4-6"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "freelancer",
       "description": "Freelancing-Automation — Bewerbungen, Kommunikation"
@@ -48,10 +49,11 @@
     // SURVEY WORKER — Allgemeine Survey Automation
     // Multi-Platform Survey Worker
     "survey": {
-      "model": "google/antigravity-gemini-3-flash",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "nvidia-nim/stepfun-ai/step-3.5-flash"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "survey-generalist",
       "description": "Allgemeine Survey Automation — Multi-Platform"
@@ -65,28 +67,31 @@
 
     // Survey Discovery — Surveys finden
     "discovery": {
-      "model": "google/antigravity-gemini-3-flash",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "nvidia-nim/stepfun-ai/step-3.5-flash"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
 
     // Survey Completion — Surveys ausfuellen
     "completion": {
-      "model": "google/antigravity-gemini-3.1-pro",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "openai/gpt-5.4"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
 
     // Communication — Emails, Nachrichten schreiben
     "communication": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-gemini-3.1-pro",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     }
   }

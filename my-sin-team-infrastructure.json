@@ -23,10 +23,11 @@
     // DEPLOY AGENT — Deployment Automation
     // Vercel, Cloudflare, HF Spaces, OCI VM
     "deploy": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "deployment-specialist",
       "description": "Deployment Automation — Vercel, Cloudflare, HF Spaces, OCI"
@@ -35,10 +36,11 @@
     // MONITORING AGENT — System Monitoring
     // Health Checks, Alerts, Performance
     "monitoring": {
-      "model": "google/antigravity-gemini-3.1-pro",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "google/antigravity-claude-sonnet-4-6"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "monitoring-specialist",
       "description": "Health Checks, Alerts, Performance-Monitoring"
@@ -47,13 +49,15 @@
     // SECURITY AGENT — Security Audits
     // Vulnerability Scanning, Secret Detection
     "security": {
-      "model": "google/antigravity-claude-opus-4-6-thinking",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "openai/gpt-5.4"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "security-specialist",
-      "description": "Vulnerability Scanning, Secret Detection, Security Audits"
+      "description": "Vulnerability Scanning, Secret Detection, Security Audits",
+      "reasoningEffort": "xhigh"
     }
   },
 
@@ -64,38 +68,43 @@
 
     // Infrastructure Setup — Server, Services einrichten
     "setup": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
 
     // Deployment — Code deployen
     "deployment": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
 
     // Monitoring — System ueberwachen
     "monitoring": {
-      "model": "google/antigravity-gemini-3-flash",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "google/antigravity-gemini-3.1-pro"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
 
     // Security — Security Audits
     "security": {
-      "model": "google/antigravity-claude-opus-4-6-thinking",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "openai/gpt-5.4"
-      ]
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
+      ],
+      "reasoningEffort": "xhigh"
     }
   }
 }

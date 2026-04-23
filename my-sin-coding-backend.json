@@ -7,24 +7,27 @@
   "agents": {},
   "categories": {
     "implementation": {
-      "model": "google/antigravity-claude-sonnet-4-6",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "google/antigravity-gemini-3.1-pro"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
     "research": {
-      "model": "google/antigravity-gemini-3.1-pro",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
     "quick": {
-      "model": "google/antigravity-gemini-3-flash",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     }
   }

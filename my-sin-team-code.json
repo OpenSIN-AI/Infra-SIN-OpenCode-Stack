@@ -27,24 +27,25 @@
     // SIN-ZEUS — Supreme Fleet Commander
     // Plant lokal, erstellt GitHub Issues, dispatcht an Cloud-Executors
     "sin-zeus": {
-      "model": "google/antigravity-claude-opus-4-6-thinking",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "google/antigravity-gemini-3.1-pro",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "fleet-commander",
-      "description": "Supreme fleet commander — plant, dispatcht, ueberwacht"
+      "description": "Supreme fleet commander — plant, dispatcht, ueberwacht",
+      "reasoningEffort": "xhigh"
     },
 
     // SIMONE MCP — Der ultimative Code-Worker
     // LSP-powered semantic code operations fuer 40+ Sprachen
     "simone-mcp": {
-      "model": "google/antigravity-claude-sonnet-4-6",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
         "qwen/coder-model",
-        "google/antigravity-gemini-3.1-pro"
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "code-worker",
       "description": "LSP-powered semantic code operations (40+ languages)"
@@ -53,11 +54,11 @@
     // FRONTEND — UI/UX Specialist
     // React, Next.js, CSS, Design-Systems
     "frontend": {
-      "model": "google/antigravity-gemini-3.1-pro",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "openai/gpt-5.4",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "frontend-specialist",
       "description": "UI/UX, React, Next.js, Design-Systems, CSS"
@@ -66,11 +67,11 @@
     // BACKEND — API & Services Specialist
     // FastAPI, Node.js, Databases, Infrastructure
     "backend": {
-      "model": "google/antigravity-claude-sonnet-4-6",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "google/antigravity-gemini-3.1-pro",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "backend-specialist",
       "description": "APIs, Services, Databases, Infrastructure"
@@ -79,11 +80,11 @@
     // FULLSTACK — Generalist
     // Can handle both frontend and backend tasks
     "fullstack": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "google/antigravity-gemini-3.1-pro",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ],
       "role": "fullstack-generalist",
       "description": "Full-Stack — kann Frontend UND Backend"
@@ -97,46 +98,52 @@
 
     // Architecture-Design — Schwere Architektur-Entscheidungen
     "architecture": {
-      "model": "google/antigravity-claude-opus-4-6-thinking",
+      "model": "openai/gpt-5.4",
       "fallback_models": [
-        "google/antigravity-gemini-3.1-pro",
-        "openai/gpt-5.4"
-      ]
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
+      ],
+      "reasoningEffort": "xhigh"
     },
 
     // Implementation — Code schreiben
     "implementation": {
-      "model": "google/antigravity-claude-sonnet-4-6",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
 
     // Code-Review — Qualitaetskontrolle
     "review": {
-      "model": "google/antigravity-gemini-3.1-pro",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "openai/gpt-5.4"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
 
     // Testing — Test schreiben und ausfuehren
     "testing": {
-      "model": "openai/gpt-5.4",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "google/antigravity-claude-sonnet-4-6",
-        "qwen/coder-model"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     },
 
     // Refactoring — Code umstrukturieren
     "refactoring": {
-      "model": "google/antigravity-claude-sonnet-4-6",
+      "model": "openai/gpt-5.4-mini",
       "fallback_models": [
-        "openai/gpt-5.4",
-        "google/antigravity-gemini-3.1-pro"
+        "qwen/coder-model",
+        "modal/glm-5.1-fp8",
+        "nvidia-nim/qwen-3.5-397b"
       ]
     }
   }
