@@ -1,118 +1,163 @@
 ---
 name: doctor
-description: Full-system audit & healing skill. Checks ALL repos in a project for documentation consistency, outdated claims (CGEventPostToPid, cua-driver, SkyLight), missing VoiceOver-trick, wrong repo names, and methodological drift. Like a doctor making rounds — diagnoses, treats, and discharges healthy.
+description: Universal repo health auditor. Multi-lens deep scan: documentation truthfulness, code quality, cross-repo consistency, config drift, security gaps, and methodological correctness. Produces P0/P1/P2 findings with file:line evidence. Works on ANY repo or multi-repo workspace.
 license: MIT
 compatibility: opencode
 metadata:
   audience: all-agents
-  workflow: repo-health-audit
-  trigger: doctor, audit, gesund, reinigen, health-check
+  workflow: universal-repo-health-audit
+  trigger: doctor, audit, gesund, reinigen, health-check, diagnose, prüfe, check docs, sauber machen
 ---
 
-# /doctor — Repo-Gesundheitscheck & Heilung
+# /doctor — Universal Repo Health Auditor
 
-> "Alles wie ein Doktor reinigen und gesund machen."
+> Universell. Für JEDES Repo. 7 Lenses. P0/P1/P2. Quick + Deep.
 
-Use this skill when:
-- User asks to audit, clean, or heal documentation across repos
-- After major architectural changes (e.g., CGEventPostToPid → AXPress)
-- User says "prüfe alle md dateien", "doktor", "reinigen", "gesund machen"
-- Before release — verify no documentation lies remain
-
-## Phase 1: Diagnose (Audit)
-
-### 1.1 Identifiziere alle zugehörigen Repos
-Check `workspace.yaml` oder frage den User. Typisch für Stealth-Triade:
-- `stealth-runner` (Orchestrator)
-- `skylight-cli` (ACT)
-- `unmask-cli` (SENSE)
-- `playstealth-cli` (HIDE)
-- `A2A-SIN-Worker-heypiggy` (Archiv)
-
-### 1.2 Finde alle MD-Dateien
-```bash
-for repo in REPO1 REPO2 ...; do
-  find "$repo" -name "*.md" -not -path "*/.git/*" -not -path "*/node_modules/*"
-done
+```
+/doctor           → Quick-Scan (Key-Files, ~15s)
+/doctor deep      → Deep-Scan (ALL files, ~60s)
+/doctor --fix     → Auto-Fix sicherer Probleme
+/doctor --lens method_check,docs_complete
 ```
 
-### 1.3 Suche nach TECHNISCHEN LÜGEN
-Diese Patterns bedeuten FAST IMMER eine Lüge in aktuellen Docs:
-- `CGEventPostToPid` / `SLEventPostToPid` — außer in "funktioniert NICHT"-Kontext
-- `SkyLight.framework` als aktiver Klick-Mechanismus
-- `cua-driver` als empfohlenes Tool
-- Behauptung dass Klicks "unsichtbar" via CGEvent sind
+---
 
-Ausnahmen (KEINE Lügen):
-- In Verbotslisten (`banned.md`: "❌ CGEventPostToPid")
-- Mit Negation ("funktioniert NICHT", "ignoriert", "does NOT work")
-- Historische Docs mit `⚠️ HISTORICAL`-Header
-- Archiv-Repos mit deutlichem Archiv-Vermerk
+## Phase 0: Discovery
 
-### 1.4 Prüfe auf FEHLENDE Informationen
-- VoiceOver-Trick dokumentiert? (in brain.md + AGENTS.md der Klick-Repos)
-- AXPress als Klick-Mechanismus genannt?
-- `--force-renderer-accessibility` als VERBOTEN markiert?
-- Korrekte Versionsnummern?
+**Workspace erkennen:** `.opencode/workspace.yaml` vorhanden? → Multi-Repo-Audit aller `repos[].path`. Sonst Single-Repo.
 
-### 1.5 Erstelle Diagnose-Report
-Tabelle pro Repo: Datei | Gefunden | Schwere | Aktion
+**Repo-Typ:** Sprache erkennen (Python/JS/TS/Rust/Go/Swift), Typ (App/CLI/Lib/Config), Status (aktiv/archiviert).
 
-## Phase 2: Behandlung (Fix)
+---
 
-### 2.1 CGEventPostToPid-Lügen ersetzen
+## Phase 1: Diagnose — 7 Lenses
+
+### 🔍 Lens 1: Documentation Truthfulness
+**Frage:** Behaupten Docs Dinge, die der Code nicht hält?
+
+Extrahiere ALLE technischen Claims aus `.md`-Dateien und vergleiche mit Source-Code:
+- README claims vs actual CLI flags / API signatures
+- Architecture docs vs actual file structure
+- brain.md mechanism claims vs source code
+- Version numbers consistency
+- Dependency versions in docs vs package.json/pyproject.toml
+
+**P0:** README nennt Flag das nicht existiert, API-Signatur falsch, Mechanismus-Lüge
+**P1:** Veraltete Version, falscher Dateiname, inkorrekte Dependency
+
+### 🔍 Lens 2: Methodological Correctness
+**Frage:** Sind die beschriebenen Methoden technisch korrekt?
+
+Existieren die genannten APIs/Funktionen/Flags? Werden tote Technologien empfohlen?
+
+**Universelle Patterns (ständig erweiterbar):**
+- `CGEventPostToPid` → `AXUIElementPerformAction` (Chrome 148 ignoriert) — **P0**
+- `cua-driver` → `skylight-cli` (archiviert) — **P1**
+- `--force-renderer-accessibility` → VoiceOver-Trick (crasht Chrome) — **P1**
+- `SkyLight.framework` als aktiv → Accessibility API (macOS 26 locked) — **P1**
+
+### 🔍 Lens 3: Cross-Repo Consistency
+**Frage:** Sind alle Repos im Workspace konsistent?
+
+- Gleiche LICENSE in allen Repos?
+- workspace.yaml in jedem Repo?
+- AGENTS.md Cross-Referenzen vorhanden?
+- Konsistente Tool-Versionen?
+- brain.md/goal.md in allen aktiven Repos?
+
+### 🔍 Lens 4: Documentation Completeness
+**Frage:** Fehlen kritische Dateien?
+
+| Datei | Pflicht | Prüfung |
+|-------|---------|---------|
+| README.md | ✅ | Existiert, hat Install + Usage |
+| LICENSE | ✅ | Existiert |
+| AGENTS.md | ✅ | Hat Commands / Click-Contract |
+| brain.md | ✅ | Aktueller State + Issues |
+| .opencode/workspace.yaml | ✅¹ | Partner-Repos gelistet |
+| CONTRIBUTING.md | 🟡 | Existiert |
+| SECURITY.md | 🟡 | Existiert |
+| banned.md | 🟡 | Verbotene Patterns |
+| goal.md | 🟡 | Ziel + Status |
+| fix.md | 🟡 | Bekannte Bugs |
+| issues.md | 🟡 | Offene Punkte |
+
+¹ Pflicht nur in Multi-Repo-Workspaces
+
+### 🔍 Lens 5: Code Quality Surface
+- package.json/pyproject.toml/Cargo.toml?
+- Test-Framework + Linter + Formatter?
+- CI/CD Workflow (.github/workflows/)?
+- .gitignore: keine .env, node_modules, __pycache__, .venv?
+- Type-Hints / TypeScript strict mode?
+
+### 🔍 Lens 6: Secrets & Config Hygiene
+- **P0:** `.env` mit echten Keys im Repo
+- **P1:** `.env.example` fehlt
+- **P1:** Hartcodierte API-Keys in Source
+- **P2:** Passwörter in Config-Dateien
+
+### 🔍 Lens 7: Repository Metadata
+- Description + Topics gesetzt?
+- Default Branch = main?
+- Issues + PRs aktiviert?
+
+---
+
+## Phase 2: Diagnose-Report
+
 ```markdown
-# FALSCH:
-Click via CGEventPostToPid (SkyLight.framework)
+# 🩺 Doctor Audit — REPO_NAME
+**Score: 85/100 (B+)** | Mode: deep | Lenses: 7/7
 
-# RICHTIG:
-Click via AXUIElementPerformAction (Accessibility API — AXPress)
-CGEventPostToPid funktioniert NICHT auf Chrome 148/macOS 26.
+## 🔴 P0 — Critical
+| # | Lens | File:Line | Finding |
+|---|------|-----------|---------|
+
+## 🟡 P1 — High
+| # | Lens | File:Line | Finding |
+|---|------|-----------|---------|
+
+## 🟢 P2 — Medium
+| # | Lens | File:Line | Finding |
+|---|------|-----------|---------|
+
+## 📊 Lens Scores
+| Lens | Score | P0 | P1 | P2 |
+|------|-------|----|----|-----|
+| docs_vs_code | 75 | 2 | 3 | 0 |
+| method_check | 60 | 5 | 0 | 0 |
+| cross_repo | 90 | 0 | 1 | 0 |
+| docs_complete | 85 | 0 | 0 | 2 |
+| code_surface | 80 | 0 | 1 | 0 |
+| config_hygiene | 95 | 0 | 0 | 0 |
+| repo_meta | 70 | 0 | 0 | 3 |
 ```
 
-### 2.2 VoiceOver-Trick einfügen
-```markdown
-## Chrome Accessibility aktivieren (VoiceOver-Trick)
-1. VoiceOver 1× starten: `osascript -e 'tell application "VoiceOver" to launch'`
-2. chrome://accessibility → "Suppress automatic" deaktivieren
-3. VoiceOver stoppen: `osascript -e 'tell application "VoiceOver" to quit'`
-4. AX-Tree bleibt dauerhaft aktiv. Kein --force-renderer-accessibility nötig.
-```
+---
 
-### 2.3 Historische Docs markieren
-```markdown
-> ⚠️ HISTORICAL — Pre-AXPress era. CGEventPostToPid outdated.
-```
-Nicht umschreiben — nur Header hinzufügen.
+## Phase 3: Behandlung (`--fix`)
 
-### 2.4 brain.md updaten
-Muss enthalten: Klick-Mechanismus, VoiceOver-Trick, Verbote, Status, NVIDIA-Modell
+**Automatisch (sicher):**
+- Veraltete Claims ersetzen (CGEventPostToPid → AXPress)
+- workspace.yaml in Repos ohne erstellen
+- Cross-Referenzen in AGENTS.md
+- ⚠️ HISTORICAL-Header in archivierte Docs
+- .gitignore ergänzen
 
-## Phase 3: Nachsorge (Verify)
+**Semi-Automatisch (Review):**
+- brain.md updaten
+- README API-Referenzen korrigieren
+- Versionen synchronisieren
 
-### 3.1 Final Audit
-```bash
-grep -rn "CGEventPostToPid\|SLEventPostToPid" REPO --include="*.md" \
-  | grep -v "NICHT\|not\|ignoriert\|does NOT\|TOT\|⚠️\|HISTORICAL\|Pre-AXPress"
-```
-Erwartet: 0 Treffer in aktiven Docs (nur in historischen/Archiv).
+**Nur Meldung (manuell):**
+- Lizenz-Konflikte
+- Architektur-Änderungen
 
-### 3.2 Commit & Push
-Jedes Repo einzeln committen mit klarer Message:
-```
-docs: doctor-audit — CGEventPostToPid → AXPress, VoiceOver-Trick
-```
+---
 
-### 3.3 workspace.yaml prüfen/erstellen
-Falls workspace.yaml fehlt, erstellen mit Verweisen auf alle zugehörigen Repos.
+## Phase 4: Nachsorge
 
-## Bekannte Krankheitsbilder
-
-| Symptom | Diagnose | Behandlung |
-|---------|----------|------------|
-| README sagt "CGEventPostToPid" | Veraltete Doku | AXPress + VoiceOver-Trick |
-| brain.md nennt falsches Repo | Copy-Paste-Fehler | Korrigieren |
-| "SkyLight.framework" als aktiv | Pre-AXPress-Ära | AXPress ersetzen |
-| Kein VoiceOver erwähnt | Fehlende Prerequisite | Einfügen in AGENTS.md |
-| cua-driver als Tool empfohlen | Veraltete Architektur | skylight-cli ersetzen |
-| --force-renderer-accessibility | Crasht Chrome | Als VERBOTEN markieren |
+- Final Audit: Score muss gestiegen sein
+- Commit: `docs: doctor-audit — GEFIXTES`
+- Health-Trend: `.opencode/doctor-history.json`
