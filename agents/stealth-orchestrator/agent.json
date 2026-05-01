@@ -1,0 +1,134 @@
+{
+  "id": "a2a-stealth-orchestrator",
+  "name": "Stealth-Orchestrator",
+  "version": "1.0.0",
+  "description": "Live Eye v6 + Omni Vision + Stealth Quad Orchestrator. Steuert Google Login → Survey → EUR via NVIDIA Nemotron 3 Nano Omni. AKTIVE Codebasis (A2A-SIN-Worker-heypiggy ist ARCHIVIERT).",
+  "team": "Team - Workers",
+  "manager": "SIN-Zeus",
+  "status": "production-ready",
+  "capabilities": [
+    "screen_capture",
+    "video_analysis",
+    "live_eye_ringbuffer",
+    "rolling_video_buffer",
+    "nemotron_omni_vision",
+    "nvidia_nim_api",
+    "sse_streaming",
+    "skylight_axpress_click",
+    "playstealth_chrome_isolated",
+    "screen_follow_recording",
+    "unmask_dom_xray",
+    "survey_orchestration",
+    "google_login_automation",
+    "json_schema_enforcement"
+  ],
+  "models": {
+    "primary": "nvidia-nim/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "fallback_chain": [
+      "nvidia-nim/meta/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "nvidia-nim/meta/llama-3.2-11b-vision-instruct"
+    ],
+    "video_config": {
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "fps": 5,
+      "buffer_seconds": 4,
+      "max_frames": 20,
+      "resolution": "960x540",
+      "crf": 35,
+      "preset": "ultrafast",
+      "image_format": "JPEG",
+      "image_quality": 50,
+      "streaming": "SSE",
+      "json_prompt": true
+    }
+  },
+  "endpoints": {
+    "nim_api": "https://integrate.api.nvidia.com/v1/chat/completions",
+    "grpc_host": "grpc.nvcf.nvidia.com:443",
+    "grpc_function_id": "c4ed50ff-b5c3-409d-ab57-b79c33f5bb39"
+  },
+  "infrastructure": {
+    "vm_type": "macOS + OCI VM",
+    "integration": "NVIDIA NIM REST API",
+    "browser_automation": "skylight-cli (AXPress) + playstealth-cli (isolated Chrome)",
+    "video_capture": "LiveEye Ringbuffer (mss, 3ms) + screen-follow",
+    "temporal_analysis": "Rolling Video Buffer (Conv3D via Nemotron Omni)",
+    "active_repo": "~/dev/stealth-runner",
+    "archived_repo": "~/dev/A2A-SIN-Worker-heypiggy",
+    "runner_files": [
+      "runner/live_eye.py",
+      "runner/live_omni_monitor.py",
+      "runner/nemotron_omni.py",
+      "runner/video_analyzer.py",
+      "runner/step.py",
+      "runner/state_machine.py",
+      "runner/stealth_executor.py"
+    ]
+  },
+  "environment": {
+    "required": [
+      "NVIDIA_API_KEY (Prefix: nvapi-...)",
+      "HEYPIGGY_EMAIL",
+      "HEYPIGGY_PASSWORD"
+    ],
+    "optional": [
+      "CF_TOKEN (Cloudflare Workers AI, 300 req/min free)",
+      "HEYPIGGY_PROFILE_PATH"
+    ]
+  },
+  "marketplace": {
+    "pricingModel": "free",
+    "monthlyPrice": 0,
+    "purchaseModes": ["auto-include"]
+  },
+  "skills": [
+    "anonymous",
+    "stealth-browser-operator"
+  ],
+  "mcp_servers": [
+    "skylight-cli",
+    "sin-terminal"
+  ],
+  "cli_commands": {
+    "playstealth launch --url <URL>": "Isolierte Chrome-Instanz starten",
+    "skylight-cli screenshot --pid <PID> --mode som --output <FILE>": "Screenshot mit Set-of-Marks Overlay",
+    "skylight-cli click --pid <PID> --element-index <N>": "Klick via AXPress (KEINE Koordinaten)",
+    "skylight-cli list-elements --pid <PID>": "Interaktive Elemente auflisten",
+    "runner/step.py <URL>": "Ein-Schritt-Orchestrator",
+    "runner/live_eye.py <PID>": "Live-Video-Ringbuffer starten",
+    "python3 -c 'from runner.live_omni_monitor import LiveOmniMonitor; m=LiveOmniMonitor(debug=True); m.start(); m.run_continuous(max_steps=50)'": "Live Omni Monitor starten",
+    "screen-follow record --video": "Daueraufnahme starten",
+    "bash cli/heypiggy-login <PID>": "Google Login automatisieren"
+  },
+  "agent_card": {
+    "identity": {
+      "name": "Stealth-Orchestrator",
+      "version": "1.0.0",
+      "description": "Live Video + Omni Vision Orchestrator für die Stealth Quad. Nutzt Nemotron 3 Nano Omni für Video/Audio/Bild/Text Analyse. AKTIV seit 30.4.2026."
+    },
+    "capabilities": [
+      {
+        "name": "live_video_eye",
+        "description": "Memory-Ringbuffer (20 Frames, 4s) → PyAV encode → MP4 → Nemotron Omni via SSE Streaming. JPEG q=50 Optimierung."
+      },
+      {
+        "name": "hybrid_screenshot_video",
+        "description": "Screenshot (jeder Step, schnell) + Rolling Video (alle 5 Steps, temporal). SSE Streaming für tokenweise Antwort."
+      },
+      {
+        "name": "skylight_click",
+        "description": "AXUIElementPerformAction via skylight-cli. KEIN Cursor-Sprung. NUR --element-index, NIEMALS Koordinaten."
+      },
+      {
+        "name": "survey_orchestration",
+        "description": "Google Login → Dashboard → Survey-Start → Screener → Questions → Complete → EUR via playstealth + skylight + Omni Vision."
+      }
+    ],
+    "default_input_modes": ["text", "image", "video"],
+    "default_output_modes": ["text", "json"],
+    "archived_alternatives": [
+      "A2A-SIN-Worker-heypiggy (BRAIN.md sagt ARCHIVIERT)",
+      "mcp_survey_runner.py (veraltet, nutzt Mistral statt Nemotron)"
+    ]
+  }
+}

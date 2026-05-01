@@ -145,19 +145,22 @@ echo ""
 if [ "$SKIP_BUN" = false ]; then
 log_info "Installing bun plugins..."
 for plugin in "opencode-antigravity-auth@1.6.5-beta.0" "oh-my-opencode@3.11.2"; do
-    if bun pm ls -g 2>/dev/null | grep -q "$plugin"; then
+    # Check both bun AND npm global — npm is primary, bun fallback
+    plugin_name="${plugin%%@*}"
+    if npm ls -g "$plugin_name" 2>/dev/null | grep -q "$plugin_name" || bun pm ls -g 2>/dev/null | grep -q "$plugin"; then
       log_skip "$plugin"
     else
-      [ "$DRY_RUN" = false ] && bun add -g "$plugin" 2>&1 | tail -1
+      [ "$DRY_RUN" = false ] && bun add -g "$plugin" 2>&1 | tail -1 || log_warn "$plugin (bun install fehlgeschlagen, npm global nutzen)"
       log_ok "$plugin installiert"
     fi
   done
   if [ -d "plugins/local-plugins/opencode-openrouter-auth" ]; then
-    if bun pm ls -g 2>/dev/null | grep -q "opencode-openrouter-auth"; then
-      log_skip "opencode-openrouter-auth"
+    plugin_name="opencode-openrouter-auth"
+    if npm ls -g "$plugin_name" 2>/dev/null | grep -q "$plugin_name" || bun pm ls -g 2>/dev/null | grep -q "$plugin_name"; then
+      log_skip "$plugin_name"
     else
-[ "$DRY_RUN" = false ] && cd "plugins/local-plugins/opencode-openrouter-auth" && bun add -g . 2>&1 | tail -1 && cd "$SCRIPT_DIR"
-log_ok "opencode-openrouter-auth installiert"
+[ "$DRY_RUN" = false ] && cd "plugins/local-plugins/opencode-openrouter-auth" && bun add -g . 2>&1 | tail -1 || log_warn "$plugin_name (bun install fehlgeschlagen)" && cd "$SCRIPT_DIR"
+log_ok "$plugin_name installiert"
 fi
 fi
 else
