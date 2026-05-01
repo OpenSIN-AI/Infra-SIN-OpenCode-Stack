@@ -273,15 +273,25 @@ fi
 
 echo ""
 
-# 6b. Doctor CLI — installiere Dependencies
-log_info "Installing Doctor CLI dependencies..."
-if command -v pip3 &>/dev/null; then
-    pip3 install --break-system-packages md-dead-link-check 2>/dev/null && log_ok "Doctor: md-dead-link-check" || log_warn "Doctor: md-dead-link-check skipped"
-fi
-if command -v npm &>/dev/null; then
-    npm install -g markdownlint-cli2 2>/dev/null && log_ok "Doctor: markdownlint-cli2" || log_warn "Doctor: markdownlint skipped"
-fi
-echo ""
+# 6b. Doctor CLI — installiere ALLE 23 Tools
+log_info "Installing Doctor CLI (23 Tools)..."
+BREW_TOOLS="cloc tokei lizard plantuml doxygen pandoc vale git-cliff lychee trufflehog gitleaks"
+NPM_TOOLS="dependency-cruiser typedoc terraform-docs standard-readme conventional-changelog-cli auto-changelog markdownlint-cli2"
+PIP_TOOLS="pydeps gitingest sphinx mkdocs pdoc repomix pylint md-dead-link-check code2flow"
+for t in $BREW_TOOLS; do
+    if ! command -v "$t" &>/dev/null; then
+        brew install "$t" 2>/dev/null && log_ok "brew: $t" || log_warn "brew: $t skipped"
+    else log_skip "$t"; fi
+done
+for t in $NPM_TOOLS; do
+    if ! command -v "$t" &>/dev/null; then
+        npm install -g "$t" 2>/dev/null && log_ok "npm: $t" || log_warn "npm: $t skipped"
+    else log_skip "$t"; fi
+done
+for t in $PIP_TOOLS; do
+    pip3 install --break-system-packages "$t" 2>/dev/null && log_ok "pip: $t" || log_warn "pip: $t skipped"
+done
+echo "✅ Doctor: 23 Tools installiert"
 
 # 7. opencode.json — INTELLIGENT MERGE, NIEMALS overwrite
 if [ -f "opencode.json" ]; then
