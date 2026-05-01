@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Doctor CLI — Multi-Repo Documentation Health Auditor
+# Installiert via infra-opencode-stack/install.sh
+# Quelle: stealth-runner/runner/doctor_cli.py
+set -euo pipefail
+
+STEALTH_RUNNER="/Users/jeremy/dev/stealth-runner"
+
+if [ ! -f "$STEALTH_RUNNER/runner/doctor_cli.py" ]; then
+    echo "❌ Doctor CLI nicht gefunden (stealth-runner fehlt?)"
+    exit 1
+fi
+
+# Args durchreichen
+python3 "$STEALTH_RUNNER/runner/doctor_cli.py" "$@"

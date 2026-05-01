@@ -273,6 +273,16 @@ fi
 
 echo ""
 
+# 6b. Doctor CLI — installiere Dependencies
+log_info "Installing Doctor CLI dependencies..."
+if command -v pip3 &>/dev/null; then
+    pip3 install --break-system-packages md-dead-link-check 2>/dev/null && log_ok "Doctor: md-dead-link-check" || log_warn "Doctor: md-dead-link-check skipped"
+fi
+if command -v npm &>/dev/null; then
+    npm install -g markdownlint-cli2 2>/dev/null && log_ok "Doctor: markdownlint-cli2" || log_warn "Doctor: markdownlint skipped"
+fi
+echo ""
+
 # 7. opencode.json — INTELLIGENT MERGE, NIEMALS overwrite
 if [ -f "opencode.json" ]; then
   log_info "Merging opencode.json..."

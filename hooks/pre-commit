@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 # ~/.config/opencode/hooks/pre-commit
 # Automatically syncs all projects when global config changes
+# + Optional Doctor Scan bei .md Änderungen
 
 if [[ "$GIT_DIR" == *".config/opencode"* ]]; then
     echo "[HOOK] Config change detected, syncing to all projects..."
     ~/.config/opencode/opencode-master-sync.sh
+fi
+
+# Optional: Doctor Scan wenn .md Dateien geändert wurden
+if git diff --cached --name-only | grep -q "\.md$"; then
+    if command -v doctor &>/dev/null; then
+        echo "[HOOK] .md Änderungen erkannt – Doctor Quick-Scan..."
+        doctor --dry-run 2>&1 | tail -5
+    fi
 fi
