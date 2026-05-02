@@ -465,33 +465,6 @@
         "top_p": 0.9
       }
     },
-    "sin-executor-solo": {
-      "role": "Single-Agent Coder",
-      "model": "fireworks-ai/minimax-m2.7",
-      "fallback_model": "vercel/deepseek/deepseek-v4-flash",
-      "tools": [
-        "opencode",
-        "docker",
-        "build-tools"
-      ],
-      "output_format": "json",
-      "benchmarks": [
-        "single_task_execution",
-        "code_quality"
-      ],
-      "responsibilities": [
-        "Direct Code Execution",
-        "Single-File Changes",
-        "Deterministic Tasks"
-      ],
-      "model_config": {
-        "context_window": "128K",
-        "thinking_mode": true,
-        "tool_calls": 500,
-        "temperature": 0.7,
-        "top_p": 0.9
-      }
-    },
     "metis": {
       "role": "Plan Consultant",
       "model": "vercel/deepseek/deepseek-v4-flash",
@@ -564,6 +537,33 @@
       ],
       "model_config": {
         "context_window": "1M",
+        "thinking_mode": true,
+        "tool_calls": 500,
+        "temperature": 0.7,
+        "top_p": 0.9
+      }
+    },
+    "sin-solo": {
+      "role": "Single-Agent Coder",
+      "model": "vercel/deepseek-v4-pro",
+      "fallback_model": "vercel/deepseek/deepseek-v4-flash",
+      "tools": [
+        "opencode",
+        "docker",
+        "build-tools"
+      ],
+      "output_format": "json",
+      "benchmarks": [
+        "single_task_execution",
+        "code_quality"
+      ],
+      "responsibilities": [
+        "Direct Code Execution",
+        "Single-File Changes",
+        "Deterministic Tasks"
+      ],
+      "model_config": {
+        "context_window": "128K",
         "thinking_mode": true,
         "tool_calls": 500,
         "temperature": 0.7,

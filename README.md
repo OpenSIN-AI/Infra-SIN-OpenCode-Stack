@@ -1,7 +1,63 @@
-# Code-Swarm: SOTA Agent Swarm Architecture with Simone-MCP
+# Code-Swarm: SOTA Agent Swarm Architecture
 
 > **KEIN tmux! KEINE Worktrees! KEIN Background-Dispatch!**
 > Subagent-Delegation erfolgt NUR via opencode-native oh-my-opencode Sub-Sessions.
+
+## 🤖 Main Agents
+
+### SIN-Zeus — Supreme Fleet Commander
+| Property | Value |
+|----------|-------|
+| Model | `fireworks-ai/minimax-m2.7` |
+| Role | Fleet Commander |
+| Mode | Primary |
+| Reasoning | xhigh |
+
+**Capabilities:**
+- github-orchestration
+- fleet-dispatch
+- multi-agent-coordination
+- planning
+- research
+
+**Hard Rules:**
+- NEVER_IDLE_FLEET
+- NEVER_DIRECT_CODING
+- GITHUB_IS_SOURCE_OF_TRUTH
+- MIN_2_PARALLEL_TOOLS
+
+### SIN-Solo — Direct Single-Agent Executor (formerly Sin-Executor-Solo)
+| Property | Value |
+|----------|-------|
+| Model | `vercel/deepseek-v4-pro` |
+| Role | Direct Executor |
+| Mode | Primary |
+
+**Capabilities:**
+- direct-coding
+- single-agent-execution
+- no-delegation
+- minimal-invasive-changes
+
+**Hard Rules:**
+- WORK_ALONE
+- MINIMAL_CHANGES
+- NO_GOVERNANCE_EDITS
+- VALIDATE_IMMEDIATELY
+
+### Coder-SIN-Qwen
+| Property | Value |
+|----------|-------|
+| Model | `vercel/deepseek-v4-flash` |
+| Role | Alternative Coder |
+
+### Stealth-Orchestrator
+| Property | Value |
+|----------|-------|
+| Model | `vercel/deepseek-v4-flash` |
+| Role | Browser Automation |
+
+---
 
 ## Simone-MCP Integration
 
@@ -19,15 +75,23 @@ Every Code-Swarm agent uses **Simone-MCP** for AST-level code operations via MCP
 | `code.insert_after_symbol` | Write | Insert text immediately after a symbol block |
 | `code.project_overview` | Read | Summarize workspace footprint and file types |
 
-### Integration
+### Deployment
 
+**Local Development:**
 ```python
 from simone_mcp.client import SimoneClient
 from simone_mcp.bridge import SwarmSimoneBridge
 
-bridge = SwarmSimoneBridge("http://localhost:8234")
+bridge = SwarmSimoneBridge(local=True)
 await bridge.analyze_code("MyClass")
 ```
+
+**Production (OCI VM):**
+```
+ubuntu@92.5.60.87:8234
+```
+
+---
 
 ## SOTA Implementation
 
@@ -46,6 +110,8 @@ await bridge.analyze_code("MyClass")
 
 ### P2 - Optimization
 - [x] **Self-Improvement**: RLHF feedback loops + Bayesian optimization
+
+---
 
 ## Quick Start
 
@@ -69,25 +135,44 @@ uvicorn api.main:app --reload
 python -m cli.main status
 ```
 
+---
+
 ## Architecture
 
 ```
 SIN-Zeus (Fleet Commander)
-├── hermes (Dispatcher) → Simone-MCP AST
-├── prometheus (System Planner) → Fireworks AI minimax-m2.7 + Simone-MCP
-├── zeus (Validation Superlayer) → Fireworks AI minimax-m2.7
-├── atlas (Backend Engineer) → Fireworks AI minimax-m2.7 + Simone-MCP
+├── hermes (Dispatcher) → Fireworks AI + Simone-MCP
+├── prometheus (System Planner) → Fireworks AI + Simone-MCP
+├── zeus (Validation Superlayer) → Fireworks AI
+├── atlas (Backend Engineer) → Fireworks AI + Simone-MCP
+├── SIN-Solo (Direct Executor) → Vercel DeepSeek V4 Pro
 ├── multimedia_looker (Vision) → NVIDIA Nemotron 3 Nano Omni
 └── LangGraph Pipeline (StateGraph + Simone-MCP + Feedback Loops)
 ```
+
+---
 
 ## GitHub Issues
 
 | # | Status | Description |
 |---|--------|-------------|
-| #15 | 🚀 Epic | Simone-MCP Full Integration |
+| #15 | ✅ Epic | Simone-MCP Full Integration |
 | #16 | 🔧 TODO | Deploy Simone-MCP on OCI VM |
 | #17 | 🔗 TODO | Configure endpoint |
 | #18 | 🧠 TODO | LangGraph integration |
 | #19 | 💾 TODO | Hybrid memory |
 | #20 | ⚙️ TODO | opencode.json MCP config |
+| #21 | ✅ Epic | SIN-Zeus & SIN-Solo Fusion |
+
+---
+
+## Model Hierarchy
+
+| Modell | Agenten | Provider |
+|--------|---------|----------|
+| `fireworks-ai/minimax-m2.7` | SIN-Zeus, coder-sin-swarm, hermes, prometheus, zeus, atlas, hephaestus | Fireworks AI |
+| `vercel/deepseek-v4-flash` | Coder-SIN-Qwen, Stealth-Orchestrator, 10 Subagenten | Vercel |
+| `vercel/deepseek-v4-pro` | SIN-Solo | Vercel |
+| `nvidia/nvidia/nemotron-3-nano-omni` | multimedia_looker | NVIDIA |
+| `groq/whisper-large-v3` | audio_agent | Groq |
+| **Simone-MCP (MCP 2.0)** | **Alle 22 Agenten** | **AST-Level Operations** |

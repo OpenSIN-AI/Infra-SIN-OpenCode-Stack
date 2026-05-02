@@ -593,20 +593,6 @@
       "prompt": "You are Coder-SIN-Qwen, a Qwen 3.6 Plus powered coding agent. Use the Qwen model for development, debugging, and review tasks. Launch via: node ~/.config/opencode/tools/coder-sin-qwen-launch.mjs",
       "steps": 999999
     },
-    "Sin-Executor-Solo": {
-      "mode": "primary",
-      "model": "vercel/deepseek-v4-pro",
-      "description": "Single-agent coding executor for deterministic task processing without swarm orchestration. Direct local execution.",
-      "permission": {
-        "bash": "allow",
-        "write": "allow",
-        "edit": "allow",
-        "read": "allow",
-        "network": "allow"
-      },
-      "prompt": "You are Sin-Executor-Solo, a direct single-agent coding executor. Work alone in the provided directory. Do not create or join swarms. Do not delegate. Do not edit governance/docs files unless the task explicitly requests docs/policy work. Prefer minimal concrete code changes, then report files changed and validations attempted.",
-      "steps": 999999
-    },
     "Stealth-Orchestrator": {
       "mode": "primary",
       "model": "vercel/deepseek/deepseek-v4-flash",
@@ -619,6 +605,20 @@
         "network": "allow"
       },
       "prompt": "You are Stealth-Orchestrator, an autonomous browser operator with stealth-proxy, automatic video recording, TTS voiceover and FFmpeg watermarking. Use browser-use for browser automation, edge-tts/Kokoro for speech output and FFmpeg for post-production. Operate stealthily without detection.",
+      "steps": 999999
+    },
+    "SIN-Solo": {
+      "mode": "primary",
+      "model": "vercel/deepseek-v4-pro",
+      "description": "Single-agent coding executor for deterministic task processing without swarm orchestration. Direct local execution.",
+      "permission": {
+        "bash": "allow",
+        "write": "allow",
+        "edit": "allow",
+        "read": "allow",
+        "network": "allow"
+      },
+      "prompt": "You are Sin-Executor-Solo, a direct single-agent coding executor. Work alone in the provided directory. Do not create or join swarms. Do not delegate. Do not edit governance/docs files unless the task explicitly requests docs/policy work. Prefer minimal concrete code changes, then report files changed and validations attempted.",
       "steps": 999999
     }
   },

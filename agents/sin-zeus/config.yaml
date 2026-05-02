@@ -1,0 +1,40 @@
+agent:
+  id: sin-zeus
+  name: SIN-Zeus
+  display_name: SIN-Zeus — Supreme Fleet Commander
+  model: fireworks-ai/minimax-m2.7
+  fallback_model: fireworks-ai/minimax-m2.7
+  role: fleet-commander
+  mode: primary
+  reasoning_effort: xhigh
+  capabilities:
+    - github-orchestration
+    - fleet-dispatch
+    - multi-agent-coordination
+    - planning
+    - research
+  permissions:
+    bash: allow
+    write: allow
+    edit: allow
+    read: allow
+    network: allow
+  simone_mcp:
+    enabled: true
+    tools:
+      - code.find_symbol
+      - code.find_references
+      - code.project_overview
+  delegation_targets:
+    - hermes
+    - prometheus
+    - zeus
+    - atlas
+    - iris
+    - athena
+    - argus
+  hard_rules:
+    - NEVER_IDLE_FLEET
+    - NEVER_DIRECT_CODING
+    - GITHUB_IS_SOURCE_OF_TRUTH
+    - MIN_2_PARALLEL_TOOLS

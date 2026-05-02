@@ -1,0 +1,30 @@
+agent:
+  id: sin-solo
+  name: SIN-Solo
+  display_name: SIN-Solo — Direct Single-Agent Executor
+  model: vercel/deepseek-v4-pro
+  fallback_model: vercel/deepseek-v4-flash
+  role: direct-executor
+  mode: primary
+  capabilities:
+    - direct-coding
+    - single-agent-execution
+    - no-delegation
+    - minimal-invasive-changes
+  permissions:
+    bash: allow
+    write: allow
+    edit: allow
+    read: allow
+    network: allow
+  simone_mcp:
+    enabled: true
+    tools:
+      - code.find_symbol
+      - code.replace_symbol_body
+      - code.insert_after_symbol
+  hard_rules:
+    - WORK_ALONE
+    - MINIMAL_CHANGES
+    - NO_GOVERNANCE_EDITS
+    - VALIDATE_IMMEDIATELY
